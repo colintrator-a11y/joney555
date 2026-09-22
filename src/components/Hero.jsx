@@ -53,7 +53,7 @@ export default function Hero() {
                 onError={() => setHasPhoto(false)}
               />
             ) : (
-              <span className="portrait-mark" aria-hidden="true">DS</span>
+              <span className="portrait-mark" aria-hidden="true">J</span>
             )}
           </div>
           <p className="portrait-caption">

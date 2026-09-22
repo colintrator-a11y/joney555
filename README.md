@@ -1,4 +1,4 @@
-# Dawid Salwecki — Portfolio
+# Joney — Portfolio
 
 A single-page portfolio: everything a client needs to judge the work is on one
 screen-scroll — who you are, what you build, the stack, the projects, work
@@ -153,7 +153,7 @@ the four locales stay as they are.
 The portrait is [`public/avatar.jpg`](public/avatar.jpg) — a plain file in
 `public/`, not a bundled asset, so it can be replaced without touching the code.
 The frame is 4:5; the current file is 900×1125. If it is ever missing, the hero
-falls back to a "DS" monogram rather than a broken image.
+falls back to a "J" monogram rather than a broken image.
 
 ## Structure
 

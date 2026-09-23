@@ -47,8 +47,11 @@ export default function Hero() {
               <span className="portrait-mark" aria-hidden="true">J</span>
             )}
           </div>
+          {/* Two lines, not one with a separator: the title is long enough
+              that "Since 2019" would be left hanging on a line of its own. */}
           <p className="portrait-caption">
-            {t.hero.caption} · <span>{t.hero.captionValue}</span>
+            {t.hero.caption}
+            <span>{t.hero.captionValue}</span>
           </p>
         </aside>
       </div>

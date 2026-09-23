@@ -106,7 +106,12 @@
 
 .portrait-caption {
   margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
   font-size: 0.82rem;
+  line-height: 1.35;
   color: var(--ink-faint);
   text-align: center;
 }
@@ -170,7 +175,7 @@
     max-width: 230px;
   }
 
-  .portrait-caption { text-align: left; }
+  .portrait-caption { text-align: left; align-items: flex-start; }
 }
 
 @media (max-width: 860px) {

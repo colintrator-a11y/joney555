@@ -37,7 +37,7 @@ export default {
       'Web applications, mobile apps, online stores and AI automation — taken from the first requirement through to deployment.',
     note: 'This site introduces my skills and the projects behind them.',
     cta: 'See the work',
-    caption: 'Full stack developer',
+    caption: 'Full Stack & Mobile & AI automation Developer',
     captionValue: 'Since 2019',
     stats: {
       years: 'Years building software',

@@ -88,7 +88,10 @@ h1, h2, h3, h4 {
 
 p { margin: 0; }
 img { max-width: 100%; display: block; }
-ul { margin: 0; padding: 0; list-style: none; }
+/* Both list types: an <ol> keeps the browser's 40px indent otherwise, which
+   pushed the project rows off-centre against every other card on the page. */
+ul,
+ol { margin: 0; padding: 0; list-style: none; }
 
 a {
   color: inherit;

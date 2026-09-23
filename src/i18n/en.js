@@ -54,11 +54,13 @@ export default {
     reach: (count) =>
       `7 years and ${count} projects across web, mobile, e-commerce and automation. This page walks through the skills and the work behind them.`,
     bestTitle: 'What I do best',
+    // The label at the foot of each area card; the card itself is the link.
+    bestGo: 'See these projects →',
     best: [
       { id: 'ecommerce', area: 'E-commerce', detail: 'Shopify and WordPress/WooCommerce stores, custom themes, payment integrations' },
       { id: 'web', area: 'Web apps', detail: 'React, Node.js, Laravel/PHP, from landing pages to enterprise ERP platforms' },
       { id: 'mobile', area: 'Mobile', detail: 'React Native, Kotlin, Java for Android and iOS' },
-      { id: 'automation', area: 'AI & automation', detail: 'chatbots with Rasa, workflow automation with n8n and Python' },
+      { id: 'automation', area: 'AI & automation', detail: 'Chatbots with Rasa, workflow automation with n8n and Python' },
     ],
     approachTitle: 'How I work',
     approach:

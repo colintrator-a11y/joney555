@@ -1,29 +1,33 @@
-.about-grid {
+/* ------------------------------- intro -------------------------------- */
+
+.about-intro {
   display: grid;
-  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
-  gap: 40px;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: 30px 48px;
   align-items: start;
 }
 
-.about-copy {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  max-width: 64ch;
-}
-
-.about-copy p {
-  font-size: 1rem;
-  color: var(--ink-soft);
-}
-
-.about-copy .about-lead {
-  font-size: 1.1rem;
+.about-lead {
+  font-size: 1.22rem;
+  line-height: 1.5;
   color: var(--ink);
+  max-width: 34ch;
 }
 
-.about-copy h3 {
-  margin-top: 10px;
+/* The figure behind the claim, set apart from it by the rule rather than by a
+   box: a second card here would compete with the four below. */
+.about-reach {
+  font-size: 0.97rem;
+  color: var(--ink-soft);
+  padding-left: 22px;
+  border-left: 2px solid var(--accent);
+  align-self: center;
+}
+
+/* ------------------------------ what I do ------------------------------ */
+
+.about-subhead {
+  margin: 42px 0 16px;
   font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.13em;
@@ -32,63 +36,62 @@
 }
 
 .about-best {
-  display: flex;
-  flex-direction: column;
-  gap: 9px;
-}
-
-.about-best li {
-  position: relative;
-  padding-left: 18px;
-  font-size: 0.97rem;
-  color: var(--ink-soft);
-}
-
-.about-best li::before {
-  content: '';
-  position: absolute;
-  left: 2px;
-  top: 10px;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--accent);
-}
-
-.about-best a {
-  font-weight: 600;
-  color: var(--ink);
-  border-bottom: 1px solid var(--line-strong);
-  transition: color 0.15s ease, border-color 0.15s ease;
-}
-
-.about-best a:hover {
-  color: var(--accent-ink);
-  border-color: var(--accent);
-}
-
-.about-best strong { font-weight: 600; }
-
-/* The separator sits on the detail, not on the link, so the underline stops
-   at the end of the area name. */
-.about-best span::before {
-  content: ' — ';
-  color: var(--ink-faint);
-}
-
-.about-closing {
-  padding-top: 6px;
-  border-top: 1px solid var(--line);
-  margin-top: 4px;
-}
-
-.about-side {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 14px;
 }
 
-.about-panel { padding: 20px 22px; }
+.about-best li { display: flex; }
+
+.about-best-card {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  width: 100%;
+  padding: 20px 22px 18px;
+  color: var(--ink-soft);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.about-best-card:hover {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+}
+
+.about-best-card strong {
+  font-size: 1.02rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.about-best-card span { font-size: 0.92rem; line-height: 1.45; }
+
+/* Pushed to the bottom so the four cards end on the same line whatever the
+   length of the detail above it. */
+.about-best-go {
+  margin-top: auto;
+  padding-top: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent-ink);
+}
+
+.about-best-card:hover .about-best-go { text-decoration: underline; }
+
+/* ------------------------------- closing ------------------------------- */
+
+.about-close {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr);
+  gap: 14px;
+  margin-top: 30px;
+}
+
+/* Nothing in the second column: the panel has the row to itself. */
+.about-close.is-single { grid-template-columns: minmax(0, 1fr); }
+
+.about-panel { padding: 22px 24px; }
 
 .about-panel h3 {
   font-size: 0.72rem;
@@ -96,7 +99,19 @@
   letter-spacing: 0.13em;
   text-transform: uppercase;
   color: var(--ink-faint);
-  margin-bottom: 14px;
+  margin-bottom: 12px;
+}
+
+.about-panel p {
+  font-size: 0.97rem;
+  color: var(--ink-soft);
+  max-width: 78ch;
+}
+
+.about-closing {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
 }
 
 .cert-list { display: flex; flex-direction: column; gap: 12px; }
@@ -118,9 +133,20 @@
 .cert-body strong { font-size: 0.94rem; font-weight: 600; }
 .cert-body small { font-size: 0.81rem; color: var(--ink-faint); }
 
-/* Nothing in the side column: the copy has the row to itself. */
-.about-grid.is-single { grid-template-columns: minmax(0, 1fr); }
+/* ------------------------------ responsive ----------------------------- */
+
+@media (max-width: 1000px) {
+  .about-best { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 
 @media (max-width: 860px) {
-  .about-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .about-intro { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  .about-lead { max-width: none; }
+  .about-close { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 560px) {
+  .about-best { grid-template-columns: minmax(0, 1fr); }
+  .about-lead { font-size: 1.12rem; }
+  .about-subhead { margin-top: 32px; }
 }

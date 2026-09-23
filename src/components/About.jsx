@@ -13,38 +13,44 @@ export default function About({ onFocus }) {
           <h2>{t.about.heading}</h2>
         </div>
 
-        <div className={`about-grid${certifications.length ? '' : ' is-single'}`}>
-          <div className="about-copy">
-            <p className="about-lead">{t.about.lead}</p>
-            {/* The project count follows the list rather than being typed in,
-                so it cannot drift from the number in the hero. */}
-            <p>{t.about.reach(projects.length)}</p>
+        {/* The opening claim and the figure behind it, side by side: the lead
+            reads as the statement, the note as its evidence. */}
+        <div className="about-intro">
+          <p className="about-lead">{t.about.lead}</p>
+          {/* The project count follows the list rather than being typed in,
+              so it cannot drift from the number in the hero. */}
+          <p className="about-reach">{t.about.reach(projects.length)}</p>
+        </div>
 
-            <h3>{t.about.bestTitle}</h3>
-            <ul className="about-best">
-              {t.about.best.map((item) => (
-                <li key={item.id}>
-                  {/* A real anchor: the jump to the work section is the
-                      browser's, and the click only sets what it lands on. */}
-                  <a href="#work" onClick={() => onFocus(item.id)}>
-                    <strong>{item.area}</strong>
-                  </a>
-                  <span>{item.detail}</span>
-                </li>
-              ))}
-            </ul>
+        <h3 className="about-subhead">{t.about.bestTitle}</h3>
+        <ul className="about-best">
+          {t.about.best.map((item) => (
+            <li key={item.id}>
+              {/* A real anchor: the jump to the work section is the browser's,
+                  and the click only sets what it lands on. The whole card is
+                  the link, so the target is a card rather than two words. */}
+              <a className="card about-best-card" href="#work" onClick={() => onFocus(item.id)}>
+                <strong>{item.area}</strong>
+                <span>{item.detail}</span>
+                <span className="about-best-go" aria-hidden="true">
+                  {t.about.bestGo}
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
 
+        <div className={`about-close${certifications.length ? '' : ' is-single'}`}>
+          <div className="card about-panel">
             <h3>{t.about.approachTitle}</h3>
             <p>{t.about.approach}</p>
-
             <p className="about-closing">{t.about.closing}</p>
           </div>
 
-          {/* Nothing to list means no column at all, rather than an empty
-              box beside the copy. */}
+          {/* Nothing to list means no panel, rather than a heading over an
+              empty box. */}
           {certifications.length ? (
-            <aside className="about-side">
-              <div className="card about-panel">
+            <div className="card about-panel">
               <h3>{t.about.certTitle}</h3>
               <ul className="cert-list">
                 {certifications.map((certification) => {
@@ -61,7 +67,6 @@ export default function About({ onFocus }) {
                 })}
               </ul>
             </div>
-          </aside>
           ) : null}
         </div>
       </div>

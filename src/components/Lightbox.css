@@ -166,21 +166,50 @@
 
 @media (max-width: 640px) {
   .lightbox {
-    grid-template-columns: minmax(0, 1fr);
+    /* Two columns so the arrows can sit either side of the middle on their
+       own row, rather than being nudged there with a transform. */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-template-rows: minmax(0, 1fr) auto;
-    padding: 64px 12px 16px;
+    gap: 12px 0;
+    padding: 58px 10px calc(14px + env(safe-area-inset-bottom));
   }
 
-  .lightbox-figure { grid-column: 1; grid-row: 1; }
+  .lightbox-figure {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    gap: 10px;
+  }
 
   /* Under the image on a phone, where reaching the sides of the screen is
-     harder than reaching the bottom. */
-  .lightbox-step {
+     harder than reaching the bottom. Both selectors carry the .is-* class so
+     they outrank the desktop rules that place them in columns 1 and 3. */
+  .lightbox-step.is-prev,
+  .lightbox-step.is-next {
     grid-row: 2;
-    grid-column: 1;
-    justify-self: center;
+    width: 46px;
+    height: 46px;
   }
 
-  .lightbox-step.is-prev { transform: translateX(-38px); }
-  .lightbox-step.is-next { transform: translateX(38px); }
+  .lightbox-step.is-prev { grid-column: 1; justify-self: end; margin-right: 9px; }
+  .lightbox-step.is-next { grid-column: 2; justify-self: start; margin-left: 9px; }
+
+  .lightbox-close { top: 10px; right: 10px; }
+
+  /* The title can take the full width and the controls sit under it; on a
+     narrow screen they would otherwise all squeeze onto one line. */
+  .lightbox-bar {
+    width: 100%;
+    gap: 6px 10px;
+    font-size: 0.85rem;
+  }
+
+  .lightbox-title {
+    width: 100%;
+    text-align: center;
+    /* A long project name stays on one line rather than stealing height from
+       the image. */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }

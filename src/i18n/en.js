@@ -347,7 +347,7 @@ export default {
     company: 'Remote Development — Freelance',
     period: 'August 2019 — Present',
     points: [
-      'Collaborating remotely with clients across Latin America, Brazil and the United States.',
+      'Working remotely with clients worldwide, as the single developer on most of the work.',
       'Building web applications with React, Next.js, Node.js and TypeScript, and back ends with Python, Django, PHP and Laravel.',
       'Shipping Android and iOS apps with React Native, Flutter and Unity 3D.',
       'Delivering WordPress sites and Shopify stores, from design through to launch.',
@@ -370,6 +370,6 @@ export default {
   },
 
   footer: {
-    role: 'Full Stack & Mobile Developer · Poland',
+    role: 'Full Stack & Mobile Developer · Singapore',
   },
 }

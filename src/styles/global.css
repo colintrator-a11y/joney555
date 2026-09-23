@@ -219,7 +219,7 @@ a {
   border: 0;
 }
 
-@media (max-width: 1080px) {
+@media (max-width: 900px) {
   /* The nav grows a second row of links on narrower screens. */
   html { scroll-padding-top: 118px; }
 }

@@ -109,10 +109,10 @@
 
 .theme-toggle:hover { color: var(--accent-ink); border-color: var(--accent); }
 
-/* Below 1080px the links move to their own scrollable strip under the brand
-   instead of collapsing into a menu, so every section stays one tap away. The
-   breakpoint clears the longest locale, not just English. */
-@media (max-width: 1080px) {
+/* Below 900px the links move to their own scrollable strip under the brand
+   instead of collapsing into a menu, so every section stays one tap away.
+   English-only now, so the six links hold one row well past a tablet. */
+@media (max-width: 900px) {
   .nav-inner {
     height: auto;
     flex-wrap: wrap;
@@ -133,4 +133,26 @@
   .nav-links::-webkit-scrollbar { display: none; }
   .nav-links a { padding: 6px 11px; white-space: nowrap; }
   .nav-actions { margin-left: auto; }
+}
+
+/* On a phone the strip would otherwise cut "Contact" off with nothing to show
+   it scrolls. Tighter links fit all six, and the fade at the right edge is the
+   hint for the handful of screens still too narrow. */
+@media (max-width: 560px) {
+  .nav-links {
+    gap: 0;
+    margin-inline: -4px;
+    padding-inline: 4px;
+    -webkit-mask-image: linear-gradient(to right, #000 88%, transparent 100%);
+    mask-image: linear-gradient(to right, #000 88%, transparent 100%);
+  }
+
+  .nav-links a { padding: 6px 6px; font-size: 0.8rem; }
+  .nav-brand-name { font-size: 0.88rem; }
+}
+
+/* The six links measure 315px here; below that the fade and the scroll take
+   over rather than shrinking the type any further. */
+@media (max-width: 400px) {
+  .nav-links a { padding: 6px 4px; font-size: 0.78rem; }
 }

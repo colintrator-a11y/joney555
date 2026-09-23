@@ -147,12 +147,22 @@
   color: var(--ink-faint);
 }
 
-@media (max-width: 860px) {
+/* Tablet: still two columns, with the portrait taking less of the row. */
+@media (max-width: 1000px) {
+  .hero-inner {
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 0.8fr);
+    gap: 32px;
+  }
+}
+
+/* One column only once the copy would be squeezed. */
+@media (max-width: 680px) {
   .hero { padding-top: 36px; }
 
   .hero-inner {
     grid-template-columns: minmax(0, 1fr);
     gap: 30px;
+    align-items: start;
   }
 
   .hero-portrait {
@@ -161,8 +171,8 @@
   }
 
   .portrait-caption { text-align: left; }
-  .hero-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 32px; }
 }
 
-@media (max-width: 420px) {
+@media (max-width: 860px) {
+  .hero-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 32px; }
 }

@@ -85,6 +85,11 @@ Clicking any image opens it full size in a preview, with the project name and,
 in a set, a counter and arrows. This is where the top-anchored tiles pay off: a
 page capture cropped to a 365x250 tile in the row is shown whole here.
 
+On a touch screen the image also takes the gestures the picture invites:
+pinch to zoom anywhere between fit and 5x, drag with one finger to pan once
+zoomed, and — at fit size, where there is nothing to pan — a sideways swipe
+moves through the set.
+
 Clicking the image zooms it to 2x, and clicking again returns it to fit. The
 wheel, the buttons and `+` / `-` step through to 5x in 25% increments. A click
 or a wheel zoom keeps the pixel under the pointer where it is, rather than

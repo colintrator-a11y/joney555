@@ -33,6 +33,18 @@ export default function Lightbox({ project, index, onClose, onMove }) {
   const drag = useRef(null)
   const dragged = useRef(false)
 
+  // Every finger currently on the image, by pointer id: one pans or swipes,
+  // two pinch. A ref rather than state — it changes on every pointermove and
+  // nothing in the markup reads it.
+  const pointers = useRef(new Map())
+  const pinch = useRef(null)
+  const swipe = useRef(null)
+
+  // The live view, for handlers that would otherwise close over a stale one
+  // between renders during a gesture.
+  const viewRef = useRef(view)
+  viewRef.current = view
+
   const count = project.media.length
   const item = project.media[index]
   const zoomed = view.scale > MIN_SCALE
@@ -77,11 +89,19 @@ export default function Lightbox({ project, index, onClose, onMove }) {
   const zoomBy = useCallback((delta, anchor) => zoom((scale) => scale + delta, anchor), [zoom])
 
   // The rect is the transformed one, so its centre is where the image sits now.
-  const anchorFrom = (event) => {
+  const anchorAt = (point) => {
     const rect = imageRef.current?.getBoundingClientRect()
     if (!rect) return undefined
-    return { x: event.clientX - (rect.left + rect.width / 2), y: event.clientY - (rect.top + rect.height / 2) }
+    return { x: point.x - (rect.left + rect.width / 2), y: point.y - (rect.top + rect.height / 2) }
   }
+
+  const anchorFrom = (event) => anchorAt({ x: event.clientX, y: event.clientY })
+
+  const spread = ([a, b]) => Math.hypot(a.x - b.x, a.y - b.y)
+  const middle = ([a, b]) => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 })
+
+  // A flick shorter than this is a tap that wandered, not a swipe.
+  const SWIPE = 55
 
   const move = useCallback(
     (step) => {
@@ -142,24 +162,75 @@ export default function Lightbox({ project, index, onClose, onMove }) {
   }, [zoomBy])
 
   const onPointerDown = (event) => {
-    if (!zoomed) return
-    dragged.current = false
-    drag.current = { x: event.clientX - view.x, y: event.clientY - view.y }
     event.currentTarget.setPointerCapture(event.pointerId)
+    pointers.current.set(event.pointerId, { x: event.clientX, y: event.clientY })
+
+    if (pointers.current.size === 1) dragged.current = false
+
+    // Two fingers: pinch, and neither of the one-finger gestures.
+    if (pointers.current.size === 2) {
+      const points = [...pointers.current.values()]
+      pinch.current = { spread: spread(points) || 1, scale: viewRef.current.scale }
+      drag.current = null
+      swipe.current = null
+      return
+    }
+
+    if (viewRef.current.scale > MIN_SCALE) {
+      drag.current = { x: event.clientX - viewRef.current.x, y: event.clientY - viewRef.current.y }
+    } else if (count > 1) {
+      // Nothing to pan at fit size, so the same drag turns the page instead.
+      swipe.current = { x: event.clientX, y: event.clientY }
+    }
   }
 
   const onPointerMove = (event) => {
+    if (pointers.current.has(event.pointerId)) {
+      pointers.current.set(event.pointerId, { x: event.clientX, y: event.clientY })
+    }
+
+    if (pinch.current && pointers.current.size >= 2) {
+      const points = [...pointers.current.values()]
+      const distance = spread(points)
+      if (!distance) return
+      dragged.current = true
+      // Anchored on the midpoint between the fingers, so the picture grows
+      // around what is being held rather than around its own centre.
+      zoom(() => pinch.current.scale * (distance / pinch.current.spread), anchorAt(middle(points)))
+      return
+    }
+
     // Read the drag origin here, not inside the updater: React runs updaters
     // after the handler returns, and a pointerup arriving in the same task -
     // a quick flick - clears the ref before the updater ever looks at it.
     const origin = drag.current
-    if (!origin) return
-    dragged.current = true
-    const next = { x: event.clientX - origin.x, y: event.clientY - origin.y }
-    setView((current) => ({ ...current, ...limit(next, current.scale) }))
+    if (origin) {
+      dragged.current = true
+      const next = { x: event.clientX - origin.x, y: event.clientY - origin.y }
+      setView((current) => ({ ...current, ...limit(next, current.scale) }))
+      return
+    }
+
+    // A swipe in progress: enough movement that the release must not be read
+    // as a tap on the image.
+    if (swipe.current && Math.abs(event.clientX - swipe.current.x) > 8) dragged.current = true
   }
 
-  const endDrag = () => { drag.current = null }
+  const endPointer = (event, cancelled) => {
+    pointers.current.delete(event.pointerId)
+    if (pointers.current.size < 2) pinch.current = null
+
+    const start = swipe.current
+    if (start && !cancelled && count > 1) {
+      const dx = event.clientX - start.x
+      const dy = event.clientY - start.y
+      // Sideways and far enough: anything else is a tap or a scroll attempt.
+      if (Math.abs(dx) > SWIPE && Math.abs(dx) > Math.abs(dy)) move(dx < 0 ? 1 : -1)
+    }
+
+    swipe.current = null
+    drag.current = null
+  }
 
   return createPortal(
     <div
@@ -167,6 +238,12 @@ export default function Lightbox({ project, index, onClose, onMove }) {
       role="dialog"
       aria-modal="true"
       aria-label={project.name}
+      onPointerDown={(event) => {
+        // A press that starts anywhere but the image begins a fresh click:
+        // without this the flag left over from the last pan would swallow the
+        // first click on the surround, and the overlay would refuse to close.
+        if (!event.target.closest('img')) dragged.current = false
+      }}
       onClick={(event) => {
         // Anything that is not the image or a control is "outside".
         if (dragged.current) return
@@ -206,8 +283,8 @@ export default function Lightbox({ project, index, onClose, onMove }) {
             }}
             onPointerDown={onPointerDown}
             onPointerMove={onPointerMove}
-            onPointerUp={endDrag}
-            onPointerCancel={endDrag}
+            onPointerUp={(event) => endPointer(event, false)}
+            onPointerCancel={(event) => endPointer(event, true)}
           />
         </div>
 

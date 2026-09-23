@@ -4,8 +4,8 @@ A single-page portfolio: everything a client needs to judge the work is on one
 screen-scroll — who you are, what you build, the stack, the projects, work
 history, languages and how to reach you.
 
-Built with Vite + React 18, in four languages, with no UI framework and no
-runtime dependencies beyond React.
+Built with Vite + React 18, in English, with no UI framework and no runtime
+dependencies beyond React.
 
 ## Run it
 
@@ -14,35 +14,25 @@ npm install
 npm run dev            # http://localhost:5173
 npm run build          # production build into dist/
 npm run preview        # serve the built site on :4173
-npm run check:locales  # verify every locale has every string
+npm run check:locales  # verify every id has its string
 ```
 
-## Languages
+## Copy
 
-The site ships in **English, Portuguese, Spanish and Polish**, switchable from
-the button group in the header. On a first visit the language is picked from the
-browser's preferences (matching on the primary subtag, so `pt-BR` and `pt-PT`
-both land on Portuguese) and falls back to English; after that the visitor's
-choice is remembered in `localStorage`. Switching also updates `<html lang>`.
-
-Each locale is one file in [`src/i18n/`](src/i18n/) with an identical shape.
-`npm run check:locales` fails if a locale is missing a key, has one the others
-don't, or is missing a string for an id defined in `src/data/profile.js` — run it
-after any translation edit, because a missing key would quietly render as
-`undefined` rather than throwing.
-
-To add a language: copy `src/i18n/en.js`, translate the values, and add it to
-`localeList` in [`src/i18n/index.js`](src/i18n/index.js).
+Every string on the page lives in [`src/i18n/en.js`](src/i18n/en.js), keyed by
+the ids in `src/data/profile.js`. `npm run check:locales` fails if an id is
+missing its string — run it after any copy edit, because a missing key would
+quietly render as `undefined` rather than throwing.
 
 ## Editing the content
 
 Content is split in two on purpose:
 
 - [`src/data/profile.js`](src/data/profile.js) — everything language independent:
-  project ids, tags, card accents, skill lists, the language-bar percentages.
-  Technology names are proper nouns and live here, not in the locales.
-- [`src/i18n/<locale>.js`](src/i18n/) — every string a translator would touch,
-  keyed by the ids above.
+  project ids, tags, card accents, skill lists.
+  Technology names are proper nouns and live here, not in `en.js`.
+- [`src/i18n/en.js`](src/i18n/en.js) — every string on the page, keyed by the
+  ids above.
 
 ## Adding a project
 
@@ -55,8 +45,8 @@ Content is split in two on purpose:
    first. Vite hashes the files on build, so replacing an image cannot leave
    visitors on a cached old one.
 2. Add an entry to `projects` in [`src/data/profile.js`](src/data/profile.js) —
-   `id`, `name`, `category` (one of the keys in `projects.categories` in the
-   locales), `accent` (`violet`, `teal`, `emerald`, `amber`, `rose`, `slate`,
+   `id`, `name`, `category` (one of the keys in `projects.categories` in
+   `en.js`), `accent` (`violet`, `teal`, `emerald`, `amber`, `rose`, `slate`,
    which colours the band at the top of the row), `tags`, and `media`: a list of
    `{ file, width, height }` from step 1. The intrinsic size goes on the `<img>`
    so the row does not jump as images load, and how many images there are picks
@@ -67,10 +57,9 @@ Content is split in two on purpose:
    | 1 | Beside the text. A landscape screenshot takes the wider half of the row, a phone-shaped one the narrower. |
    | 2 | Beside the text, the two sharing one height — a hero shot next to a full-page strip. |
    | 3+ | Above the text at full width: the first image large and whole, the rest as small top-anchored tiles four across beneath it (three below 1000px, two below 560px). |
-3. Add the description under `projects.items.<id>` in **all four** locale files,
-   as an array of paragraphs.
-4. Run `npm run check:locales`. It fails if a locale is missing the description
-   or has a different number of paragraphs from the English one.
+3. Add the description under `projects.items.<id>` in `src/i18n/en.js`, as an
+   array of paragraphs.
+4. Run `npm run check:locales`. It fails if the description is missing.
 
 The headline "projects" count in the hero follows `projects.length`.
 
@@ -89,8 +78,7 @@ dropdown listing every tag in use with its count, in two groups — the tags tha
 appear on more than one project first, then the ones unique to a single
 project. Every tag on a project row is
 also a button — clicking one filters to that skill, clicking it again clears it.
-Both filters are keyed by category id and by the tag text, neither of which is
-translated, so switching language keeps the selection. "Clear filters" appears
+"Clear filters" appears
 whenever either is set.
 
 Clicking any image opens it full size in a preview, with the project name and,
@@ -146,7 +134,7 @@ sight such a visitor would be stuck.
 
 To post to a real endpoint instead (Formspree, Getform, a function of your own),
 replace the body of `submit` with a `fetch` to it. The fields, the labels and
-the four locales stay as they are.
+the copy stay as they are.
 
 ## The photo
 
@@ -160,10 +148,10 @@ falls back to a "J" monogram rather than a broken image.
 ```
 index.html              meta tags, JSON-LD, fonts, pre-paint theme script
 src/data/profile.js     language-independent structure
-src/i18n/               en, pt, es, pl + locale detection and React context
+src/i18n/               English copy (en.js) and the React context that serves it
 src/styles/global.css   design tokens (light + dark) and shared primitives
 src/components/         one component + one stylesheet per section
-scripts/                locale consistency check
+scripts/                copy coverage check, GIF optimiser
 public/                 avatar, favicon, robots.txt, sitemap.xml
 ```
 

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { navSections, profile } from '../data/profile.js'
 import { useLocale } from '../i18n/LocaleContext.jsx'
-import LanguageSwitcher from './LanguageSwitcher.jsx'
 import ThemeToggle from './ThemeToggle.jsx'
 import './Navbar.css'
 
@@ -37,7 +36,6 @@ export default function Navbar() {
         </nav>
 
         <div className="nav-actions">
-          <LanguageSwitcher />
           <ThemeToggle />
         </div>
       </div>

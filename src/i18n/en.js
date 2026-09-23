@@ -11,7 +11,6 @@ export default {
     toLight: 'Switch to light theme',
     toDark: 'Switch to dark theme',
     backToTop: 'Back to top',
-    language: 'Language',
     filter: 'Filter projects by category',
     close: 'Close',
     prevImage: 'Previous image',
@@ -32,34 +31,28 @@ export default {
   },
 
   hero: {
-    status: 'Available for new projects',
+    status: 'Open to new opportunities',
     title: 'Full Stack & Mobile Developer',
     tagline:
       'Web applications, mobile apps and online stores — taken from the first requirement through to deployment.',
-    note: 'Working remotely with clients in Latin America, Brazil and the United States',
+    note: 'This site introduces my skills and the projects behind them.',
     cta: 'See the work',
-    facts: [
-      { label: 'Based in', value: 'Poland' },
-      { label: 'Rate', value: 'USD 25 / hour' },
-      { label: 'Languages', value: 'English · Portuguese · Spanish' },
-      { label: 'Working', value: 'Remote, worldwide' },
-    ],
-    caption: 'Freelance developer',
+    caption: 'Full stack developer',
     captionValue: 'Since 2019',
     stats: {
       years: 'Years building software',
       projects: 'Featured projects',
-      languages: 'Client languages',
-      since: 'Freelancing since',
+      skills: 'Technologies',
+      since: 'Developing since',
     },
   },
 
   about: {
     eyebrow: 'About',
-    heading: 'Seven years of shipping, start to finish',
-    lead: 'I build web and mobile products that ship — and I speak your language, literally. English, Portuguese and Spanish, so you get direct communication instead of translated back-and-forth.',
+    heading: 'Seven years of building for web and mobile',
+    lead: 'I\u2019m a full stack and mobile developer. I build web applications, mobile apps, online stores and automations, and I work across the whole path — from the first requirement to a product running in production.',
     reach: (count) =>
-      `7 years, ${count} delivered projects, working remotely with clients across Latin America, Brazil, Europe and the US.`,
+      `7 years and ${count} projects across web, mobile, e-commerce and automation. This page walks through the skills and the work behind them.`,
     bestTitle: 'What I do best',
     best: [
       { id: 'ecommerce', area: 'E-commerce', detail: 'Shopify and WordPress/WooCommerce stores, custom themes, payment integrations' },
@@ -69,16 +62,10 @@ export default {
     ],
     approachTitle: 'How I work',
     approach:
-      'One point of contact from first call to launch. Realistic deadlines, not optimistic ones. Weekly updates you don\u2019t have to ask for. Clean, documented code you or another developer can maintain after I\u2019m gone.',
+      'Understand the problem before writing code. Plan in realistic milestones. Keep communication clear and regular. Write clean, documented code that another developer can pick up and maintain.',
     closing:
-      'Scroll down for the portfolio. Then send me your idea — I\u2019ll tell you honestly whether I\u2019m the right fit, roughly what it takes, and how I\u2019d approach it.',
-    languagesTitle: 'Languages',
+      'Scroll down for the skills and projects in detail. If you would like to work together or talk about any of it, the contact form is at the bottom of the page.',
     certTitle: 'Certification',
-    languages: {
-      english: { name: 'English', level: 'Advanced' },
-      portuguese: { name: 'Portuguese', level: 'High intermediate' },
-      spanish: { name: 'Spanish', level: 'High intermediate' },
-    },
     certifications: {
     },
   },
@@ -369,14 +356,14 @@ export default {
 
   contact: {
     eyebrow: 'Contact',
-    heading: 'Have a project in mind?',
-    body: 'Tell me what you need and I will come back with questions, a plan and a realistic timeline — before any code is written.',
+    heading: 'Get in touch',
+    body: 'Questions about my work, a role or a project? Send a message and I will get back to you.',
     form: {
       name: 'Your name',
       email: 'Your email',
-      message: 'What do you need?',
+      message: 'Your message',
       send: 'Send email',
-      subject: 'Project enquiry',
+      subject: 'Message from your portfolio',
       direct: 'Or write to me directly at',
       note: 'This opens your own mail app with the message ready to send.',
     },

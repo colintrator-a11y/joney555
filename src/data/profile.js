@@ -638,14 +638,9 @@ export const projects = [
 export const stats = [
   { id: 'years', value: '7+' },
   { id: 'projects', value: String(projects.length) },
-  { id: 'languages', value: '3' },
+  // Every technology listed in the Skills section, counted rather than typed.
+  { id: 'skills', value: String(skillGroups.reduce((sum, group) => sum + group.items.length, 0)) },
   { id: 'since', value: '2019' },
-]
-
-export const spokenLanguages = [
-  { id: 'english', value: 85 },
-  { id: 'portuguese', value: 70 },
-  { id: 'spanish', value: 70 },
 ]
 
 // Nothing listed at the moment. The About panel renders only when this has

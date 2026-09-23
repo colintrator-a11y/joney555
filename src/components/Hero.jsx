@@ -31,15 +31,6 @@ export default function Hero() {
               {t.hero.cta}
             </a>
           </div>
-
-          <dl className="hero-facts">
-            {t.hero.facts.map((fact) => (
-              <div key={fact.label}>
-                <dt>{fact.label}</dt>
-                <dd>{fact.value}</dd>
-              </div>
-            ))}
-          </dl>
         </div>
 
         <aside className="hero-portrait">

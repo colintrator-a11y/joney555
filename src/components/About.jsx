@@ -1,4 +1,4 @@
-import { certifications, projects, spokenLanguages } from '../data/profile.js'
+import { certifications, projects } from '../data/profile.js'
 import { useLocale } from '../i18n/LocaleContext.jsx'
 import './About.css'
 
@@ -13,7 +13,7 @@ export default function About({ onFocus }) {
           <h2>{t.about.heading}</h2>
         </div>
 
-        <div className="about-grid">
+        <div className={`about-grid${certifications.length ? '' : ' is-single'}`}>
           <div className="about-copy">
             <p className="about-lead">{t.about.lead}</p>
             {/* The project count follows the list rather than being typed in,
@@ -40,49 +40,29 @@ export default function About({ onFocus }) {
             <p className="about-closing">{t.about.closing}</p>
           </div>
 
-          <aside className="about-side">
-            <div className="card about-panel">
-              <h3>{t.about.languagesTitle}</h3>
-              <ul className="lang-list">
-                {spokenLanguages.map((language) => {
-                  const copy = t.about.languages[language.id]
+          {/* Nothing to list means no column at all, rather than an empty
+              box beside the copy. */}
+          {certifications.length ? (
+            <aside className="about-side">
+              <div className="card about-panel">
+              <h3>{t.about.certTitle}</h3>
+              <ul className="cert-list">
+                {certifications.map((certification) => {
+                  const copy = t.about.certifications[certification.id]
                   return (
-                    <li key={language.id}>
-                      <div className="lang-row">
-                        <span className="lang-name">{copy.name}</span>
-                        <span className="lang-level">{copy.level}</span>
-                      </div>
-                      <div className="lang-track" role="presentation">
-                        <div className="lang-fill" style={{ width: `${language.value}%` }} />
-                      </div>
+                    <li key={certification.id}>
+                      <span className="cert-year">{certification.year}</span>
+                      <span className="cert-body">
+                        <strong>{copy.name}</strong>
+                        <small>{copy.detail}</small>
+                      </span>
                     </li>
                   )
                 })}
               </ul>
             </div>
-
-            {/* Nothing to list means no panel, rather than a heading over an
-                empty box. */}
-            {certifications.length ? (
-              <div className="card about-panel">
-                <h3>{t.about.certTitle}</h3>
-                <ul className="cert-list">
-                  {certifications.map((certification) => {
-                    const copy = t.about.certifications[certification.id]
-                    return (
-                      <li key={certification.id}>
-                        <span className="cert-year">{certification.year}</span>
-                        <span className="cert-body">
-                          <strong>{copy.name}</strong>
-                          <small>{copy.detail}</small>
-                        </span>
-                      </li>
-                    )
-                  })}
-                </ul>
-              </div>
-            ) : null}
           </aside>
+          ) : null}
         </div>
       </div>
     </section>

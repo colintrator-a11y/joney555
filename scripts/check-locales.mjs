@@ -1,6 +1,7 @@
 /**
- * Guards the one invariant the UI depends on: every locale has the same shape,
- * and every id in src/data/profile.js has a string in every locale. A missing
+ * Guards the one invariant the UI depends on: every id in src/data/profile.js
+ * has a string in the locale file (and, if more locales are ever added, that
+ * they all share one shape). A missing
  * key would render as `undefined` on the page rather than throwing, so this is
  * checked here instead of at runtime.
  *
@@ -13,7 +14,6 @@ import {
   projects,
   serviceIds,
   skillGroups,
-  spokenLanguages,
   stats,
 } from '../src/data/profile.js'
 
@@ -45,7 +45,6 @@ for (const locale of rest) {
 const coverage = {
   'nav': navSections,
   'hero.stats': stats.map((stat) => stat.id),
-  'about.languages': spokenLanguages.map((language) => language.id),
   'about.certifications': certifications.map((certification) => certification.id),
   'services.items': serviceIds,
   'skills.groups': skillGroups.map((group) => group.id),
@@ -64,7 +63,6 @@ for (const locale of localeList) {
   // Lengths the layout assumes.
   const lengths = {
     'about.best': [locale.about.best.length, 4],
-    'hero.facts': [locale.hero.facts.length, 4],
     'experience.points': [locale.experience.points.length, 4],
   }
 
@@ -87,4 +85,4 @@ if (problems.length) {
   process.exit(1)
 }
 
-console.log(`✓ ${localeList.length} locales (${localeList.map((l) => l.code).join(', ')}) — identical shape, every id covered`)
+console.log(`✓ ${localeList.map((l) => l.code).join(', ')} — every id covered`)

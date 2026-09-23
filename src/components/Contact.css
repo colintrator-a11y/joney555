@@ -25,19 +25,47 @@
   color: var(--ink-soft);
 }
 
-.contact-direct {
-  font-size: 0.9rem;
+.contact-direct-title {
+  margin-top: 22px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
 }
 
-.contact-direct a {
+.contact-channels {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.contact-channels li {
+  display: grid;
+  /* A fixed label column so the three values line up under each other. */
+  grid-template-columns: 82px minmax(0, 1fr);
+  align-items: baseline;
+  gap: 12px;
+}
+
+.channel-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--ink-faint);
+}
+
+.channel-value {
+  font-size: 0.93rem;
   color: var(--accent-ink);
   font-weight: 500;
   border-bottom: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  justify-self: start;
+  /* A long address on a narrow phone breaks rather than widening the row. */
+  overflow-wrap: anywhere;
 }
 
-.contact-direct a:hover {
-  border-bottom-color: var(--accent);
-}
+.channel-value:hover { border-bottom-color: var(--accent); }
 
 .contact-form {
   display: grid;

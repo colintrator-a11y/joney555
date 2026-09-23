@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { profile } from '../data/profile.js'
+import { contactChannels, profile } from '../data/profile.js'
 import { useLocale } from '../i18n/LocaleContext.jsx'
 import './Contact.css'
 
@@ -30,10 +30,26 @@ export default function Contact() {
             <span className="eyebrow">{t.contact.eyebrow}</span>
             <h2>{t.contact.heading}</h2>
             <p>{t.contact.body}</p>
-            <p className="contact-direct">
-              {t.contact.form.direct}{' '}
-              <a href={`mailto:${profile.contactEmail}`}>{profile.contactEmail}</a>
-            </p>
+            {/* Printed in full, and not only linked: a browser with no mail
+                app does nothing with a mailto:, and the same goes for a
+                desktop without Telegram or WhatsApp installed. */}
+            <h3 className="contact-direct-title">{t.contact.form.directTitle}</h3>
+            <ul className="contact-channels">
+              {contactChannels.map((channel) => (
+                <li key={channel.id}>
+                  <span className="channel-label">{t.contact.channels[channel.id]}</span>
+                  <a
+                    className="channel-value"
+                    href={channel.href}
+                    {...(channel.id === 'email'
+                      ? {}
+                      : { target: '_blank', rel: 'noreferrer noopener' })}
+                  >
+                    {channel.value}
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
 
           <form className="contact-form" onSubmit={submit}>

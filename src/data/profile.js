@@ -12,6 +12,19 @@ export const profile = {
 // The four areas the About list names. Each is broader than one category — a
 // visitor who clicks "Mobile" means phone work of any kind, games included —
 // so a focus selects a set of categories rather than a single one.
+// Every way to reach me, in the order they are shown. `value` is what the
+// page prints, `href` where it goes: wa.me wants the number with no spaces or
+// punctuation, t.me the handle without its @.
+export const contactChannels = [
+  {
+    id: 'email',
+    value: profile.contactEmail,
+    href: `mailto:${profile.contactEmail}`,
+  },
+  { id: 'telegram', value: '@joney555', href: 'https://t.me/joney555' },
+  { id: 'whatsapp', value: '+1 (857) 822-8963', href: 'https://wa.me/18578228963' },
+]
+
 export const focusAreas = {
   ecommerce: ['shopify', 'ecommerce', 'mobileCommerce'],
   web: ['wordpress', 'saas', 'blockchain'],

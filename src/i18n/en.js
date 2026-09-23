@@ -358,6 +358,11 @@ export default {
 
   contact: {
     eyebrow: 'Contact',
+    channels: {
+      email: 'Email',
+      telegram: 'Telegram',
+      whatsapp: 'WhatsApp',
+    },
     heading: 'Get in touch',
     body: 'Questions about my work, a role or a project? Send a message and I will get back to you.',
     form: {
@@ -366,7 +371,7 @@ export default {
       message: 'Your message',
       send: 'Send email',
       subject: 'Message from your portfolio',
-      direct: 'Or write to me directly at',
+      directTitle: 'Or reach me directly',
       note: 'This opens your own mail app with the message ready to send.',
     },
   },

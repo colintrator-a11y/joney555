@@ -4,8 +4,8 @@ import { useLocale } from '../i18n/LocaleContext.jsx'
 import ThemeToggle from './ThemeToggle.jsx'
 import './Navbar.css'
 
-// The same head crop the favicon is cut from, small enough that the nav does
-// not pull the full-size portrait down for a 32px circle.
+// A small head crop, so the nav does not pull the full-size portrait down for
+// a 32px circle. The tab icon is the "J" mark in public/, not this.
 const LOGO = `${import.meta.env.BASE_URL}logo.png`
 
 export default function Navbar() {

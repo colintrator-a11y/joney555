@@ -152,7 +152,7 @@ src/i18n/               English copy (en.js) and the React context that serves i
 src/styles/global.css   design tokens (light + dark) and shared primitives
 src/components/         one component + one stylesheet per section
 scripts/                copy coverage check, GIF optimiser
-public/                 avatar, favicon, robots.txt, sitemap.xml
+public/                 avatar, logo, "J" tab icon, robots.txt, sitemap.xml
 ```
 
 `src/styles/global.css` is imported before `App.jsx` in `main.jsx` so that

@@ -4,9 +4,9 @@ import { useLocale } from '../i18n/LocaleContext.jsx'
 import ThemeToggle from './ThemeToggle.jsx'
 import './Navbar.css'
 
-// A small head crop, so the nav does not pull the full-size portrait down for
-// a 32px circle. The tab icon is the "J" mark in public/, not this.
-const LOGO = `${import.meta.env.BASE_URL}logo.png`
+// The same "J" mark as the tab icon, from public/ so both can be replaced
+// without touching the build.
+const LOGO = `${import.meta.env.BASE_URL}icon.svg`
 
 export default function Navbar() {
   const t = useLocale()

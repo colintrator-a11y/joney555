@@ -32,9 +32,9 @@ export default {
 
   hero: {
     status: 'Open to new opportunities',
-    title: 'Full Stack & Mobile Developer',
+    title: 'Full Stack & Mobile & AI automation Developer',
     tagline:
-      'Web applications, mobile apps and online stores — taken from the first requirement through to deployment.',
+      'Web applications, mobile apps, online stores and AI automation — taken from the first requirement through to deployment.',
     note: 'This site introduces my skills and the projects behind them.',
     cta: 'See the work',
     caption: 'Full stack developer',
@@ -343,7 +343,7 @@ export default {
   experience: {
     eyebrow: 'Experience',
     heading: 'Work history',
-    role: 'Full Stack & Mobile Developer',
+    role: 'Full Stack & Mobile & AI automation Developer',
     company: 'Remote Development — Freelance',
     period: 'August 2019 — Present',
     points: [
@@ -370,6 +370,6 @@ export default {
   },
 
   footer: {
-    role: 'Full Stack & Mobile Developer · Singapore',
+    role: 'Full Stack & Mobile & AI automation Developer · Singapore',
   },
 }

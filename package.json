@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Portfolio website for Joney \u2014 Full Stack & Mobile Developer.",
+  "description": "Portfolio website for Joney \u2014 Full Stack & Mobile & AI automation Developer.",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

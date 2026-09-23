@@ -45,12 +45,8 @@
 .nav-mark {
   width: 34px;
   height: 34px;
-  border-radius: 50%;
-  object-fit: cover;
-  background: var(--bg-sunken);
-  /* A hairline ring so the light background of the crop does not bleed into
-     the page in the light theme. */
-  box-shadow: 0 0 0 1px var(--line-strong);
+  /* The mark is a rounded square, so a circular crop would cut its corners. */
+  border-radius: 9px;
 }
 
 /* The name alone: the job title is already the loudest line in the hero, and

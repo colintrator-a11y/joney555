@@ -1,4 +1,33 @@
-/* ------------------------------- intro -------------------------------- */
+/* ------------------------------ headline -------------------------------- */
+
+/* The role, then the stack it is built on, as one wrapping line. The dividers
+   are drawn by the stylesheet rather than typed, so they can be faint without
+   the words going faint with them. */
+.about-headline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 0;
+  margin-bottom: 26px;
+  font-size: 0.84rem;
+  color: var(--ink-faint);
+}
+
+.about-headline span { padding: 0 14px; }
+
+.about-headline span + span {
+  border-left: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+.about-headline span:first-child { padding-left: 0; }
+
+.about-headline .is-role {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--accent-ink);
+}
+
+/* ------------------------------- intro --------------------------------- */
 
 .about-intro {
   display: grid;
@@ -7,66 +36,121 @@
   align-items: center;
 }
 
-/* The portrait as a lit disc, ringed like the loader: the one round thing on
-   a page of rectangles. */
+/* ------------------------------ portrait -------------------------------- */
+
 .about-portrait {
   position: relative;
-  width: 168px;
+  width: 252px;
   margin: 0;
+  padding: 26px 0 8px;
   text-align: center;
 }
 
-.about-portrait img {
-  width: 148px;
-  height: 148px;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
-  box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent-soft) 55%, transparent),
-    0 0 42px -6px rgba(var(--glow), 0.65);
+/* The frame: a squircle lit along its edge, so the photograph reads as a
+   plate mounted in a rig rather than a picture in a box. */
+.about-portrait-frame {
+  position: relative;
+  display: block;
+  width: 168px;
+  margin: 0 auto;
+  padding: 7px;
+  border-radius: 34% / 32%;
+  background:
+    conic-gradient(
+      from 140deg,
+      rgba(var(--glow), 0.9),
+      transparent 28%,
+      transparent 52%,
+      rgba(var(--glow), 0.75) 72%,
+      transparent 92%
+    ),
+    var(--bg-sunken);
+  box-shadow: 0 0 46px -14px rgba(var(--glow), 0.9);
 }
 
-/* The orbit: a dashed ring turning slowly around the photograph. */
-.about-portrait::before {
+.about-portrait-frame img {
+  display: block;
+  width: 100%;
+  /* The <img> carries width/height attributes, which the browser maps to CSS
+     dimensions: without height:auto the attribute wins and aspect-ratio is
+     ignored, because both dimensions would then be specified. */
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: inherit;
+  background: var(--bg-sunken);
+}
+
+/* The sweep: a dashed ring turning slowly around the plate. */
+.about-portrait-frame::after {
   content: '';
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 168px;
-  height: 168px;
-  margin: -84px 0 0 -84px;
-  border-radius: 50%;
-  border: 1px dashed color-mix(in srgb, var(--accent) 38%, transparent);
-  animation: about-orbit 26s linear infinite;
+  inset: -9px;
+  border-radius: inherit;
+  border: 1px dashed color-mix(in srgb, var(--accent) 32%, transparent);
+  animation: about-orbit 34s linear infinite;
 }
 
 @keyframes about-orbit {
   to { transform: rotate(360deg); }
 }
 
+/* --------------------------- orbiting labels ---------------------------- */
+
+.about-orbit span {
+  position: absolute;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  background: color-mix(in srgb, var(--bg-raised) 88%, transparent);
+  box-shadow: 0 0 18px -8px rgba(var(--glow), 0.9);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--accent-ink);
+  white-space: nowrap;
+  /* Each label bobs a beat after the one before it, so the group never moves
+     as one block. */
+  animation: about-float 5.2s ease-in-out infinite;
+  animation-delay: calc(var(--slot) * -1.3s);
+}
+
+/* One to a corner of the frame. */
+.about-orbit span:nth-child(1) { top: 6px; left: -4px; }
+.about-orbit span:nth-child(2) { top: 64px; right: -20px; }
+.about-orbit span:nth-child(3) { bottom: 78px; left: -22px; }
+.about-orbit span:nth-child(4) { bottom: 34px; right: 10px; }
+
+@keyframes about-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
 .about-portrait figcaption {
-  margin-top: 26px;
-  font-size: 0.7rem;
-  letter-spacing: 0.18em;
+  margin-top: 18px;
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--ink-faint);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .about-portrait::before { animation: none; }
+  .about-portrait-frame::after,
+  .about-orbit span { animation: none; }
 }
+
+/* --------------------------------- lead --------------------------------- */
 
 .about-lead {
-  font-size: 1.22rem;
-  line-height: 1.5;
+  font-size: 1.1rem;
+  line-height: 1.55;
   color: var(--ink);
-  max-width: 34ch;
 }
 
-/* The figure behind the claim, set apart from it by the rule rather than by a
-   box: a second card here would compete with the four below. */
+/* The figure behind the claim, set apart by a rule rather than a box: a second
+   card here would compete with the four below. */
 .about-reach {
-  font-size: 0.97rem;
+  font-size: 0.95rem;
   color: var(--ink-soft);
   padding-left: 22px;
   border-left: 2px solid var(--accent);
@@ -193,7 +277,11 @@
 }
 
 @media (max-width: 860px) {
-  .about-intro { grid-template-columns: minmax(0, 1fr); gap: 18px; justify-items: start; }
+  .about-intro { grid-template-columns: minmax(0, 1fr); gap: 24px; justify-items: start; }
+
+  /* Centred once stacked: the labels hang off both sides of the frame, and
+     against the left edge the left-hand ones would push the page wider. */
+  .about-portrait { justify-self: center; }
   .about-reach { grid-column: auto; }
   .about-lead { max-width: none; }
   .about-close { grid-template-columns: minmax(0, 1fr); }
@@ -201,6 +289,8 @@
 
 @media (max-width: 560px) {
   .about-best { grid-template-columns: minmax(0, 1fr); }
-  .about-lead { font-size: 1.12rem; }
+  .about-lead { font-size: 1rem; }
+  .about-headline { font-size: 0.78rem; }
+  .about-headline span { padding: 0 10px; }
   .about-subhead { margin-top: 32px; }
 }

@@ -1,4 +1,4 @@
-import { certifications, profile, stats } from '../data/profile.js'
+import { certifications, orbitSkills, profile, stats } from '../data/profile.js'
 import { useLocale } from '../i18n/LocaleContext.jsx'
 import './About.css'
 
@@ -13,18 +13,40 @@ export default function About({ onFocus }) {
           <h2>{t.about.heading}</h2>
         </div>
 
+        {/* The title, as one line of segments: the first is the role, the rest
+            are what it is built on. Split here rather than typed with dividers
+            so each piece can be styled and wrapped on its own. */}
+        <p className="about-headline" data-reveal>
+          {t.about.headline.split('|').map((part, index) => (
+            <span key={part.trim()} className={index === 0 ? 'is-role' : undefined}>
+              {part.trim()}
+            </span>
+          ))}
+        </p>
+
         {/* The opening claim and the figure behind it, side by side: the lead
             reads as the statement, the note as its evidence. */}
         <div className="about-intro" data-reveal>
           {/* Lives in public/ so it can be swapped without touching the build. */}
-          <figure className="about-portrait" data-tilt="soft">
-            <img
-              src={`${import.meta.env.BASE_URL}avatar.jpg`}
-              alt={`${profile.name}, ${t.hero.title}`}
-              width="900"
-              height="1125"
-              loading="lazy"
-            />
+          <figure className="about-portrait" data-tilt>
+            <span className="about-portrait-frame">
+              <img
+                src={`${import.meta.env.BASE_URL}avatar.jpg`}
+                alt={`${profile.name}, ${t.hero.title}`}
+                width="900"
+                height="1125"
+                loading="lazy"
+              />
+            </span>
+
+            {/* The stack, hung off the corners of the frame. Decorative: the
+                same names are in the Skills section as text. */}
+            <span className="about-orbit" aria-hidden="true">
+              {orbitSkills.map((skill, index) => (
+                <span key={skill} style={{ '--slot': index }}>{skill}</span>
+              ))}
+            </span>
+
             <figcaption>{t.hero.captionValue}</figcaption>
           </figure>
 

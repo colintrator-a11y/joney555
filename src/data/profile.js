@@ -83,6 +83,10 @@ export const experience = [
   },
 ]
 
+// The four labels that ring the portrait in the About section. Four because
+// the frame has four sides to hang them from.
+export const orbitSkills = ['Flutter', 'React Native', 'Python', 'AI']
+
 export const navSections = ['about', 'services', 'skills', 'work', 'experience', 'contact']
 
 export const serviceIds = ['web', 'mobile', 'ecommerce', 'automation']

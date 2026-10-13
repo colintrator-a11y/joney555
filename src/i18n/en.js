@@ -55,7 +55,11 @@ export default {
   about: {
     eyebrow: 'About',
     heading: 'Seven years of building for web and mobile',
-    lead: 'I\u2019m a full stack and mobile developer. I build web applications, mobile apps, online stores and automations, and I work across the whole path — from the first requirement to a product running in production.',
+    // The pipe-separated line is rendered as its own row of segments; the
+    // separators are drawn rather than typed, so they can be styled.
+    headline:
+      'Senior Mobile & AI Software Engineer | Flutter | React Native | Python | Full-Stack Development | AI Integration | 7+ Years of Software Engineering Experience',
+    lead: 'I build cross-platform apps in Flutter and React Native, the Python and Node services behind them, and the AI that increasingly sits in the middle \u2014 LLM APIs, chat, document processing, automation. Seven years of it, with product teams in Singapore.',
     reach: (count) =>
       `7 years and ${count} projects across web, mobile, e-commerce and automation. This page walks through the skills and the work behind them.`,
     bestTitle: 'What I do best',

@@ -290,8 +290,16 @@ the copy stay as they are.
 
 The portrait is [`public/avatar.jpg`](public/avatar.jpg) — a plain file in
 `public/`, not a bundled asset, so it can be replaced without touching the code.
-The frame is 4:5; the current file is 900×1125. If it is ever missing, the hero
-falls back to a "J" monogram rather than a broken image.
+It lives in the About section, in a squircle frame lit along one edge by a
+conic gradient, with a dashed ring turning around it and the four names in
+`orbitSkills` hung off its corners. Those labels are decoration: the same
+technologies are in the Skills section as text.
+
+Give the file any aspect ratio — it is cropped square by `object-fit`. The
+`height: auto` on it is load-bearing: an `<img>` with `width`/`height`
+attributes has both dimensions specified as far as CSS is concerned, and
+`aspect-ratio` is then ignored, which renders the photograph at its full
+1125px height.
 
 ## Structure
 

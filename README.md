@@ -226,9 +226,10 @@ sitting in a grey smear.
 It is markup and inline CSS in [`index.html`](index.html), not a component: a
 React loader cannot paint until the bundle it lives in has downloaded, which is
 the wait being covered. [`src/utils/bootScreen.js`](src/utils/bootScreen.js)
-takes it away once the fonts have resolved and the portrait has decoded — at
-least 450ms so it reads as a transition rather than a flicker, and at most
-3.2s, because a font that never resolves must not leave anyone watching a cube.
+takes it away once the fonts have resolved and the first image has decoded —
+but never before **5 seconds**, so the web is seen being spun rather than
+glimpsed. The waits themselves are still capped at 3.2s each, because a font
+that never resolves must not leave anyone waiting on it.
 Under `prefers-reduced-motion` the web is shown spun rather than spinning, and
 only the bar pulses.
 

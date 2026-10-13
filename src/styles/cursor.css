@@ -1,0 +1,47 @@
+/*
+ * The spider, hanging from the point it is pointing at — the hotspot is the
+ * top of its thread, so the pixel being clicked is still the one under the
+ * tip, not somewhere inside the drawing.
+ *
+ * Imported last, after every component stylesheet: `.btn` and `.filter` set
+ * `cursor: pointer` themselves, and with equal specificity the later rule is
+ * the one that counts.
+ *
+ * The images are bundled assets rather than files in public/, so Vite writes
+ * the finished URL into the stylesheet: an absolute /cursor-spider.png would
+ * break the moment the site is served from anywhere but a domain root.
+ *
+ * Only where there is a cursor to replace. A touch screen has none, and
+ * `auto`/`pointer` stays as the fallback in every rule for a browser that
+ * refuses a custom cursor or cannot load the file.
+ */
+@media (hover: hover) and (pointer: fine) {
+  body {
+    cursor: url('../assets/cursor-spider.png') 4 4, auto;
+  }
+
+  /* The lit variant, on anything that answers a click. */
+  a,
+  button,
+  summary,
+  select,
+  [role='button'],
+  .filter,
+  .tag-button,
+  .btn {
+    cursor: url('../assets/cursor-spider-link.png') 4 4, pointer;
+  }
+
+  /* Text still wants a text cursor: a spider sitting over the field you are
+     typing in hides the caret you are aiming. */
+  input,
+  textarea {
+    cursor: text;
+  }
+
+  /* The preview says what it does instead: the picture zooms, and once
+     zoomed it is dragged. */
+  .lightbox-stage img { cursor: zoom-in; }
+  .lightbox-stage img.is-zoomed { cursor: grab; }
+  .lightbox-stage img.is-zoomed:active { cursor: grabbing; }
+}

@@ -48,6 +48,28 @@ Cards are *slightly* transparent so the sky shows through, but they carry no
 alone puts 48 of them on a page. The blur is kept for the two surfaces that
 genuinely float — the dock and the hero's tiles.
 
+## The cursor
+
+A spider, hanging by a thread from the point it is pointing at:
+[`src/styles/cursor.css`](src/styles/cursor.css), with a lit variant on
+anything clickable. The hotspot is the top of the thread, so the pixel being
+clicked is the one under the tip rather than somewhere inside the drawing.
+
+Three things it deliberately does not do. **Replace the caret** — a spider over
+the field you are typing in hides the thing you are aiming. **Replace the
+preview's own cursors** — zoom-in and grab say more there than a spider does.
+**Appear on a touch screen**, which has no cursor to replace; the rules sit
+behind `(hover: hover) and (pointer: fine)`, and every one keeps `auto` or
+`pointer` as its fallback.
+
+The images are bundled assets, not files in `public/`, so Vite writes the final
+URL into the stylesheet — an absolute `/cursor-spider.png` would break the
+moment the site is served from anywhere but a domain root. At ~2KB each they
+end up inlined as data URIs, so the cursor costs no request at all. The sheet
+is imported last in `main.jsx`, after the component stylesheets, because
+`.btn` and `.filter` set `cursor: pointer` themselves and equal specificity is
+settled by order.
+
 ## The loading screen
 
 Rings leaving the mark, one after another, held until the page is worth

@@ -8,6 +8,9 @@ import './styles/global.css'
 import './styles/tailwind.css'
 import './styles/depth.css'
 import App from './App.jsx'
+// After the component stylesheets, which set their own cursors: with equal
+// specificity, the last rule in the bundle is the one that applies.
+import './styles/cursor.css'
 import dismissBootScreen from './utils/bootScreen.js'
 import initDepth from './utils/depth.js'
 

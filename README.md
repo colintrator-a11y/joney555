@@ -380,12 +380,15 @@ its own rotation and the rings would shear. The four names in `orbitSkills`
 float around it, and they are decoration: the same technologies are in the
 Skills section as text.
 
-The rings are drawn twice. The second copy sits over the mark, clipped to a
-disc just larger than it and strengthened, because the half of the sphere
-nearest the reader has to cross in front of the mark — without it the mark
-reads as something sitting outside the sphere rather than at the heart of it.
-Clipped, because drawing the whole set twice would double every line
-everywhere else.
+The rings are drawn twice. The second copy sits over the mark, because the half
+of the sphere nearest the reader has to cross in front of it — without that the
+mark reads as something sitting outside the sphere rather than at the heart of
+it. It is masked down to a disc around the mark, since drawing the whole set
+twice would double every line everywhere else, and it is masked rather than
+clipped: a clip ends each thread with a cut edge, and those cut ends read as
+short shadows lying inside the sphere. The copy keeps the colours of the
+original, so a thread crossing the mark is the same thread it was a pixel
+earlier.
 
 ## Structure
 

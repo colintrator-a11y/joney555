@@ -131,27 +131,19 @@
   50% { scale: 1.06; }
 }
 
-/* The front half, drawn over the mark. Same rings, same animation, started at
-   the same moment, so the two copies turn as one. */
+/* The front half, drawn over the mark. Same rings, same colours, same
+   animation started at the same moment, so the two copies turn as one and a
+   thread crossing the mark is the same thread it was a pixel earlier.
+
+   Masked rather than clipped: a clip ends a line with a cut edge, and those
+   cut ends read as little shadows lying inside the sphere. A mask lets each
+   thread fade out instead, so there is nothing to see but the thread. */
 .about-sphere-front {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  /* Only where it crosses the mark: elsewhere the first copy is already
-     drawing these lines. */
-  clip-path: circle(38px at 50% 50%);
-}
-
-/* Over a pale tile the thread has to be stronger than it is against the page,
-   or it disappears exactly where it is doing its job. */
-.about-sphere-front .about-ring {
-  border-color: color-mix(in srgb, var(--accent) 72%, transparent);
-}
-
-.about-sphere-front .about-ring:nth-child(7),
-.about-sphere-front .about-ring:nth-child(8),
-.about-sphere-front .about-ring:nth-child(9) {
-  border-color: color-mix(in srgb, var(--accent) 52%, transparent);
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 48%, transparent 76%);
+  mask-image: radial-gradient(circle at 50% 50%, #000 48%, transparent 76%);
 }
 
 /* --------------------------- orbiting labels ---------------------------- */

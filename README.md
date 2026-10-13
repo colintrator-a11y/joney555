@@ -47,7 +47,15 @@ so it curls rather than sitting flat. It is drawn at unit size and the context
 is scaled instead of the path, which lets one cached gradient — pale at the
 tip, deep at the base — paint all four hundred of them. A petal the pointer
 passes turns a little towards it, eased frame by frame rather than set, so it
-leans rather than flicks. Every one of them is the same colour — depth and the pointer change how
+leans rather than flicks.
+
+They float rather than travel. Each one rides a swell of its own — an offset
+added at drawing time, not a change of course, so it rises and falls without
+wandering off across the page — and rocks about its own axis as it goes. A
+click sends a ring of push outwards from the point: a band, not a drawn circle,
+lifting the petals it passes and leaving them to settle back towards where they
+were. The ring tires as it spreads, the petals lose their momentum to damping,
+and what is left pulls slowly home. Every one of them is the same colour — depth and the pointer change how
 present a petal is, never what colour it is, or the sky reads as two sets of
 confetti. They fall at a third of the speed the stars sweep past: a night sky
 seen from a moving ship, a day sky of petals in still air. Same structure,
@@ -363,6 +371,13 @@ thing that turns; applied to the rotating element it would be re-applied after
 its own rotation and the rings would shear. The four names in `orbitSkills`
 float around it, and they are decoration: the same technologies are in the
 Skills section as text.
+
+The rings are drawn twice. The second copy sits over the mark, clipped to a
+disc just larger than it and strengthened, because the half of the sphere
+nearest the reader has to cross in front of the mark — without it the mark
+reads as something sitting outside the sphere rather than at the heart of it.
+Clipped, because drawing the whole set twice would double every line
+everywhere else.
 
 ## Structure
 

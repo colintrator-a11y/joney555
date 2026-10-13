@@ -37,6 +37,20 @@ export default function About({ onFocus }) {
                 ))}
               </span>
               <span className="about-core">{profile.name.charAt(0)}</span>
+
+              {/* The same rings again, over the mark and clipped to a disc
+                  just larger than it: the half of the sphere nearest the
+                  reader has to pass in front of the mark, or the mark reads as
+                  something sitting outside the sphere rather than inside it.
+                  Clipped, because drawing the whole set twice would double
+                  every line everywhere else. */}
+              <span className="about-sphere-front">
+                <span className="about-sphere-spin">
+                  {Array.from({ length: 9 }, (_, ring) => (
+                    <span key={ring} className="about-ring" style={{ '--ring': ring }} />
+                  ))}
+                </span>
+              </span>
             </span>
 
             {/* The stack, hung off the corners of the frame. Decorative: the

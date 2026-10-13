@@ -60,6 +60,20 @@ const DAY_SPEED = 0.3
 const TILT_MAX = 0.42
 const TILT_EASE = 0.06
 
+// Water. A petal on a surface does not travel in a line: it rides a swell,
+// rocks as it goes, and comes back to rest where it was.
+const BOB_AMP = 7          // px of sway at the near plane
+const BOB_RATE = 0.00042   // radians per millisecond
+
+// The ring a click sends out. It is a band of push, not a drawn circle: the
+// petals it passes are lifted outwards and then settle.
+const RIPPLE_MS = 1500
+const RIPPLE_REACH = 620   // px the front of the ring travels
+const RIPPLE_BAND = 86     // how wide the push is at its front
+const RIPPLE_FORCE = 3.4
+const RIPPLE_DAMP = 0.9    // how quickly a pushed petal loses its momentum
+const RIPPLE_HOME = 0.012  // and how quickly it drifts back to where it was
+
 /**
  * One petal, drawn around the origin at unit size: a pointed tip at the top, a
  * fuller, rounder base at the bottom, and the two sides cut differently so it
@@ -97,6 +111,7 @@ export default function SpaceField() {
     let frame = 0
     const pointer = { x: 0, y: 0, on: false }
     let webs = []
+    let ripples = []
 
     // A web is cut once, at the click: the jitter in its spokes has to stay
     // the same for the life of the animation or it would shiver.
@@ -105,8 +120,14 @@ export default function SpaceField() {
         const angle = (i / WEB_SPOKES) * Math.PI * 2 + (Math.random() - 0.5) * 0.22
         return { angle, reach: 0.72 + Math.random() * 0.45 }
       })
-      webs.push({ x, y, born: performance.now(), spokes })
+      const born = performance.now()
+      webs.push({ x, y, born, spokes })
       if (webs.length > WEB_MAX) webs = webs.slice(-WEB_MAX)
+      // Day only: at night the stars are not floating on anything.
+      if (!night) {
+        ripples.push({ x, y, born })
+        if (ripples.length > WEB_MAX) ripples = ripples.slice(-WEB_MAX)
+      }
     }
 
     // The canvas is painted in the page's own colours, so the sky follows the
@@ -175,6 +196,14 @@ export default function SpaceField() {
         spinV: (Math.random() - 0.5) * 0.012,
         tilt: 0,
         glint: 0,
+        // Water: each petal rides its own swell, and carries whatever a
+        // passing ripple gave it.
+        waveF: 0.7 + Math.random() * 0.8,
+        waveA: 0.55 + Math.random() * 0.9,
+        ox: 0,
+        oy: 0,
+        ovx: 0,
+        ovy: 0,
       }
     }
 
@@ -184,6 +213,8 @@ export default function SpaceField() {
       const cx = width / 2
       const cy = height / 2
 
+      if (!night) ripples = ripples.filter((r) => time - r.born < RIPPLE_MS)
+
       const screen = []
       for (const star of stars) {
         if (!still.matches) {
@@ -192,7 +223,7 @@ export default function SpaceField() {
           star.x += star.vx * pace
           star.y += star.vy * pace
           star.z += star.vz * pace
-          star.spin += star.spinV * (night ? 1 : 0.6)
+          star.spin += star.spinV * (night ? 1 : 0.28)
 
           // Out of the volume at either end: born again at the far side of it,
           // so the field neither empties nor crowds the eye.
@@ -211,8 +242,10 @@ export default function SpaceField() {
         }
 
         const scale = FOCAL / star.z
-        const sx = cx + star.x * scale
-        const sy = cy + star.y * scale
+        // Not const: by day the swell and any passing ripple are added to
+        // these before anything is drawn or measured.
+        let sx = cx + star.x * scale
+        let sy = cy + star.y * scale
         // Depth as a 0–1 reading, used for size, brightness and the web.
         const near = Math.min(Math.max((FAR - star.z) / (FAR - NEAR), 0), 1)
         screen.push({ x: sx, y: sy, near })
@@ -233,6 +266,39 @@ export default function SpaceField() {
           // falling rather than things shining. One colour throughout —
           // depth and the pointer change how present a petal is, never what
           // colour it is, or the sky looks like two sets of confetti.
+          // The swell: an offset rather than a change of course, so a petal
+          // rides up and down without wandering off across the page.
+          const swell = time * BOB_RATE * star.waveF + star.twinkle
+          const bobX = Math.sin(swell) * BOB_AMP * star.waveA * (0.35 + near * 0.65)
+          const bobY = Math.cos(swell * 0.82) * BOB_AMP * 0.62 * star.waveA * (0.35 + near * 0.65)
+
+          // What any passing ripple has done to it, and the slow return home.
+          if (!still.matches) {
+            for (const ripple of ripples) {
+              const age = (time - ripple.born) / RIPPLE_MS
+              const front = RIPPLE_REACH * (1 - Math.pow(1 - age, 2.2))
+              const dx = sx + star.ox - ripple.x
+              const dy = sy + star.oy - ripple.y
+              const distance = Math.hypot(dx, dy) || 0.001
+              const band = Math.abs(distance - front)
+              if (band > RIPPLE_BAND) continue
+              // Strongest at the crest of the ring, and weaker as the ring
+              // tires and spreads.
+              const push = (1 - band / RIPPLE_BAND) * (1 - age) * RIPPLE_FORCE
+              star.ovx += (dx / distance) * push
+              star.ovy += (dy / distance) * push
+              star.spin += push * 0.01
+            }
+
+            star.ovx *= RIPPLE_DAMP
+            star.ovy *= RIPPLE_DAMP
+            star.ox += star.ovx - star.ox * RIPPLE_HOME
+            star.oy += star.ovy - star.oy * RIPPLE_HOME
+          }
+
+          sx += bobX + star.ox
+          sy += bobY + star.oy
+
           const lean = pointer.on
             ? Math.max(0, 1 - Math.hypot(sx - pointer.x, sy - pointer.y) / POINTER_DISTANCE)
             : 0
@@ -244,7 +310,7 @@ export default function SpaceField() {
           context.globalAlpha = (0.18 + near * 0.5) * pulse + star.glint * 0.26
           context.save()
           context.translate(sx, sy)
-          context.rotate(star.spin + star.tilt)
+          context.rotate(star.spin + star.tilt + Math.sin(swell * 1.1) * 0.22)
           // The gradient is written in the same unit space as the path, so
           // scaling the context carries both.
           context.scale(size * 3.1, size * 3.1)

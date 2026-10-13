@@ -426,6 +426,14 @@ The headline "projects" count in the hero follows `projects.length`.
    [`src/i18n/en.js`](src/i18n/en.js).
 3. Run `npm run check:locales`, which fails if a role has no copy.
 
+Each role shows its company's logo, from `src/assets/logos/<id>.png` where
+`<id>` is the role's id in `profile.js` — adding one is dropping the file in. A
+role without a file shows the company's initials instead, so the column of
+marks never has a gap. The five there now are the companies' own app icons,
+taken from their websites. Every mark sits on a white tile whatever its own
+colours: some are drawn for white pages, and Tech JDI's black wordmark vanishes
+on a dark card without one.
+
 The dates are printed and the length of each job worked out from `start` and
 `end`, so "1 yr 10 mos" on the current role keeps counting without anyone
 editing the file. Past roles are written in the past tense, the current one in

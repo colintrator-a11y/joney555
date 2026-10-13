@@ -1,4 +1,22 @@
 import { experience } from '../data/profile.js'
+
+// Every file in src/assets/logos/, keyed by its name without the extension —
+// which is the role's id in profile.js. Adding a logo is dropping a file in.
+const logos = Object.fromEntries(
+  Object.entries(
+    import.meta.glob('../assets/logos/*.{png,svg,webp,jpg}', { eager: true, query: '?url', import: 'default' }),
+  ).map(([path, url]) => [path.split('/').pop().replace(/\.[^.]+$/, ''), url]),
+)
+
+// For a role with no logo file: the company's initials, so the column of
+// marks stays a column instead of a gap where one is missing.
+const initials = (name) =>
+  name
+    .split(/\s+/)
+    .map((word) => word[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase()
 import { useLocale } from '../i18n/LocaleContext.jsx'
 import './Experience.css'
 
@@ -72,11 +90,22 @@ export default function Experience() {
                   <span className="timeline-index" aria-hidden="true">
                     {String(experience.length - index).padStart(2, '0')}
                   </span>
-                  <h3>{copy.role}</h3>
-                  <p className="timeline-company">{job.company}</p>
-                  <p className="timeline-meta">
-                    {copy.type} · {job.location}
-                  </p>
+                  <div className="timeline-head">
+                    <span className="timeline-logo">
+                      {logos[job.id] ? (
+                        <img src={logos[job.id]} alt={`${job.company} logo`} width="44" height="44" loading="lazy" />
+                      ) : (
+                        <span aria-hidden="true">{initials(job.company)}</span>
+                      )}
+                    </span>
+                    <div>
+                      <h3>{copy.role}</h3>
+                      <p className="timeline-company">{job.company}</p>
+                      <p className="timeline-meta">
+                        {copy.type} · {job.location}
+                      </p>
+                    </div>
+                  </div>
 
                   <ul>
                     {copy.points.map((point) => (

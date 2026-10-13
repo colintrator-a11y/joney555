@@ -45,7 +45,7 @@
    * a section title. It is a mask rather than an image, so the thread takes
    * its colour from the page and follows the theme without a second copy.
    */
-  --web-corner: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none' stroke='%23000' stroke-width='1.1' stroke-linecap='round'><path d='M0 0L99.5 10.5 M0 0L94.6 32.6 M0 0L84.8 53.0 M0 0L70.7 70.7 M0 0L53.0 84.8 M0 0L32.6 94.6 M0 0L10.5 99.5'/><path d='M25.9 2.7Q22.3 5.0 24.6 8.5Q20.7 9.9 22.0 13.8Q17.9 14.2 18.4 18.4Q14.2 17.9 13.8 22.0Q9.9 20.7 8.5 24.6Q5.0 22.3 2.7 25.9'/><path d='M49.7 5.2Q43.0 9.5 47.3 16.3Q39.7 18.9 42.4 26.5Q34.4 27.4 35.4 35.4Q27.4 34.4 26.5 42.4Q18.9 39.7 16.3 47.3Q9.5 43.0 5.2 49.7'/><path d='M73.6 7.7Q63.6 14.1 70.0 24.1Q58.8 28.0 62.8 39.2Q51.0 40.5 52.3 52.3Q40.5 51.0 39.2 62.8Q28.0 58.8 24.1 70.0Q14.1 63.6 7.7 73.6'/><path d='M97.5 10.2Q84.2 18.7 92.7 31.9Q77.8 37.1 83.1 51.9Q67.5 53.7 69.3 69.3Q53.7 67.5 51.9 83.1Q37.1 77.8 31.9 92.7Q18.7 84.2 10.2 97.5'/></svg>");
+  --web-corner: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none' stroke='%23000' stroke-width='0.7' stroke-linecap='round'><path d='M0 0L99.5 10.5 M0 0L94.6 32.6 M0 0L84.8 53.0 M0 0L70.7 70.7 M0 0L53.0 84.8 M0 0L32.6 94.6 M0 0L10.5 99.5'/><path d='M25.9 2.7Q22.3 5.0 24.6 8.5Q20.7 9.9 22.0 13.8Q17.9 14.2 18.4 18.4Q14.2 17.9 13.8 22.0Q9.9 20.7 8.5 24.6Q5.0 22.3 2.7 25.9'/><path d='M49.7 5.2Q43.0 9.5 47.3 16.3Q39.7 18.9 42.4 26.5Q34.4 27.4 35.4 35.4Q27.4 34.4 26.5 42.4Q18.9 39.7 16.3 47.3Q9.5 43.0 5.2 49.7'/><path d='M73.6 7.7Q63.6 14.1 70.0 24.1Q58.8 28.0 62.8 39.2Q51.0 40.5 52.3 52.3Q40.5 51.0 39.2 62.8Q28.0 58.8 24.1 70.0Q14.1 63.6 7.7 73.6'/><path d='M97.5 10.2Q84.2 18.7 92.7 31.9Q77.8 37.1 83.1 51.9Q67.5 53.7 69.3 69.3Q53.7 67.5 51.9 83.1Q37.1 77.8 31.9 92.7Q18.7 84.2 10.2 97.5'/></svg>");
 }
 
 /* Daylight is Wendy's: the same structure in lilac and rose, with petals in
@@ -178,13 +178,21 @@ a {
   width: 54px;
   height: 54px;
   background: var(--accent);
-  -webkit-mask-image: var(--web-corner);
-  mask-image: var(--web-corner);
-  -webkit-mask-size: contain;
-  mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  opacity: 0.22;
+  /*
+   * Two masks, intersected: the web itself, and a circle of light centred on
+   * the corner it hangs from. The second one is what lets the threads fade
+   * into the page instead of stopping dead at the outermost arc, which is
+   * what made these read as stickers laid over the sky.
+   */
+  -webkit-mask-image: var(--web-corner), radial-gradient(circle at 0% 0%, #000 34%, transparent 82%);
+  mask-image: var(--web-corner), radial-gradient(circle at 0% 0%, #000 34%, transparent 82%);
+  -webkit-mask-size: contain, 100% 100%;
+  mask-size: contain, 100% 100%;
+  -webkit-mask-repeat: no-repeat, no-repeat;
+  mask-repeat: no-repeat, no-repeat;
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+  opacity: 0.2;
   pointer-events: none;
 }
 

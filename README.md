@@ -192,6 +192,16 @@ without a second copy, and the one file serves a 330px web in the hero and a
 has to be encoded — left raw it begins a fragment and the browser throws the
 rest of the drawing away, leaving a solid rectangle where the web should be.
 
+Blending it into the sky took three things, and all three were needed. The
+threads are **thin** (0.7 against a soft sky; at 1.1 a web reads as drawn on
+glass). The web is **hung from beyond the corner**, so its outer threads run
+off the screen instead of ending in a visible arc inside it — which is why
+`.hero` has `overflow: hidden`, since the overhang would otherwise count
+towards the page's scrollable width. And the mask is **two masks intersected**:
+the web itself, and a circle of light centred on the corner it hangs from, so
+the threads thin out into the page rather than stopping dead. Without the
+second mask they read as stickers laid over the sky.
+
 The mark drops the web below 64px. On a 32px favicon the threads are noise
 rather than a web, and the letter has to win.
 

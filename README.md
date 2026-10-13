@@ -89,8 +89,21 @@ Two canvases carry it:
   second field of points. A sixth of all stars run warm rather than blue, the
   nearest few throw the cross a bright point makes through a lens, and every
   ten seconds or so something crosses the sky along the band, head bright and
-  tail stretched behind it. Behind all of it are three still clouds of colour,
-  in CSS. Every star has a depth,
+  tail stretched behind it. The spikes on a burning star are tapered slivers
+  rather than lines — a line of even width reads as a plus sign drawn on the
+  sky, where a spike that narrows to nothing reads as light — over a bloom that
+  is most of what the eye actually sees.
+
+  Behind all of it, in CSS: three still clouds of colour, and three worlds — a
+  blue moon, a small warm one, and a large ringed planet that gives the sky its
+  scale, because a field of stars alone has no scale in it. They are in the
+  backdrop rather than on the canvas because a planet is a large, soft, barely
+  moving thing, and the compositor keeps one for nothing where the canvas
+  repaints it sixty times a second: drawn live they cost two thirds of the
+  frame rate, cached as sprites and blitted, a third of it, and as CSS,
+  nothing.
+
+  Every star has a depth,
   and what reaches the screen is its perspective projection: near ones are
   larger, brighter and sweep past faster, and when one passes the eye it is
   born again at the back. Threads are drawn only between stars at a similar
@@ -128,7 +141,8 @@ at home. The device pixel ratio is capped at 2, and the web is bucketed into a
 grid one link-distance across — comparing all 260 stars with each other would
 be 34,000 pairs a frame.
 
-Cards are *slightly* transparent so the sky shows through, but they carry no
+Cards are transparent enough for the sky to carry through them, but they carry
+no
 `backdrop-filter`: that is a full-screen filter per card, and the work list
 alone puts 48 of them on a page. The blur is kept for the two surfaces that
 genuinely float — the dock and the hero's tiles.

@@ -151,10 +151,11 @@ genuinely float — the dock and the hero's tiles.
 
 ## The cursor
 
-A spider, hanging by a thread from the point it is pointing at:
-[`src/styles/cursor.css`](src/styles/cursor.css), with a lit variant on
-anything clickable. The hotspot is the top of the thread, so the pixel being
-clicked is the one under the tip rather than somewhere inside the drawing.
+A spider, turned to one side the way an arrow cursor is, and nothing else
+around it: [`src/styles/cursor.css`](src/styles/cursor.css), with a lit variant
+on anything clickable. It faces up and to the left, and what it faces is the
+hotspot, so the pixel being clicked is the one under its head rather than
+somewhere inside the drawing.
 
 In daylight it is a butterfly instead, arriving at the same point the spider
 hangs from — the light theme is Wendy's, and the pointer belongs to it too.
@@ -224,13 +225,18 @@ other. The spokes go out first and the spirals are laid from the middle
 outwards, which is the order a spider works in. Held until the page is worth
 looking at.
 
-The spider is [`public/spider.webp`](public/spider.webp) — artwork, not
-drawing, so it is a plain file in `public/` and the loader can show it before
-the bundle exists. Its background was matted out by brightness rather than cut
-by hand: the piece is a glow on near-black, so everything below the threshold
-goes transparent and the glow stays. The threshold has to be high enough that
-the near-black *fringe* goes too, or the spider arrives on the daylight theme
-sitting in a grey smear.
+The spider is artwork rather than drawing. Its background was matted out by
+brightness rather than cut by hand: the piece is a glow on near-black, so
+everything below a threshold goes transparent and the glow stays — and the
+threshold has to be high enough to take the near-black *fringe* too, or the
+spider arrives on the daylight theme sitting in a grey smear.
+
+In the loader it is **inline**, a data URI in the HTML. As a file it is a
+second request racing the loading screen it belongs to: on a slow line the web
+spins in an empty middle and the spider arrives just in time to leave with it.
+Inline costs about 37KB of HTML and the spider is there the moment the screen
+is. The emblem's copy is a bundled asset instead — that one is below the fold,
+where a request of its own costs nothing worth saving.
 
 It is markup and inline CSS in [`index.html`](index.html), not a component: a
 React loader cannot paint until the bundle it lives in has downloaded, which is
@@ -453,7 +459,7 @@ the copy stay as they are.
 ## The emblem
 
 There is no photograph. In its place the About section has a web, spun from the
-middle out with the mark sitting at its centre the way its maker would:
+middle out with the spider sitting at its centre the way its maker would:
 [`WebEmblem.jsx`](src/components/WebEmblem.jsx). Twelve spokes, five spiral
 threads strung between them, and each segment of a thread is a curve pulled in
 towards the middle — a real orb web is strung slack, and drawn taut it looks
@@ -464,7 +470,7 @@ webs are recognisably the same web; by day, in lilac, the figure reads as a
 flower rather than a trap. SVG rather than a stack of rotated rings: a thread
 is one path instead of a whole element, and the shape stays exact at any size
 rather than depending on how the browser rounds a border radius. The web turns
-slowly; the mark does not turn with it, and the four names in `orbitSkills`
+slowly; the spider does not turn with it, and the four names in `orbitSkills`
 float around the outside. Those labels are decoration: the same technologies
 are in the Skills section as text.
 

@@ -30,7 +30,7 @@ export default function About({ onFocus }) {
         <div className="about-intro" data-reveal>
           {/* A web, with the mark at the centre of it. */}
           <figure className="about-portrait" data-tilt="soft">
-            <WebEmblem mark={profile.name.charAt(0)} />
+            <WebEmblem alt={`${profile.name} — the spider at the middle of its web`} />
 
             {/* The stack, hung off the corners of the frame. Decorative: the
                 same names are in the Skills section as text. */}

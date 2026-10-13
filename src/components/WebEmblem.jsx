@@ -1,8 +1,9 @@
 import { useMemo } from 'react'
+import spider from '../assets/spider.webp'
 
 /**
  * The emblem in the About section: a web, spun from the middle out, with the
- * mark sitting at its centre the way its maker would.
+ * spider sitting at its centre the way its maker would.
  *
  * The same geometry the click effect draws on the canvas — spokes, and spiral
  * threads strung between them that hang rather than cut straight — so the
@@ -27,7 +28,7 @@ const point = (angle, radius) => [
   CENTRE + Math.sin(angle) * radius,
 ]
 
-export default function WebEmblem({ mark }) {
+export default function WebEmblem({ alt }) {
   const { spokes, threads } = useMemo(() => {
     // Starting a twelfth of a turn round puts a spoke either side of vertical
     // rather than one straight up the middle of the mark.
@@ -90,7 +91,9 @@ export default function WebEmblem({ mark }) {
         </g>
       </svg>
 
-      <span className="web-emblem-mark">{mark}</span>
+      {/* Bundled rather than inline here: this one is below the fold, so a
+          request of its own costs nothing worth saving. */}
+      <img className="web-emblem-mark" src={spider} alt={alt} width="320" height="285" />
     </span>
   )
 }

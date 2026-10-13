@@ -100,22 +100,13 @@
   50% { opacity: 1; r: 2.9px; }
 }
 
-/* The mark sits at the centre, where its maker would. It does not turn with
+/* The spider sits at the centre, where its maker would. It does not turn with
    the web: it faces the reader. */
 .web-emblem-mark {
   grid-area: 1 / 1;
-  display: grid;
-  place-items: center;
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
-  font-family: var(--display);
-  font-size: 1.55rem;
-  font-weight: 600;
-  color: var(--accent-ink);
-  background: color-mix(in srgb, var(--bg) 78%, transparent);
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 45%, transparent),
-    0 0 34px -6px rgba(var(--glow), 0.75);
+  width: 96px;
+  height: auto;
+  filter: drop-shadow(0 0 18px rgba(var(--glow), 0.5));
   animation: about-breathe 3.6s ease-in-out infinite;
 }
 

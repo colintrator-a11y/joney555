@@ -52,10 +52,18 @@ leans rather than flicks.
 They float rather than travel. Each one rides a swell of its own — an offset
 added at drawing time, not a change of course, so it rises and falls without
 wandering off across the page — and rocks about its own axis as it goes. A
-click sends a ring of push outwards from the point: a band, not a drawn circle,
-lifting the petals it passes and leaving them to settle back towards where they
-were. The ring tires as it spreads, the petals lose their momentum to damping,
-and what is left pulls slowly home. Every one of them is the same colour — depth and the pointer change how
+click sends a wave train outwards from the point — a band of water, not a drawn
+circle and not a shove. A petal on water is not pushed aside by a passing wave:
+it rides up the face of it, leans with the slope, slides back as the crest goes
+under and ends where it started. So a ripple contributes an *offset* read from
+the wave at that instant, never a velocity that accumulates, which is what
+makes the petals come to rest exactly where they were.
+
+The lean is the wave's slope — its derivative, a quarter turn out of step with
+the displacement — and that quarter turn is the whole reason a float rocks
+rather than simply bobbing. On a crest a petal is nearer the eye, so it is
+drawn a touch larger and brighter. The train fades over a few wavelengths
+rather than stopping at an edge, and tires as it spreads. Every one of them is the same colour — depth and the pointer change how
 present a petal is, never what colour it is, or the sky reads as two sets of
 confetti. They fall at a third of the speed the stars sweep past: a night sky
 seen from a moving ship, a day sky of petals in still air. Same structure,

@@ -65,14 +65,18 @@ const TILT_EASE = 0.06
 const BOB_AMP = 7          // px of sway at the near plane
 const BOB_RATE = 0.00042   // radians per millisecond
 
-// The ring a click sends out. It is a band of push, not a drawn circle: the
-// petals it passes are lifted outwards and then settle.
-const RIPPLE_MS = 1500
-const RIPPLE_REACH = 620   // px the front of the ring travels
-const RIPPLE_BAND = 86     // how wide the push is at its front
-const RIPPLE_FORCE = 3.4
-const RIPPLE_DAMP = 0.9    // how quickly a pushed petal loses its momentum
-const RIPPLE_HOME = 0.012  // and how quickly it drifts back to where it was
+// The ring a click sends out: a wave train, not a shove. A petal on water does
+// not get pushed aside by a passing wave — it rides up the face of it, leans
+// with the slope, slides back as the crest goes by and ends up where it
+// started. So the ripple contributes an *offset* that oscillates, never a
+// velocity that accumulates.
+const RIPPLE_MS = 1700
+const RIPPLE_REACH = 680     // px the front of the train travels
+const RIPPLE_BAND = 120      // how far behind the front the swell still carries
+const RIPPLE_WAVE = 104      // crest to crest
+const RIPPLE_SWAY = 15       // px a petal rides, at the strongest
+const RIPPLE_ROCK = 0.52     // radians it leans on the steepest face
+const RIPPLE_LIFT = 0.16     // how much bigger it looks lifted on a crest
 
 /**
  * One petal, drawn around the origin at unit size: a pointed tip at the top, a
@@ -196,14 +200,9 @@ export default function SpaceField() {
         spinV: (Math.random() - 0.5) * 0.012,
         tilt: 0,
         glint: 0,
-        // Water: each petal rides its own swell, and carries whatever a
-        // passing ripple gave it.
+        // Water: each petal rides its own swell.
         waveF: 0.7 + Math.random() * 0.8,
         waveA: 0.55 + Math.random() * 0.9,
-        ox: 0,
-        oy: 0,
-        ovx: 0,
-        ovy: 0,
       }
     }
 
@@ -272,32 +271,52 @@ export default function SpaceField() {
           const bobX = Math.sin(swell) * BOB_AMP * star.waveA * (0.35 + near * 0.65)
           const bobY = Math.cos(swell * 0.82) * BOB_AMP * 0.62 * star.waveA * (0.35 + near * 0.65)
 
-          // What any passing ripple has done to it, and the slow return home.
+          // Any passing wave train. Each one adds a ride along the line back
+          // to where it was cut, a lean with the slope of the water, and a
+          // little lift on the crest. All three are read from the wave at this
+          // instant, so when it has gone the petal is exactly where it was.
+          let ride = 0
+          let rock = 0
+          let lift = 0
+          let rideX = 0
+          let rideY = 0
+
           if (!still.matches) {
             for (const ripple of ripples) {
               const age = (time - ripple.born) / RIPPLE_MS
               const front = RIPPLE_REACH * (1 - Math.pow(1 - age, 2.2))
-              const dx = sx + star.ox - ripple.x
-              const dy = sy + star.oy - ripple.y
+              const dx = sx - ripple.x
+              const dy = sy - ripple.y
               const distance = Math.hypot(dx, dy) || 0.001
-              const band = Math.abs(distance - front)
-              if (band > RIPPLE_BAND) continue
-              // Strongest at the crest of the ring, and weaker as the ring
-              // tires and spreads.
-              const push = (1 - band / RIPPLE_BAND) * (1 - age) * RIPPLE_FORCE
-              star.ovx += (dx / distance) * push
-              star.ovy += (dy / distance) * push
-              star.spin += push * 0.01
+              const behind = distance - front
+              // The train only carries behind its own front, and fades out
+              // over a few wavelengths rather than stopping at an edge.
+              const envelope =
+                Math.exp(-((behind / RIPPLE_BAND) ** 2)) *
+                (1 - age) *
+                (1 - Math.min(distance / RIPPLE_REACH, 1) * 0.55)
+              if (envelope < 0.01) continue
+
+              const phase = (behind / RIPPLE_WAVE) * Math.PI * 2
+              // Displacement follows the wave; the slope it is lying on is
+              // that wave's derivative, a quarter turn out of step — which is
+              // what makes a float rock as the crest goes under it.
+              ride += Math.cos(phase) * envelope
+              rock += Math.sin(phase) * envelope
+              lift += Math.max(0, Math.cos(phase)) * envelope
+              rideX += (dx / distance) * envelope
+              rideY += (dy / distance) * envelope
             }
 
-            star.ovx *= RIPPLE_DAMP
-            star.ovy *= RIPPLE_DAMP
-            star.ox += star.ovx - star.ox * RIPPLE_HOME
-            star.oy += star.ovy - star.oy * RIPPLE_HOME
+            if (ride || rock) {
+              const spread = Math.hypot(rideX, rideY) || 1
+              sx += (rideX / spread) * ride * RIPPLE_SWAY
+              sy += (rideY / spread) * ride * RIPPLE_SWAY
+            }
           }
 
-          sx += bobX + star.ox
-          sy += bobY + star.oy
+          sx += bobX
+          sy += bobY
 
           const lean = pointer.on
             ? Math.max(0, 1 - Math.hypot(sx - pointer.x, sy - pointer.y) / POINTER_DISTANCE)
@@ -307,13 +326,15 @@ export default function SpaceField() {
           star.tilt += (lean * TILT_MAX - star.tilt) * TILT_EASE
           star.glint += (lean - star.glint) * TILT_EASE
 
-          context.globalAlpha = (0.18 + near * 0.5) * pulse + star.glint * 0.26
+          context.globalAlpha = (0.18 + near * 0.5) * pulse + star.glint * 0.26 + lift * 0.12
           context.save()
           context.translate(sx, sy)
-          context.rotate(star.spin + star.tilt + Math.sin(swell * 1.1) * 0.22)
+          context.rotate(star.spin + star.tilt + Math.sin(swell * 1.1) * 0.22 + rock * RIPPLE_ROCK)
           // The gradient is written in the same unit space as the path, so
           // scaling the context carries both.
-          context.scale(size * 3.1, size * 3.1)
+          // Lifted on a crest it is nearer the eye, so a touch larger.
+          const riding = size * 3.1 * (1 + lift * RIPPLE_LIFT)
+          context.scale(riding, riding)
           context.fillStyle = petalFill
           petalPath(context)
           context.fill()

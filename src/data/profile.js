@@ -463,19 +463,6 @@ export const projects = [
     tags: ['WordPress', 'WooCommerce', 'PHP', 'jQuery', 'HTML', 'CSS'],
   },
   {
-    id: 'keyzar',
-    name: 'Keyzar Jewelry',
-    category: 'shopify',
-    accent: 'rose',
-    media: [
-      { file: 'keyzar-home.jpg', width: 1400, height: 875 },
-      { file: 'keyzar-sec1.jpg', width: 800, height: 500 },
-      { file: 'keyzar-sec2.jpg', width: 800, height: 500 },
-    ],
-    links: [{ kind: 'site', href: 'https://keyzarjewelry.com/' }],
-    tags: ['Shopify', 'E-commerce', 'Responsive Web Design', 'JavaScript'],
-  },
-  {
     id: 'tools4trade',
     name: 'Tools4Trade',
     category: 'shopify',
@@ -701,7 +688,10 @@ export const projects = [
 // Declared after `projects` so the headline count follows the list itself.
 export const stats = [
   { id: 'years', value: '7+' },
-  { id: 'projects', value: String(projects.length) },
+  // Rounded down to the ten below, so the hero makes a claim the list always
+  // covers: 47 projects shows as 40+, and it only changes when a tenth one
+  // is added.
+  { id: 'projects', value: `${Math.floor(projects.length / 10) * 10}+` },
   // Every technology listed in the Skills section, counted rather than typed.
   { id: 'skills', value: String(skillGroups.reduce((sum, group) => sum + group.items.length, 0)) },
   { id: 'since', value: '2019' },

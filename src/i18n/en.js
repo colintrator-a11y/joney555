@@ -270,10 +270,6 @@ export default {
       wooBulkDiscount: [
         'A custom WordPress plugin that shows discounted prices dynamically. Built with PHP, HTML and CSS against WordPress and WooCommerce\u2019s own functions.',
       ],
-      keyzar: [
-        'A Shopify storefront for Keyzar, a fine jewellery brand selling engagement rings, wedding bands, diamonds and gemstones.',
-        'The store is built around a considered purchase rather than an impulse one: diamonds browsable by shape, an education section, consultation booking in the New York showroom or online, and the reassurances a buyer looks for before spending on a ring — free resizing, certification and appraisal, conflict-free stones, a lifetime warranty.',
-      ],
       tools4trade: [
         'A Shopify store for Tools4Trade, a UK retailer of power tools, hand tools, workwear and site equipment.',
         'This one is a catalogue problem. Thousands of lines across a dozen categories and every trade brand stocked side by side, with search by category, brand or part number, and merchandising that has to carry clearance, warehouse deals, new arrivals, brand redemptions and a rewards scheme without burying the products underneath them.',

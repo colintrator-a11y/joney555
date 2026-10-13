@@ -1,4 +1,4 @@
-import { certifications, profile, projects } from '../data/profile.js'
+import { certifications, profile, stats } from '../data/profile.js'
 import { useLocale } from '../i18n/LocaleContext.jsx'
 import './About.css'
 
@@ -29,9 +29,11 @@ export default function About({ onFocus }) {
           </figure>
 
           <p className="about-lead">{t.about.lead}</p>
-          {/* The project count follows the list rather than being typed in,
-              so it cannot drift from the number in the hero. */}
-          <p className="about-reach">{t.about.reach(projects.length)}</p>
+          {/* The same rounded figure the hero shows, read from the same
+              place, so the two can never disagree. */}
+          <p className="about-reach">
+            {t.about.reach(stats.find((stat) => stat.id === 'projects').value)}
+          </p>
         </div>
 
         <h3 className="about-subhead">{t.about.bestTitle}</h3>

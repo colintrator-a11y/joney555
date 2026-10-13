@@ -199,6 +199,15 @@ The dates are printed and the length of each job worked out from `start` and
 editing the file. Past roles are written in the past tense, the current one in
 the present.
 
+The section draws a lit spine down the list: one segment per role, tiled so
+they meet across the gap and read as a single thread, with a node where each
+card joins it. A light runs down each segment a beat after the one above —
+`--step` on the row sets the delay — and because the cards are different
+heights the light is a band in the *background* rather than a box that moves,
+so it crosses the whole of whatever segment it is in. The role with no end date
+gets the ring leaving its node, the same figure as the loader. All of it stops
+under `prefers-reduced-motion`.
+
 ## Browsing the work
 
 The four areas named in the About list — E-commerce, Web apps, Mobile, AI &

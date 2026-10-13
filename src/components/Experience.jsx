@@ -38,15 +38,23 @@ export default function Experience() {
         </div>
 
         <ol className="timeline">
-          {experience.map((job) => {
+          {experience.map((job, index) => {
             const copy = t.experience.items[job.id]
             const from = monthStart(job.start)
             // An open-ended role is measured to today, so the current one
             // counts itself up without anyone editing the file.
             const to = job.end ? monthStart(job.end) : new Date()
 
+            const current = !job.end
+
             return (
-              <li key={job.id} className="timeline-item">
+              // `--step` staggers the light that runs down the spine, so it
+              // travels the list rather than flashing on every node at once.
+              <li
+                key={job.id}
+                className={`timeline-item${current ? ' is-current' : ''}`}
+                style={{ '--step': index }}
+              >
                 <div className="timeline-period">
                   <span className="timeline-dates">
                     {MONTH_YEAR.format(from)} — {job.end ? MONTH_YEAR.format(to) : t.experience.present}
@@ -54,7 +62,16 @@ export default function Experience() {
                   <span className="timeline-length">{duration(monthsBetween(from, to), t)}</span>
                 </div>
 
+                {/* The spine. One segment per role, tiled into a continuous
+                    thread, with the node sitting on it. */}
+                <div className="timeline-rail" aria-hidden="true">
+                  <span className="timeline-node" />
+                </div>
+
                 <div className="card timeline-card" data-tilt="soft" data-reveal>
+                  <span className="timeline-index" aria-hidden="true">
+                    {String(experience.length - index).padStart(2, '0')}
+                  </span>
                   <h3>{copy.role}</h3>
                   <p className="timeline-company">{job.company}</p>
                   <p className="timeline-meta">

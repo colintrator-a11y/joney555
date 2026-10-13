@@ -223,7 +223,8 @@ a {
   transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
 }
 
-.btn:hover { transform: translateY(-1px); }
+/* The lift and the push on press are in src/styles/depth.css, with every
+   other clickable surface. */
 
 .btn-primary {
   background: var(--accent);

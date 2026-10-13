@@ -33,7 +33,9 @@ const ICONS = {
 export const DOCK_BUTTON =
   'group relative grid h-9 w-9 place-items-center rounded-full text-[var(--ink-soft)] ' +
   'transition-[background-color,color,box-shadow,transform] duration-200 ' +
-  'hover:-translate-y-px hover:bg-[var(--bg-sunken)] hover:text-[var(--ink)] ' +
+  'hover:bg-[var(--bg-sunken)] hover:text-[var(--ink)] '  +
+  'hover:[transform:translate3d(0,-2px,22px)_rotateX(-12deg)] ' +
+  'active:[transform:translate3d(0,1px,-10px)] active:duration-75 ' +
   'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ' +
   'focus-visible:outline-[var(--accent)] sm:h-10 sm:w-10'
 

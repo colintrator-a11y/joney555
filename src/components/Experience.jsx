@@ -15,7 +15,7 @@ export default function Experience() {
         <ol className="timeline">
           <li className="timeline-item">
             <div className="timeline-period">{t.experience.period}</div>
-            <div className="card timeline-card">
+            <div className="card timeline-card" data-tilt="soft" data-reveal>
               <h3>{t.experience.role}</h3>
               <p className="timeline-company">{t.experience.company}</p>
               <ul>

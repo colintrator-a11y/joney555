@@ -21,6 +21,18 @@
   to { opacity: 1; }
 }
 
+/* The picture comes forward out of the page rather than simply appearing. */
+.lightbox-figure { animation: lightbox-figure-in 0.3s cubic-bezier(0.22, 0.72, 0.28, 1); }
+
+@keyframes lightbox-figure-in {
+  from { opacity: 0; transform: perspective(1000px) rotateX(7deg) translate3d(0, 18px, -70px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lightbox-figure { animation: none; }
+}
+
 .lightbox-figure {
   grid-column: 2;
   align-self: stretch;

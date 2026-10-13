@@ -250,14 +250,16 @@ export default function Lightbox({ project, index, onClose, onMove }) {
         if (!event.target.closest('img, button')) onClose()
       }}
     >
-      <button ref={closeRef} type="button" className="lightbox-close" onClick={onClose} aria-label={t.a11y.close}>
+      <button ref={closeRef} type="button" data-press
+        className="lightbox-close" onClick={onClose} aria-label={t.a11y.close}>
         <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
           <path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
         </svg>
       </button>
 
       {count > 1 ? (
-        <button type="button" className="lightbox-step is-prev" onClick={() => move(-1)} aria-label={t.a11y.prevImage}>
+        <button type="button" data-press
+          className="lightbox-step is-prev" onClick={() => move(-1)} aria-label={t.a11y.prevImage}>
           <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
             <path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
@@ -329,7 +331,8 @@ export default function Lightbox({ project, index, onClose, onMove }) {
       </figure>
 
       {count > 1 ? (
-        <button type="button" className="lightbox-step is-next" onClick={() => move(1)} aria-label={t.a11y.nextImage}>
+        <button type="button" data-press
+          className="lightbox-step is-next" onClick={() => move(1)} aria-label={t.a11y.nextImage}>
           <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
             <path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>

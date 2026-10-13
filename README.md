@@ -31,6 +31,35 @@ least 450ms so it reads as a transition rather than a flicker, and at most
 Under `prefers-reduced-motion` the cube holds one angle and only the bar
 pulses.
 
+## The 3D layer
+
+Three behaviours, one vocabulary, in [`src/styles/depth.css`](src/styles/depth.css)
+with the geometry and [`src/utils/depth.js`](src/utils/depth.js) with the numbers:
+
+| Attribute | What it does | Where |
+|---|---|---|
+| `data-tilt` | Turns towards the pointer and lifts off the page under it. `data-tilt="soft"` halves the angle for anything large. | Service, area and skill cards, project rows, the portrait, the stat tiles, the work history |
+| `data-press` | Rises on hover and goes *into* the page on the press itself | Buttons, filters, tags, the preview controls, back-to-top |
+| `data-reveal` | Arrives rotated back in perspective and settles upright on scroll | Every card and panel below the fold |
+
+The runtime is delegated from the document rather than wired into components:
+the work list rebuilds on every filter change, and handlers bound to a card
+would have to be rebound each time. A `MutationObserver` picks up cards that
+arrive later, so a filtered list reveals like the first one did.
+
+Three things it will not do. **Tilt on a touch screen** — there is no hover to
+tilt during, and a phone has the least compositing power to spare, so pointer
+tilt is behind `(hover: hover) and (pointer: fine)`. **Anything under
+`prefers-reduced-motion`** — the transforms are dropped, not just shortened,
+since the global rule would otherwise apply them instantly instead of not at
+all. **Hide content from a visitor whose script never runs** — the rules that
+hold a card back until it is revealed are scoped to `.depth-ready`, a class
+added by the runtime, so the page without it is the page with everything
+visible.
+
+Each tilt costs two custom properties and one `requestAnimationFrame` per
+frame; nothing reads layout except the hovered card's own rect.
+
 ## The header
 
 A dock: a floating pill of icons, centred, as wide as its contents rather than
@@ -196,6 +225,7 @@ src/data/profile.js     language-independent structure
 src/i18n/               English copy (en.js) and the React context that serves it
 src/styles/global.css   design tokens (light + dark) and shared primitives
 src/styles/tailwind.css Tailwind theme + utilities, without preflight
+src/styles/depth.css    the tilt / press / reveal vocabulary
 src/components/         one component + one stylesheet per section
 scripts/                copy coverage check, GIF optimiser
 public/                 avatar, logo, "J" tab icon, robots.txt, sitemap.xml

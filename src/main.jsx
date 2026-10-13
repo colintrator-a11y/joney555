@@ -6,8 +6,10 @@ import { createRoot } from 'react-dom/client'
 // component rule and a .btn rule have the same specificity, so order decides).
 import './styles/global.css'
 import './styles/tailwind.css'
+import './styles/depth.css'
 import App from './App.jsx'
 import dismissBootScreen from './utils/bootScreen.js'
+import initDepth from './utils/depth.js'
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -18,3 +20,7 @@ createRoot(document.getElementById('root')).render(
 // The loader is markup in index.html, so it is on screen before this bundle
 // exists; React only decides when it has seen enough to take it away.
 dismissBootScreen()
+
+// Tilt, press and reveal, delegated from the document so the work list keeps
+// them through every filter change.
+initDepth()

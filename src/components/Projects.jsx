@@ -129,6 +129,7 @@ export default function Projects({ focus, onFocusChange }) {
             {focus ? (
               <button
                 type="button"
+                data-press
                 className="filter is-active"
                 onClick={() => onFocusChange(null)}
                 aria-pressed="true"
@@ -141,6 +142,7 @@ export default function Projects({ focus, onFocusChange }) {
               <button
                 key={id}
                 type="button"
+                data-press
                 className={`filter${category === id && !focus ? ' is-active' : ''}`}
                 onClick={() => pickCategory(id)}
                 aria-pressed={category === id && !focus}
@@ -177,6 +179,7 @@ export default function Projects({ focus, onFocusChange }) {
             {filtered ? (
               <button
                 type="button"
+                data-press
                 className="filter-reset"
                 onClick={() => {
                   setCategory(ALL)
@@ -193,7 +196,7 @@ export default function Projects({ focus, onFocusChange }) {
         {shown.length ? (
           <ol className="projects-list">
             {shown.map((project) => (
-              <li key={project.id} className={`card project-row accent-${project.accent}${rowLayout(project)}`}>
+              <li key={project.id} data-tilt="soft" data-reveal className={`card project-row accent-${project.accent}${rowLayout(project)}`}>
                 <div className={`project-media${mediaLayout(project)}`}>
                   {shot(project, 0, 'media-lead')}
                   {project.media.length > 1 ? (
@@ -215,6 +218,7 @@ export default function Projects({ focus, onFocusChange }) {
                       <li key={tag}>
                         <button
                           type="button"
+                          data-press
                           className={`tag-button${skill === tag ? ' is-active' : ''}`}
                           onClick={() => setSkill(skill === tag ? ALL : tag)}
                           aria-pressed={skill === tag}

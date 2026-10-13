@@ -16,6 +16,7 @@ export default function BackToTop() {
   return (
     <button
       type="button"
+      data-press
       className={`back-to-top${visible ? ' is-visible' : ''}`}
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       aria-label={t.a11y.backToTop}

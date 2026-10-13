@@ -16,7 +16,7 @@ export default function Services() {
 
         <ul className="services-grid">
           {serviceIds.map((id, index) => (
-            <li key={id} className="card service-card">
+            <li key={id} className="card service-card" data-tilt data-reveal>
               <span className="service-index">{String(index + 1).padStart(2, '0')}</span>
               <h3>{t.services.items[id].title}</h3>
               <p>{t.services.items[id].body}</p>

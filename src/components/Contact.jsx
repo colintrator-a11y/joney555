@@ -25,7 +25,7 @@ export default function Contact() {
   return (
     <section className="section" id="contact">
       <div className="shell">
-        <div className="card contact-panel">
+        <div className="card contact-panel" data-reveal>
           <div className="contact-copy">
             <span className="eyebrow">{t.contact.eyebrow}</span>
             <h2>{t.contact.heading}</h2>
@@ -85,7 +85,7 @@ export default function Contact() {
               />
             </label>
 
-            <button type="submit" className="btn btn-primary contact-send">
+            <button type="submit" className="btn btn-primary contact-send" data-press>
               {t.contact.form.send}
             </button>
             <p className="contact-note">{t.contact.form.note}</p>

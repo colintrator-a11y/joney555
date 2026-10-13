@@ -27,14 +27,14 @@ export default function Hero() {
           <p className="hero-note">{t.hero.note}</p>
 
           <div className="hero-actions">
-            <a className="btn btn-primary" href="#work">
+            <a className="btn btn-primary" href="#work" data-press>
               {t.hero.cta}
             </a>
           </div>
         </div>
 
         <aside className="hero-portrait">
-          <div className="portrait-frame">
+          <div className="portrait-frame" data-tilt>
             {hasPhoto ? (
               <img
                 src={AVATAR}
@@ -59,7 +59,7 @@ export default function Hero() {
       <div className="shell">
         <ul className="hero-stats">
           {stats.map((stat) => (
-            <li key={stat.id}>
+            <li key={stat.id} data-tilt="soft" data-reveal>
               <strong>{stat.value}</strong>
               <span>{t.hero.stats[stat.id]}</span>
             </li>

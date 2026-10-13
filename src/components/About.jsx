@@ -15,7 +15,7 @@ export default function About({ onFocus }) {
 
         {/* The opening claim and the figure behind it, side by side: the lead
             reads as the statement, the note as its evidence. */}
-        <div className="about-intro">
+        <div className="about-intro" data-reveal>
           <p className="about-lead">{t.about.lead}</p>
           {/* The project count follows the list rather than being typed in,
               so it cannot drift from the number in the hero. */}
@@ -29,7 +29,7 @@ export default function About({ onFocus }) {
               {/* A real anchor: the jump to the work section is the browser's,
                   and the click only sets what it lands on. The whole card is
                   the link, so the target is a card rather than two words. */}
-              <a className="card about-best-card" href="#work" onClick={() => onFocus(item.id)}>
+              <a className="card about-best-card" data-tilt data-reveal href="#work" onClick={() => onFocus(item.id)}>
                 <strong>{item.area}</strong>
                 <span>{item.detail}</span>
                 <span className="about-best-go" aria-hidden="true">
@@ -41,7 +41,7 @@ export default function About({ onFocus }) {
         </ul>
 
         <div className={`about-close${certifications.length ? '' : ' is-single'}`}>
-          <div className="card about-panel">
+          <div className="card about-panel" data-tilt="soft" data-reveal>
             <h3>{t.about.approachTitle}</h3>
             <p>{t.about.approach}</p>
             <p className="about-closing">{t.about.closing}</p>
@@ -50,7 +50,7 @@ export default function About({ onFocus }) {
           {/* Nothing to list means no panel, rather than a heading over an
               empty box. */}
           {certifications.length ? (
-            <div className="card about-panel">
+            <div className="card about-panel" data-tilt="soft" data-reveal>
               <h3>{t.about.certTitle}</h3>
               <ul className="cert-list">
                 {certifications.map((certification) => {

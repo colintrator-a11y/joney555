@@ -18,7 +18,7 @@ export default function Skills() {
 
         <div className="skills-grid">
           {skillGroups.map((group) => (
-            <div key={group.id} className="skill-group">
+            <div key={group.id} className="skill-group" data-tilt="soft" data-reveal>
               <h3>{t.skills.groups[group.id]}</h3>
               <ul>
                 {group.items.map((item) => (

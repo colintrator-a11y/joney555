@@ -48,6 +48,9 @@ const WEB_RADIUS = 190
 const WEB_SPOKES = 13
 const WEB_RINGS = 3
 const WEB_MAX = 3          // at once: a drummed mouse should not stack up
+// The daylight bloom is thrown a shorter way than the web is cut: petals that
+// travel as far as a web's spokes read as an explosion rather than a flower.
+const BLOOM_RADIUS = 86
 
 export default function SpaceField() {
   const canvasRef = useRef(null)
@@ -272,19 +275,14 @@ export default function SpaceField() {
 
           if (!night) {
             // A bloom: petals thrown outwards from the point, turning as they
-            // go, with a ring of light opening ahead of them.
+            // go. The petals are the whole of it — a ring drawn around them
+            // read as a diagram of the effect rather than part of it.
             const spread = 1 - Math.pow(1 - t, 2.4)
             const fade = Math.pow(1 - t, 1.3)
-            context.globalAlpha = fade * 0.6
-            context.strokeStyle = `rgb(${colours.glow})`
-            context.lineWidth = 1
-            context.beginPath()
-            context.arc(web.x, web.y, WEB_RADIUS * 0.82 * spread, 0, Math.PI * 2)
-            context.stroke()
 
             context.fillStyle = `rgb(${colours.glow})`
             for (const spoke of web.spokes) {
-              const distance = WEB_RADIUS * spoke.reach * spread
+              const distance = BLOOM_RADIUS * spoke.reach * spread
               const px = web.x + Math.cos(spoke.angle) * distance
               const py = web.y + Math.sin(spoke.angle) * distance
               context.globalAlpha = fade * 0.85

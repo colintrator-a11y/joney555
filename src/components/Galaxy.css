@@ -27,6 +27,10 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  /* The picture is darker on screen than it looks on its own, and the shade
+     above it takes more again. Lifted once, on a layer that never repaints,
+     rather than by lightening every gradient over it. */
+  filter: brightness(1.22) saturate(1.1) contrast(1.04);
 }
 
 /*
@@ -37,21 +41,22 @@
  */
 .galaxy-shade {
   background:
-    /* Behind the name and the two lines under it, which sit over the brightest
-       part of the picture and had nothing to be bright against. */
-    radial-gradient(46% 46% at 50% 44%, rgba(3, 7, 16, 0.74), rgba(3, 7, 16, 0.4) 52%, transparent 80%),
-    radial-gradient(70% 26% at 50% 60%, rgba(3, 7, 16, 0.5), transparent 76%),
-    radial-gradient(120% 100% at 50% 44%, transparent 40%, rgba(2, 5, 12, 0.5) 76%, rgba(2, 5, 12, 0.8) 100%),
-    linear-gradient(to bottom, rgba(2, 5, 12, 0.4), transparent 26%, transparent 60%, rgba(2, 5, 12, 0.74));
+    /* A pocket of night behind the name and the two lines under it — tight,
+       so it darkens the type's background and not the whole picture. */
+    radial-gradient(36% 36% at 50% 42%, rgba(3, 7, 16, 0.72), rgba(3, 7, 16, 0.32) 56%, transparent 82%),
+    radial-gradient(56% 21% at 50% 58%, rgba(3, 7, 16, 0.6), transparent 76%),
+    /* And the frame, sunk just enough to hold the picture in. */
+    radial-gradient(130% 110% at 50% 44%, transparent 52%, rgba(2, 5, 12, 0.3) 84%, rgba(2, 5, 12, 0.6) 100%),
+    linear-gradient(to bottom, rgba(2, 5, 12, 0.26), transparent 24%, transparent 66%, rgba(2, 5, 12, 0.6));
 }
 
 @media (max-width: 760px) {
   /* A narrow window crops the picture hard, so the core sits higher in it. */
   .galaxy-shade {
     background:
-      radial-gradient(62% 34% at 50% 36%, rgba(3, 7, 16, 0.74), rgba(3, 7, 16, 0.42) 54%, transparent 82%),
-      radial-gradient(84% 26% at 50% 58%, rgba(3, 7, 16, 0.52), transparent 78%),
-      radial-gradient(130% 100% at 50% 40%, transparent 38%, rgba(2, 5, 12, 0.6) 76%, rgba(2, 5, 12, 0.85) 100%),
-      linear-gradient(to bottom, rgba(2, 5, 12, 0.4), transparent 26%, transparent 58%, rgba(2, 5, 12, 0.78));
+      radial-gradient(56% 28% at 50% 34%, rgba(3, 7, 16, 0.72), rgba(3, 7, 16, 0.34) 56%, transparent 82%),
+      radial-gradient(76% 22% at 50% 56%, rgba(3, 7, 16, 0.6), transparent 78%),
+      radial-gradient(140% 110% at 50% 40%, transparent 48%, rgba(2, 5, 12, 0.34) 82%, rgba(2, 5, 12, 0.64) 100%),
+      linear-gradient(to bottom, rgba(2, 5, 12, 0.3), transparent 24%, transparent 62%, rgba(2, 5, 12, 0.66));
   }
 }

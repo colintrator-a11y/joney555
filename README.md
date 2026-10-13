@@ -102,6 +102,14 @@ Two canvases carry it:
   behind each star is a cached sprite: a gradient built per star per frame is a
   hundred and eleven gradients a frame for a shape that never changes.
 
+  The picture itself is lifted on the plate — brightness, a little saturation
+  and a touch of contrast — because it reads darker on screen than it looks on
+  its own, and the shade over it takes more again. Lifting it there costs one
+  filter on a layer that never repaints, where lightening every gradient above
+  it would mean touching each of them. The shade is then kept to a tight pocket
+  behind the heading and the two lines under it, so what is darkened is the
+  type's background rather than the whole galaxy.
+
   Canvas 2D, no WebGL, no library. Paused when the tab is hidden, fewer stars
   on a phone, and under `prefers-reduced-motion` a single still frame.
 

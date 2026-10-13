@@ -18,6 +18,20 @@ npm run preview        # serve the built site on :4173
 npm run check:locales  # verify every id has its string
 ```
 
+## Type
+
+Two faces, loaded from Google Fonts in [`index.html`](index.html): **Inter** for
+everything that is read as text, and **Space Grotesk** — `--display` in
+[`global.css`](src/styles/global.css) — for section titles, the figures in the
+hero, the index numbers on the work history, and the letters the particle name
+is cut from. It replaced Instrument Serif: a book serif was the one thing on
+the page that did not belong on a starfield.
+
+The display face is drawn wide, so titles are set at weight 600 with -0.025em
+tracking, to read as one shape rather than a row of letters. `ParticleName`
+names the same family in its canvas `font`, and waits for `document.fonts.ready`
+before sampling — the particles are cut from the real face, not the fallback.
+
 ## The look
 
 Night is the ground state: near-black navy, electric blue, and a web drawn

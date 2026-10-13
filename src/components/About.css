@@ -255,7 +255,7 @@
 }
 
 .cert-year {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 1.05rem;
   color: var(--accent-ink);
   padding-top: 1px;

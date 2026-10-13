@@ -54,12 +54,12 @@ export default function ParticleName({ text }) {
 
       // Draw the word once, read it back as pixels, then clear it: what stays
       // on screen is only ever the particles.
-      const size = Math.min(width / (text.length * 0.55), height * 0.98)
+      const size = Math.min(width / (text.length * 0.62), height * 0.92)
       context.clearRect(0, 0, width, height)
       context.fillStyle = '#fff'
       context.textAlign = 'center'
       context.textBaseline = 'middle'
-      context.font = `400 ${size}px 'Instrument Serif', Georgia, serif`
+      context.font = `600 ${size}px 'Space Grotesk', 'Segoe UI', system-ui, sans-serif`
       context.fillText(text, width / 2, height / 2)
 
       const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data
@@ -138,8 +138,8 @@ export default function ParticleName({ text }) {
       pointer.y = event.clientY - rect.top
     }
 
-    // The serif the letters are cut from has to be loaded before they are
-    // sampled, or the shapes come from the fallback face.
+    // The display face the letters are cut from has to be loaded before they
+    // are sampled, or the shapes come from the fallback.
     const ready = document.fonts?.ready ?? Promise.resolve()
     let cancelled = false
     ready.catch(() => {}).then(() => {

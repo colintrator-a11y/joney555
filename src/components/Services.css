@@ -17,7 +17,7 @@
 }
 
 .service-index {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 0.95rem;
   color: var(--accent);
   letter-spacing: 0.06em;

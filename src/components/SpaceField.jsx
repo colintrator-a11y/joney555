@@ -55,17 +55,29 @@ const BLOOM_RADIUS = 86
 // Daylight drifts. The night sky is a field seen from a ship; this is petals
 // falling in still air, and it should look like it.
 const DAY_SPEED = 0.3
+// How far a petal turns towards a passing pointer, and how quickly it gets
+// there. Small and slow: a nudge, not a flinch.
+const TILT_MAX = 0.42
+const TILT_EASE = 0.06
 
 /**
- * One petal, drawn at the origin: pointed at both ends and full in the middle,
- * the way a petal is, rather than the ellipse this used to be. Two curves meet
- * at the tips, and the control points sit out at the widest part.
+ * One petal, drawn around the origin at unit size: a pointed tip at the top, a
+ * fuller, rounder base at the bottom, and the two sides cut differently so it
+ * curls rather than sitting flat — a petal off a flower, not a leaf shape.
+ *
+ * Unit coordinates on purpose. The caller scales the context instead of the
+ * path, which means one cached gradient in the same coordinates paints every
+ * petal on the page whatever its size.
  */
-function petalPath(context, length, width) {
+function petalPath(context) {
   context.beginPath()
-  context.moveTo(0, -length)
-  context.bezierCurveTo(width, -length * 0.45, width, length * 0.45, 0, length)
-  context.bezierCurveTo(-width, length * 0.45, -width, -length * 0.45, 0, -length)
+  context.moveTo(0, -1)
+  // The full side: wide, and widest below the middle, where a petal carries
+  // its weight.
+  context.bezierCurveTo(0.52, -0.46, 0.62, 0.34, 0.06, 1)
+  // The curled side: narrower, and pulled back across the axis near the base,
+  // which is what gives the petal its turn.
+  context.bezierCurveTo(-0.5, 0.42, -0.42, -0.4, 0, -1)
   context.closePath()
 }
 
@@ -112,6 +124,18 @@ export default function SpaceField() {
     const isNight = () => document.documentElement.dataset.theme !== 'light'
     let night = isNight()
 
+    // Pale at the tip, deep at the base, like the petal it is drawn from.
+    // Built once per palette rather than per petal per frame: there are four
+    // hundred of them and sixty frames a second.
+    const makePetalFill = () => {
+      const fill = context.createLinearGradient(0, -1, 0, 1)
+      fill.addColorStop(0, `rgba(${colours.glow}, 0.15)`)
+      fill.addColorStop(0.38, `rgba(${colours.glow}, 0.62)`)
+      fill.addColorStop(1, `rgba(${colours.glow}, 1)`)
+      return fill
+    }
+    let petalFill = makePetalFill()
+
     const resize = () => {
       width = window.innerWidth
       height = window.innerHeight
@@ -149,6 +173,8 @@ export default function SpaceField() {
         // Day only: the angle a petal is lying at, and how fast it turns.
         spin: Math.random() * Math.PI * 2,
         spinV: (Math.random() - 0.5) * 0.012,
+        tilt: 0,
+        glint: 0,
       }
     }
 
@@ -210,12 +236,20 @@ export default function SpaceField() {
           const lean = pointer.on
             ? Math.max(0, 1 - Math.hypot(sx - pointer.x, sy - pointer.y) / POINTER_DISTANCE)
             : 0
-          context.globalAlpha = (0.18 + near * 0.5) * pulse + lean * 0.28
-          context.fillStyle = `rgb(${colours.glow})`
+          // Eased towards the target rather than set to it: a petal should
+          // turn as the pointer passes, not flick to a new angle every frame.
+          star.tilt += (lean * TILT_MAX - star.tilt) * TILT_EASE
+          star.glint += (lean - star.glint) * TILT_EASE
+
+          context.globalAlpha = (0.18 + near * 0.5) * pulse + star.glint * 0.26
           context.save()
           context.translate(sx, sy)
-          context.rotate(star.spin + lean)
-          petalPath(context, size * 2.1, size * 0.92)
+          context.rotate(star.spin + star.tilt)
+          // The gradient is written in the same unit space as the path, so
+          // scaling the context carries both.
+          context.scale(size * 3.1, size * 3.1)
+          context.fillStyle = petalFill
+          petalPath(context)
           context.fill()
           context.restore()
         }
@@ -300,7 +334,6 @@ export default function SpaceField() {
             const spread = 1 - Math.pow(1 - t, 2.4)
             const fade = Math.pow(1 - t, 1.3)
 
-            context.fillStyle = `rgb(${colours.glow})`
             for (const spoke of web.spokes) {
               const distance = BLOOM_RADIUS * spoke.reach * spread
               const px = web.x + Math.cos(spoke.angle) * distance
@@ -311,8 +344,9 @@ export default function SpaceField() {
               // Turned by how far it has flown, so the petals tumble outwards.
               // Pointing the way it flew, and turning a little as it goes.
               context.rotate(spoke.angle + Math.PI / 2 + spread * 1.6)
-              const shrink = 1 - t * 0.35
-              petalPath(context, 10 * shrink, 4.4 * shrink)
+              context.scale(11 * (1 - t * 0.35), 11 * (1 - t * 0.35))
+              context.fillStyle = petalFill
+              petalPath(context)
               context.fill()
               context.restore()
             }
@@ -422,6 +456,7 @@ export default function SpaceField() {
     const onTheme = () => {
       colours = palette()
       night = isNight()
+      petalFill = makePetalFill()
     }
 
     resize()

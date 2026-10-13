@@ -57,6 +57,7 @@
   height: 176px;
   margin: 0 auto;
   perspective: 620px;
+  perspective-origin: 50% 50%;
 }
 
 .about-sphere-spin {
@@ -75,7 +76,9 @@
   transform: rotateY(calc(var(--ring) * 30deg));
 }
 
-/* … and two rings around the waist, to close the web into a sphere. */
+/* … and three around the waist — equator, and one either side of it — to
+   close the web into a sphere. Without the lower one the sphere is top-heavy
+   and the mark at its centre looks as though it has slipped. */
 .about-ring:nth-child(7) {
   transform: rotateX(90deg) scale(0.99);
   border-color: color-mix(in srgb, var(--accent) 26%, transparent);
@@ -86,33 +89,46 @@
   border-color: color-mix(in srgb, var(--accent) 22%, transparent);
 }
 
+.about-ring:nth-child(9) {
+  transform: rotateX(90deg) translateZ(-42px) scale(0.78);
+  border-color: color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
 @keyframes about-spin {
   from { transform: rotateX(-14deg) rotateY(0deg); }
   to { transform: rotateX(-14deg) rotateY(360deg); }
 }
 
 /* The mark sits outside the turning element, so it faces the reader however
-   far round the web has gone. */
+   far round the web has gone.
+
+   Pinned to the middle rather than left to the grid: the rings are drawn in
+   perspective and the eye reads their centre, not the box's, so the mark has
+   to be put there exactly. */
 .about-core {
-  position: relative;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
   display: grid;
   place-items: center;
-  width: 62px;
-  height: 62px;
-  border-radius: 20px;
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
   font-family: var(--display);
   font-size: 1.7rem;
   font-weight: 600;
   color: var(--accent-ink);
-  background: linear-gradient(160deg, var(--accent-soft), var(--bg-sunken));
-  border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent);
-  box-shadow: 0 0 40px -6px rgba(var(--glow), 0.8), inset 0 0 22px -10px rgba(var(--glow), 0.9);
+  background: color-mix(in srgb, var(--bg-raised) 72%, transparent);
+  backdrop-filter: blur(6px);
+  border: 1px solid color-mix(in srgb, var(--accent) 50%, transparent);
+  box-shadow: 0 0 38px -8px rgba(var(--glow), 0.75), inset 0 0 20px -10px rgba(var(--glow), 0.9);
   animation: about-breathe 3.4s ease-in-out infinite;
 }
 
 @keyframes about-breathe {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
+  0%, 100% { scale: 1; }
+  50% { scale: 1.06; }
 }
 
 /* --------------------------- orbiting labels ---------------------------- */

@@ -42,8 +42,12 @@ across it — the nickname is Blue-Spider, and the whole design follows from it.
 **Daylight is Wendy's**: lilac and rose, petals turning as they drift instead
 of stars, no threads between them, a bloom where the page is clicked instead of
 a cut web, and a butterfly for a pointer instead of a spider. A petal is two
-bezier curves meeting at the tips, pointed at both ends and full in the middle,
-and every one of them is the same colour — depth and the pointer change how
+bezier curves: a pointed tip, a fuller base, and the two sides cut differently
+so it curls rather than sitting flat. It is drawn at unit size and the context
+is scaled instead of the path, which lets one cached gradient — pale at the
+tip, deep at the base — paint all four hundred of them. A petal the pointer
+passes turns a little towards it, eased frame by frame rather than set, so it
+leans rather than flicks. Every one of them is the same colour — depth and the pointer change how
 present a petal is, never what colour it is, or the sky reads as two sets of
 confetti. They fall at a third of the speed the stars sweep past: a night sky
 seen from a moving ship, a day sky of petals in still air. Same structure,
@@ -350,7 +354,9 @@ the copy stay as they are.
 ## The emblem
 
 There is no photograph. In its place the About section has a web wound into a
-sphere: eight rings — six meridians and two around the waist — in one 3D space,
+sphere: nine rings — six meridians, and the equator with one either side of it,
+without which the sphere is top-heavy and the mark at its centre looks as
+though it has slipped — in one 3D space,
 turning together, with the mark held still at the centre so it faces the reader
 whatever the web is doing. The perspective is on the scene rather than on the
 thing that turns; applied to the rotating element it would be re-applied after

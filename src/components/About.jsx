@@ -32,7 +32,7 @@ export default function About({ onFocus }) {
           <figure className="about-portrait" data-tilt>
             <span className="about-sphere" aria-hidden="true">
               <span className="about-sphere-spin">
-                {Array.from({ length: 8 }, (_, ring) => (
+                {Array.from({ length: 9 }, (_, ring) => (
                   <span key={ring} className="about-ring" style={{ '--ring': ring }} />
                 ))}
               </span>

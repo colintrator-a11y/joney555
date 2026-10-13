@@ -18,16 +18,32 @@ import './Galaxy.css'
  */
 
 // Counted against the viewport, since a phone draws the same picture smaller.
-const COUNT = { desktop: 34000, tablet: 11000, mobile: 3800 }
+const COUNT = { desktop: 46000, tablet: 14000, mobile: 4200 }
 
 // One turn at the reference radius, in seconds. Slow enough to be majestic
 // rather than seen moving.
-const PERIOD = 150
+const PERIOD = 165
 
-const ARMS = 6
-const TWIST = 6.2 // how far an arm wraps over the disc's radius
+// Four arms, wound as a true logarithmic spiral: the angle grows with the
+// *logarithm* of the radius, which is the curve a real galaxy takes — tight
+// where it leaves the bulge, opening as it travels out. Angle grown linearly
+// with radius, as this did before, gives arms of even curvature that read as
+// rings.
+const ARMS = 4
+const WIND = 1.85 // radians of sweep per e-fold of radius
+const R_MIN = 0.055
 const TILT = -15 * (Math.PI / 180)
-const SQUASH = 0.56 // a disc seen at an angle, not face on
+const SQUASH = 0.4 // flatter: a disc seen at a shallow angle
+
+// Star-forming knots strung along each arm. Most of an arm's light comes from
+// a handful of these rather than from an even smear.
+const KNOTS = 7
+const KNOT_SHARE = 0.32
+
+// The lane of dark dust that runs along the inner edge of an arm. Carved by
+// leaving stars out of it, since light can only be added, never subtracted.
+const LANE_AT = -0.1
+const LANE_HALF = 0.035
 
 const VERTEX = `
 attribute vec2 aOrbit;      // radius, starting angle
@@ -50,7 +66,8 @@ void main() {
   // Differential rotation: the inner disc comes round sooner. Clamped near the
   // core, where the true curve goes to infinity and the particles would smear.
   float rate = 1.0 / (0.34 + 1.5 * radius);
-  float angle = aOrbit.y + uTime * rate * uMotion;
+  float wobble = sin(uTime * 1.7 + aDetail.y * 37.0) * 0.012 * uMotion;
+  float angle = aOrbit.y + uTime * rate * uMotion + wobble;
 
   vec2 disc = vec2(cos(angle), sin(angle)) * radius;
   disc.y *= ${SQUASH.toFixed(2)};
@@ -65,7 +82,7 @@ void main() {
 
   // Twinkle, and the outer arms fading into the dark.
   float twinkle = 0.72 + 0.28 * sin(uTime * (0.6 + aDetail.y) + aDetail.y * 90.0);
-  vFade = twinkle * smoothstep(1.1, 0.94, radius);
+  vFade = twinkle * smoothstep(1.12, 0.78, radius);
 
   gl_PointSize = aDetail.x * uPixelRatio * (0.75 + 0.9 * (1.0 - radius));
   vColour = aColour;
@@ -114,61 +131,80 @@ function build(count) {
   const colour = new Float32Array(count * 3)
   const detail = new Float32Array(count * 2)
 
+  // Where each arm's knots sit. Drawn once per arm so that every particle in
+  // a knot agrees on where it is.
+  const knots = Array.from({ length: ARMS }, () =>
+    Array.from({ length: KNOTS }, () => 0.16 + Math.pow(Math.random(), 0.8) * 0.82),
+  )
+
   for (let i = 0; i < count; i += 1) {
-    // Populations, in the proportions a galaxy actually shows: a dense core, a
-    // majority in the arms, a scattering of violet, and dust over all of it.
+    // Populations in the proportions a galaxy shows: a dense bulge, the arms
+    // carrying most of the light, gas in violet patches, dust over all of it,
+    // and only a few stars off the disc entirely.
     const roll = Math.random()
     let radius
-    let spread
+    let thickness
     let size
     let tint
+    let onArm = true
 
-    if (roll < 0.26) {
-      // The bulge: dense, small, and it is what makes the centre burn.
-      radius = Math.pow(Math.random(), 2.8) * 0.3
-      spread = 0.6
+    if (roll < 0.2) {
+      // The bulge: a ball of old stars, no spiral in it at all.
+      radius = Math.pow(Math.random(), 2.6) * 0.26
+      thickness = 0
       size = 0.6 + Math.random() * 1.1
-      tint = [0.95, 0.97, 1.0]
-    } else if (roll < 0.72) {
-      // The arms: the bulk of the galaxy, fine and close together.
-      // Biased inwards: an exponent under one pushes the particles to the
-      // rim, which left a dark gap around the bulge and a ring at the edge.
-      radius = 0.06 + Math.pow(Math.random(), 1.7) * 0.94
-      spread = 0.2
+      tint = [0.98, 0.95, 0.86]
+      onArm = false
+    } else if (roll < 0.8) {
+      // The arms: knotted rather than smeared.
+      const arm = Math.floor(Math.random() * ARMS)
+      radius =
+        Math.random() < KNOT_SHARE
+          ? knots[arm][Math.floor(Math.random() * KNOTS)] + bell() * 0.15
+          : R_MIN + Math.pow(Math.random(), 1.05) * (1 - R_MIN)
+      radius = Math.min(Math.max(radius, R_MIN), 1.12)
+      thickness = 0.09 + 0.19 * radius
       size = 0.5 + Math.random() * 1.0
-      tint = Math.random() < 0.35 ? [0.45, 0.78, 1.0] : [0.76, 0.92, 1.0]
-    } else if (roll < 0.88) {
-      // Gas, in patches along the arms rather than sprinkled over the disc:
-      // violet where it is lit from inside, which is the colour the reference
-      // carries through its arms.
-      radius = 0.14 + Math.pow(Math.random(), 1.4) * 0.8
-      spread = 0.22
-      size = 1.6 + Math.random() * 3.4
-      tint = Math.random() < 0.5 ? [0.45, 0.17, 0.78] : [0.24, 0.3, 0.8]
-    } else if (roll < 0.96) {
-      // Dust: wide, dim, and what gives the arms their body.
-      radius = 0.12 + Math.pow(Math.random(), 1.5) * 0.86
-      spread = 0.34
+      tint = Math.random() < 0.34 ? [0.55, 0.84, 1.0] : [0.88, 0.95, 1.0]
+      detail[i * 2 + 1] = arm // stashed so the angle below uses the same arm
+    } else if (roll < 0.9) {
+      // Gas, lit from inside: violet on the leading edge of the arms, which is
+      // where it is in the reference.
+      radius = 0.18 + Math.pow(Math.random(), 1.2) * 0.84
+      thickness = 0.1 + 0.14 * radius
+      size = 1.4 + Math.random() * 3.0
+      tint = Math.random() < 0.55 ? [0.46, 0.18, 0.8] : [0.22, 0.32, 0.86]
+    } else if (roll < 0.985) {
+      // Dust: wide, dim, and what gives an arm its body.
+      radius = 0.14 + Math.pow(Math.random(), 1.4) * 0.88
+      thickness = 0.12 + 0.16 * radius
       size = 7 + Math.random() * 15
-      tint = [0.045, 0.085, 0.22]
+      tint = [0.05, 0.09, 0.24]
     } else {
-      // Loose field stars, off the arms entirely.
-      radius = Math.random() * 1.06
-      spread = 10
-      size = 0.6 + Math.random() * 1.0
-      tint = [0.5, 0.68, 0.95]
+      // A few stars off the disc. Few on purpose: the sky behind the galaxy is
+      // the starfield's job, not this one's.
+      radius = Math.random() * 1.1
+      thickness = 10
+      size = 0.6 + Math.random() * 0.9
+      tint = [0.55, 0.7, 0.95]
+      onArm = false
     }
 
-    // A logarithmic arm: angle grows with radius, and the scatter grows with
-    // it too, so the arms are tight at the core and frayed at the rim.
-    const step = (Math.PI * 2) / ARMS
-    const arm = (Math.floor(Math.random() * ARMS) + (Math.random() < 0.34 ? 0.5 : 0)) * step
-    const wander = bell() * spread * (0.35 + radius)
-    const spiral = arm + radius * TWIST + wander + Math.random() * 0.04
-    // Towards the middle the arms give way to the bulge, which has no spiral
-    // in it at all; left on the arms it reads as spokes through the centre.
-    const bulge = Math.max(0, 1 - radius / 0.3) ** 1.6
-    const angle = spiral * (1 - bulge) + Math.random() * Math.PI * 2 * bulge
+    let angle
+    if (!onArm) {
+      angle = Math.random() * Math.PI * 2
+    } else {
+      const arm = Math.floor(Math.random() * ARMS) * ((Math.PI * 2) / ARMS)
+      // The logarithmic spiral itself.
+      const sweep = WIND * Math.log(Math.max(radius, R_MIN) / R_MIN)
+      let offset = bell() * thickness
+
+      // The dust lane: anything that would land in it is nudged out, which
+      // leaves a dark thread running along the inside of every arm.
+      if (Math.abs(offset - LANE_AT) < LANE_HALF) offset += LANE_HALF * 2.2
+
+      angle = arm + sweep + offset
+    }
 
     orbit[i * 2] = radius
     orbit[i * 2 + 1] = angle
@@ -256,7 +292,7 @@ export default function Galaxy() {
       gl.uniform2f(uViewport, w / 2, h / 2)
       gl.uniform1f(uPixelRatio, ratio)
       // The disc spans most of the window, as in the reference.
-      gl.uniform1f(uScale, Math.max(w * 0.62, h * 1.0))
+      gl.uniform1f(uScale, Math.min(w * 0.56, h * 1.15))
     }
 
     // Parallax is the galaxy's alone: the starfield in front of it stays put,

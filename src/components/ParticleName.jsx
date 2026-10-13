@@ -92,12 +92,20 @@ export default function ParticleName({ text }) {
       intro = 0
     }
 
-    const draw = () => {
+    let last = 0
+    const draw = (now) => {
+      // Frame-time, not frame-count: eased per frame, the swarm takes six
+      // times as long to come together on a device drawing at ten frames a
+      // second as on one drawing at sixty, and the name is still scattered
+      // when the visitor looks at it. Clamped, so a tab returning from the
+      // background does not jump the particles home in one step.
+      const step = last ? Math.min((now - last) / 16.67, 3) : 1
+      last = now
       context.clearRect(0, 0, width, height)
       // No canvas shadow: it is applied per fill, which means a blur for each
       // of the two thousand squares below. The halo is a CSS filter on the
       // element instead — once, on the composited layer.
-      intro = Math.min(intro + 0.012, 1)
+      intro = Math.min(intro + 0.012 * step, 1)
 
       for (const p of particles) {
         if (still.matches) {
@@ -106,8 +114,8 @@ export default function ParticleName({ text }) {
         } else {
           const dx = p.homeX - p.x
           const dy = p.homeY - p.y
-          p.vx += dx * p.ease
-          p.vy += dy * p.ease
+          p.vx += dx * p.ease * step
+          p.vy += dy * p.ease * step
 
           const px = p.x - pointer.x
           const py = p.y - pointer.y
@@ -118,10 +126,11 @@ export default function ParticleName({ text }) {
             p.vy += (py / distance) * force * 0.12
           }
 
-          p.vx *= FRICTION
-          p.vy *= FRICTION
-          p.x += p.vx
-          p.y += p.vy
+          const drag = Math.pow(FRICTION, step)
+          p.vx *= drag
+          p.vy *= drag
+          p.x += p.vx * step
+          p.y += p.vy * step
         }
 
         context.globalAlpha = still.matches ? 1 : 0.45 + intro * 0.55

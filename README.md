@@ -92,8 +92,11 @@ Two canvases carry it:
   Nothing moves: only brightness changes.
 
   A star is dim for most of its cycle and brightens briefly. Raising a sine to
-  the seventh narrows the peak, so ten to fifteen of the hundred are lit at any
-  moment and the sky never flashes. Eleven larger ones carry tapered cross
+  a power narrows that peak, and the exponent is what sets how many are lit at
+  once — simulated over two minutes of the curve, the seventh power leaves
+  about nineteen brightening at a time, the fourteenth about fourteen. It is
+  set to fourteen, which holds the ten-to-fifteen the sky is meant to keep, and
+  it never flashes. Eleven larger ones carry tapered cross
   spikes. The core has a slow breath, a few per cent over ten seconds, drawn at
   the core's measured place in the file rather than a guessed one. The halo
   behind each star is a cached sprite: a gradient built per star per frame is a

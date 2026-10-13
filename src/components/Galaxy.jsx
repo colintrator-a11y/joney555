@@ -25,12 +25,13 @@ const STARS = { desktop: 100, mobile: 58 }
 const FLARES = { desktop: 11, mobile: 6 }
 
 // A star is dim for most of its cycle and brightens briefly. Raising a sine to
-// an odd power narrows the peak: at 7, a star is near full brightness for about
-// a fifteenth of its cycle, so ten to fifteen of the hundred are lit at once
-// and the sky never flashes.
+// a power narrows the peak, and the exponent is what sets how many of the
+// hundred are lit at once. Simulated over two minutes of the curve below: at 7
+// about nineteen are visibly brightening at a time, at 13 about fourteen, at
+// 18 about twelve. 14 holds the ten-to-fifteen this is meant to keep.
 const TWINKLE_MIN = 2000
 const TWINKLE_MAX = 6000
-const PEAK = 7
+const PEAK = 14
 
 const TINTS = [
   [214, 238, 255],

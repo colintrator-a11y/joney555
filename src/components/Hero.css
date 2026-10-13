@@ -8,7 +8,8 @@
   content: '';
   position: absolute;
   /* Hung from beyond the corner, so the outer threads run off the screen
-     rather than ending in a visible arc inside it. */
+     rather than ending in a visible arc inside it — and high enough to cover
+     the strip the dock sits in. */
   top: -9%;
   width: clamp(220px, 30vw, 430px);
   height: clamp(220px, 30vw, 430px);
@@ -42,17 +43,33 @@
 
 .hero {
   position: relative;
-  /* The corner webs are hung from beyond the edges; without this their
-     overhang counts towards the page's scrollable width and a phone gets a
-     sideways scroll. */
+  /* Clips the corner webs, which are hung past its edges: without this their
+     overhang widens the page and a phone gets a sideways scroll. */
   overflow: hidden;
-  min-height: calc(100vh - var(--nav-h));
+  /*
+   * Pulled up behind the dock and padded back down by the same amount, so
+   * nothing inside moves. The hero box then starts at the top of the window,
+   * and the webs it clips reach the real corners — left alone, the box starts
+   * below the dock's row and the webs are cut off in a line across the top,
+   * leaving a strip of empty sky above them.
+   */
+  margin-top: calc(-1 * var(--dock-h));
+  min-height: 100vh;
   display: flex;
-  align-items: center;
-  padding: 40px 0 56px;
+  /*
+   * Not `align-items: center`: centred, content taller than the window
+   * overflows equally in both directions, and the half that goes up lands
+   * under the dock. Starting it at the top and letting the block margins do
+   * the centring gives the same result when there is room and never pushes
+   * past the padding when there is not.
+   */
+  align-items: flex-start;
+  padding: calc(40px + var(--dock-h)) 0 56px;
 }
 
 .hero-inner {
+  /* The safe centring described above. */
+  margin-block: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -278,7 +295,9 @@
 }
 
 @media (max-width: 560px) {
-  .hero { min-height: 0; padding: 24px 0 40px; }
+  /* The same pull-up compensation as above: the hero still starts behind the
+     dock here, so its padding still has to clear it. */
+  .hero { min-height: 0; padding: calc(24px + var(--dock-h)) 0 40px; }
   .hero-headline { letter-spacing: 0.22em; text-indent: 0.22em; }
   .hero-stack { font-size: 0.8rem; }
   .hero-scroll { margin-top: 26px; }

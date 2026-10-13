@@ -192,6 +192,15 @@ without a second copy, and the one file serves a 330px web in the hero and a
 has to be encoded — left raw it begins a fragment and the browser throws the
 rest of the drawing away, leaving a solid rectangle where the web should be.
 
+The hero is pulled up behind the dock by `--dock-h` and padded back down by
+the same amount. Left alone its box starts below the dock's row, and since it
+clips the webs they end in a line across the top of the window with a strip of
+empty sky above them. Two things follow from the pull-up: the hero centres its
+content with `margin-block: auto` rather than `align-items: center`, because
+centred content taller than the window overflows both ways and the half going
+up lands under the dock; and every one of its padding rules, including the
+phone override, has to carry the same compensation.
+
 Blending it into the sky took three things, and all three were needed. The
 threads are **thin** (0.7 against a soft sky; at 1.1 a web reads as drawn on
 glass). The web is **hung from beyond the corner**, so its outer threads run

@@ -38,6 +38,9 @@
   /* The dock's own height plus the gap above it: what an anchored section
      has to clear when the browser jumps to it. */
   --nav-h: 68px;
+  /* The pill alone, without that gap: what the hero has to be pulled up by to
+     reach the top of the window. Keep it in step with the dock's own size. */
+  --dock-h: 54px;
 
   /*
    * A quarter web, hanging from its top-left corner. One drawing, used at

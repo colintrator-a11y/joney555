@@ -1,0 +1,22 @@
+.particle-name {
+  display: block;
+  width: 100%;
+  /* The word is drawn at the canvas's own scale; the element only ever takes
+     the width it is given. */
+  height: auto;
+}
+
+/* The live heading behind it: read by screen readers and search engines,
+   never painted. Not display:none — that would take it out of the
+   accessibility tree along with the pixels. */
+.particle-name-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}

@@ -1,4 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="J">
-  <rect width="64" height="64" rx="14" fill="#0f766e"/>
-  <text x="32" y="45" text-anchor="middle" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="44" fill="#f7f5f1">J</text>
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0d2440"/>
+      <stop offset="1" stop-color="#061427"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#g)"/>
+  <rect x="0.75" y="0.75" width="62.5" height="62.5" rx="13.25" fill="none" stroke="#3da9fc" stroke-opacity="0.65"/>
+  <text x="32" y="45" text-anchor="middle" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="44" fill="#7cc8ff">J</text>
 </svg>

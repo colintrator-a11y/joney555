@@ -37,7 +37,12 @@ export default {
       'Web applications, mobile apps, online stores and AI automation — taken from the first requirement through to deployment.',
     note: 'This site introduces my skills and the projects behind them.',
     cta: 'See the work',
-    caption: 'Full Stack & Mobile & AI automation Developer',
+    // The hero's two lines under the name: the title, then the stack it is
+    // built on. Split so the title can be set wide and the stack small.
+    headline: 'Senior Mobile & AI Software Engineer',
+    stack: 'Flutter · React Native · Python · Full-Stack Development · AI Integration · 7+ Years of Software Engineering Experience',
+    scroll: 'Scroll to explore',
+    // Printed under the portrait in the About section.
     captionValue: 'Since 2019',
     stats: {
       years: 'Years building software',

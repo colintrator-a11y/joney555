@@ -1,4 +1,4 @@
-import { certifications, projects } from '../data/profile.js'
+import { certifications, profile, projects } from '../data/profile.js'
 import { useLocale } from '../i18n/LocaleContext.jsx'
 import './About.css'
 
@@ -16,6 +16,18 @@ export default function About({ onFocus }) {
         {/* The opening claim and the figure behind it, side by side: the lead
             reads as the statement, the note as its evidence. */}
         <div className="about-intro" data-reveal>
+          {/* Lives in public/ so it can be swapped without touching the build. */}
+          <figure className="about-portrait" data-tilt="soft">
+            <img
+              src={`${import.meta.env.BASE_URL}avatar.jpg`}
+              alt={`${profile.name}, ${t.hero.title}`}
+              width="900"
+              height="1125"
+              loading="lazy"
+            />
+            <figcaption>{t.hero.captionValue}</figcaption>
+          </figure>
+
           <p className="about-lead">{t.about.lead}</p>
           {/* The project count follows the list rather than being typed in,
               so it cannot drift from the number in the hero. */}

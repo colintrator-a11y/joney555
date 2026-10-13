@@ -2,9 +2,58 @@
 
 .about-intro {
   display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
-  gap: 30px 48px;
-  align-items: start;
+  grid-template-columns: auto minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 30px 44px;
+  align-items: center;
+}
+
+/* The portrait as a lit disc, ringed like the loader: the one round thing on
+   a page of rectangles. */
+.about-portrait {
+  position: relative;
+  width: 168px;
+  margin: 0;
+  text-align: center;
+}
+
+.about-portrait img {
+  width: 148px;
+  height: 148px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent-soft) 55%, transparent),
+    0 0 42px -6px rgba(var(--glow), 0.65);
+}
+
+/* The orbit: a dashed ring turning slowly around the photograph. */
+.about-portrait::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 168px;
+  height: 168px;
+  margin: -84px 0 0 -84px;
+  border-radius: 50%;
+  border: 1px dashed color-mix(in srgb, var(--accent) 38%, transparent);
+  animation: about-orbit 26s linear infinite;
+}
+
+@keyframes about-orbit {
+  to { transform: rotate(360deg); }
+}
+
+.about-portrait figcaption {
+  margin-top: 26px;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-portrait::before { animation: none; }
 }
 
 .about-lead {
@@ -138,8 +187,14 @@
   .about-best { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
+@media (max-width: 1000px) {
+  .about-intro { grid-template-columns: auto minmax(0, 1fr); }
+  .about-reach { grid-column: 1 / -1; }
+}
+
 @media (max-width: 860px) {
-  .about-intro { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  .about-intro { grid-template-columns: minmax(0, 1fr); gap: 18px; justify-items: start; }
+  .about-reach { grid-column: auto; }
   .about-lead { max-width: none; }
   .about-close { grid-template-columns: minmax(0, 1fr); }
 }

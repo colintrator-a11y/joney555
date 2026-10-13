@@ -18,9 +18,40 @@ npm run preview        # serve the built site on :4173
 npm run check:locales  # verify every id has its string
 ```
 
+## The look
+
+Night is the ground state: near-black navy, electric blue, and a web drawn
+across it — the nickname is Blue-Spider, and the whole design follows from it.
+The palette lives on bare `:root` in
+[`src/styles/global.css`](src/styles/global.css) and daylight is the override,
+which is the opposite of how the file used to read.
+
+Two canvases carry it:
+
+- [`SpaceField.jsx`](src/components/SpaceField.jsx) — one fixed canvas behind
+  the whole page: drifting stars, threads between the ones that happen to be
+  near each other, and lit threads to the pointer. It is painted in the page's
+  own tokens, so the theme toggle takes the sky with it.
+- [`ParticleName.jsx`](src/components/ParticleName.jsx) — the name, drawn once
+  into an off-screen bitmap, sampled on a grid, and rebuilt as particles that
+  fly in and scatter away from the pointer. The real `<h1>` is live text beside
+  it, hidden from view but not from a screen reader or a search engine.
+
+Both stop when the tab is hidden; the name also stops once the hero scrolls
+away. Under `prefers-reduced-motion` the stars hold still and the particles sit
+at home. The device pixel ratio is capped at 2, and the web is bucketed into a
+grid one link-distance across — comparing all 260 stars with each other would
+be 34,000 pairs a frame.
+
+Cards are *slightly* transparent so the sky shows through, but they carry no
+`backdrop-filter`: that is a full-screen filter per card, and the work list
+alone puts 48 of them on a page. The blur is kept for the two surfaces that
+genuinely float — the dock and the hero's tiles.
+
 ## The loading screen
 
-A CSS3 cube turning in perspective, held until the page is worth looking at.
+Rings leaving the mark, one after another, held until the page is worth
+looking at.
 
 It is markup and inline CSS in [`index.html`](index.html), not a component: a
 React loader cannot paint until the bundle it lives in has downloaded, which is
@@ -28,8 +59,8 @@ the wait being covered. [`src/utils/bootScreen.js`](src/utils/bootScreen.js)
 takes it away once the fonts have resolved and the portrait has decoded — at
 least 450ms so it reads as a transition rather than a flicker, and at most
 3.2s, because a font that never resolves must not leave anyone watching a cube.
-Under `prefers-reduced-motion` the cube holds one angle and only the bar
-pulses.
+Under `prefers-reduced-motion` the rings hold still at three sizes and only the
+bar pulses.
 
 ## The 3D layer
 

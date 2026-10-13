@@ -89,13 +89,13 @@ export default function Navbar() {
   return (
     // Sticky rather than fixed: the pill still takes its own height in the
     // flow, so nothing has to be padded out of the way underneath it.
-    <header className="sticky top-3 z-50 flex justify-center px-3">
+    <header className="nav-shell sticky top-3 z-50 flex justify-center px-3">
       <nav
         aria-label={t.a11y.sections}
         className="flex max-w-full items-center gap-0.5 overflow-x-auto rounded-full border
                    border-[var(--line)] bg-[var(--bg-raised)]/85 px-1.5 py-1.5
-                   shadow-[0_10px_30px_-12px_rgba(0,0,0,0.45),0_0_22px_-14px_var(--accent)]
-                   ring-1 ring-[var(--accent)]/15 backdrop-blur-xl
+                   shadow-[0_16px_44px_-18px_rgba(0,0,0,0.85),0_0_28px_-10px_rgba(var(--glow),0.55)]
+                   ring-1 ring-[rgba(var(--glow),0.22)] backdrop-blur-xl
                    [-ms-overflow-style:none] [scrollbar-width:none]
                    [&::-webkit-scrollbar]:hidden sm:gap-1 sm:px-2"
       >
@@ -114,7 +114,7 @@ export default function Navbar() {
             aria-current={active === section ? 'true' : undefined}
             className={
               active === section
-                ? `${DOCK_BUTTON} bg-[var(--accent)] text-white shadow-[0_0_18px_-3px_var(--accent)] hover:bg-[var(--accent)] hover:text-white`
+                ? `${DOCK_BUTTON} bg-[var(--accent)] text-[#04111f] shadow-[0_0_24px_-2px_rgba(var(--glow),0.95)] hover:bg-[var(--accent)] hover:text-[#04111f]`
                 : DOCK_BUTTON
             }
           >

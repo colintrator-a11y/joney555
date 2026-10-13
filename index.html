@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#f7f5f1" />
+    <meta name="theme-color" content="#05080f" />
 
     <!--
       Applies the saved theme before the first paint. Inline and synchronous on
@@ -103,16 +103,13 @@
         position: fixed;
         inset: 0;
         z-index: 100;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 34px;
-        background: #f7f5f1;
-        transition: opacity 0.5s ease, visibility 0.5s ease;
+        display: grid;
+        place-items: center;
+        background: #05080f;
+        transition: opacity 0.55s ease, visibility 0.55s ease;
       }
 
-      html[data-theme='dark'] #boot { background: #101214; }
+      html[data-theme='light'] #boot { background: #f4f7fd; }
 
       #boot.is-done {
         opacity: 0;
@@ -120,74 +117,88 @@
         pointer-events: none;
       }
 
-      /* The perspective lives on the parent: on the cube itself it would be
-         applied after its own rotation and the faces would shear. */
-      .boot-scene {
-        width: 86px;
-        height: 86px;
-        perspective: 520px;
-      }
-
-      .boot-cube {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        transform-style: preserve-3d;
-        animation: boot-spin 4.6s cubic-bezier(0.62, 0.02, 0.38, 0.98) infinite;
-      }
-
-      .boot-face {
-        position: absolute;
-        inset: 0;
+      /* Everything is stacked in one cell, so the rings are centred on the
+         mark without a single pixel of positioning maths. */
+      .boot-stage {
+        grid-area: 1 / 1;
         display: grid;
         place-items: center;
-        border: 1px solid rgba(15, 118, 110, 0.5);
-        border-radius: 12px;
-        background: rgba(15, 118, 110, 0.14);
-        box-shadow: inset 0 0 24px rgba(15, 118, 110, 0.18);
-        font: 600 30px/1 'Instrument Serif', Georgia, serif;
-        color: #0f766e;
+        width: min(78vmin, 560px);
+        height: min(78vmin, 560px);
+        perspective: 900px;
       }
 
-      html[data-theme='dark'] .boot-face {
-        border-color: rgba(79, 195, 181, 0.45);
-        background: rgba(79, 195, 181, 0.12);
-        box-shadow: inset 0 0 24px rgba(79, 195, 181, 0.16);
-        color: #7fd6ca;
+      .boot-ring {
+        grid-area: 1 / 1;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        border: 1px solid rgba(61, 169, 252, 0.42);
+        /* Each ring runs the same journey, started at a different point of
+           it: one wave of rings leaving the mark, for ever. */
+        animation: boot-ring 3.6s cubic-bezier(0.25, 0.6, 0.3, 1) infinite;
+        opacity: 0;
       }
 
-      /* 43px is half the cube: each face is pushed out to its own side. */
-      .boot-face.front  { transform: translateZ(43px); }
-      .boot-face.back   { transform: rotateY(180deg) translateZ(43px); }
-      .boot-face.right  { transform: rotateY(90deg) translateZ(43px); }
-      .boot-face.left   { transform: rotateY(-90deg) translateZ(43px); }
-      .boot-face.top    { transform: rotateX(90deg) translateZ(43px); }
-      .boot-face.bottom { transform: rotateX(-90deg) translateZ(43px); }
+      html[data-theme='light'] .boot-ring { border-color: rgba(22, 104, 196, 0.4); }
 
-      @keyframes boot-spin {
-        0%   { transform: rotateX(-24deg) rotateY(0deg); }
-        50%  { transform: rotateX(-24deg) rotateY(180deg); }
-        100% { transform: rotateX(-24deg) rotateY(360deg); }
+      .boot-ring:nth-child(2) { animation-delay: 1.2s; }
+      .boot-ring:nth-child(3) { animation-delay: 2.4s; }
+
+      @keyframes boot-ring {
+        0%   { transform: scale(0.18) rotateX(14deg); opacity: 0; }
+        18%  { opacity: 0.85; }
+        100% { transform: scale(1) rotateX(0deg); opacity: 0; }
+      }
+
+      .boot-mark {
+        grid-area: 1 / 1;
+        width: 86px;
+        height: 86px;
+        border-radius: 22px;
+        display: grid;
+        place-items: center;
+        font: 400 40px/1 'Instrument Serif', Georgia, serif;
+        color: #d6ecff;
+        background: linear-gradient(160deg, #0d2440, #061427);
+        border: 1px solid rgba(61, 169, 252, 0.55);
+        box-shadow: 0 0 46px -6px rgba(61, 169, 252, 0.75),
+          inset 0 0 26px -8px rgba(61, 169, 252, 0.9);
+        animation: boot-breathe 2.6s ease-in-out infinite;
+      }
+
+      html[data-theme='light'] .boot-mark {
+        color: #0f4f98;
+        background: linear-gradient(160deg, #ffffff, #dceaff);
+        border-color: rgba(22, 104, 196, 0.5);
+        box-shadow: 0 0 42px -10px rgba(22, 104, 196, 0.5);
+      }
+
+      @keyframes boot-breathe {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.06); }
       }
 
       .boot-text {
+        grid-area: 1 / 1;
+        align-self: end;
+        margin-bottom: 11vh;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 12px;
-        font: 500 0.72rem/1 Inter, system-ui, sans-serif;
-        letter-spacing: 0.22em;
+        gap: 14px;
+        font: 500 0.68rem/1 Inter, system-ui, sans-serif;
+        letter-spacing: 0.34em;
         text-transform: uppercase;
-        color: #8c857c;
+        color: #51688c;
       }
 
-      html[data-theme='dark'] .boot-text { color: #8b9390; }
+      html[data-theme='light'] .boot-text { color: #74839b; }
 
       .boot-track {
-        width: 132px;
-        height: 2px;
-        border-radius: 999px;
-        background: rgba(15, 118, 110, 0.16);
+        width: 150px;
+        height: 1px;
+        background: rgba(61, 169, 252, 0.18);
         overflow: hidden;
       }
 
@@ -195,40 +206,36 @@
          percentage it cannot know. */
       .boot-track i {
         display: block;
-        width: 42%;
+        width: 38%;
         height: 100%;
-        border-radius: inherit;
-        background: #0f766e;
-        animation: boot-slide 1.25s ease-in-out infinite;
+        background: linear-gradient(90deg, transparent, #3da9fc, transparent);
+        animation: boot-slide 1.4s ease-in-out infinite;
       }
-
-      html[data-theme='dark'] .boot-track i { background: #4fc3b5; }
 
       @keyframes boot-slide {
-        0%   { transform: translateX(-110%); }
-        100% { transform: translateX(260%); }
+        0% { transform: translateX(-110%); }
+        100% { transform: translateX(300%); }
       }
 
-      /* Movement off: the cube holds one readable angle and only the bar
-         fades, so the screen still says "working" without animating. */
+      /* Movement off: the rings hold still at their full size and only the
+         bar fades, so the screen still says "working". */
       @media (prefers-reduced-motion: reduce) {
-        .boot-cube { animation: none; transform: rotateX(-20deg) rotateY(-28deg); }
-        .boot-track i { animation: boot-fade 1.4s ease-in-out infinite; width: 100%; }
+        .boot-ring { animation: none; opacity: 0.4; }
+        .boot-ring:nth-child(2) { transform: scale(0.66); }
+        .boot-ring:nth-child(3) { transform: scale(0.33); }
+        .boot-mark { animation: none; }
+        .boot-track i { animation: boot-fade 1.6s ease-in-out infinite; width: 100%; }
         @keyframes boot-fade { 0%, 100% { opacity: 0.25; } 50% { opacity: 1; } }
       }
     </style>
   </head>
   <body>
     <div id="boot" role="status" aria-live="polite" aria-label="Loading the portfolio">
-      <div class="boot-scene">
-        <div class="boot-cube">
-          <div class="boot-face front">J</div>
-          <div class="boot-face back">J</div>
-          <div class="boot-face right">J</div>
-          <div class="boot-face left">J</div>
-          <div class="boot-face top"></div>
-          <div class="boot-face bottom"></div>
-        </div>
+      <div class="boot-stage">
+        <span class="boot-ring"></span>
+        <span class="boot-ring"></span>
+        <span class="boot-ring"></span>
+        <span class="boot-mark">J</span>
       </div>
 
       <p class="boot-text">

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { LocaleProvider, useLocale } from './i18n/LocaleContext.jsx'
 import notifyVisit from './utils/notifyVisit.js'
+import SpaceField from './components/SpaceField.jsx'
 import Navbar from './components/Navbar.jsx'
 import Hero from './components/Hero.jsx'
 import About from './components/About.jsx'
@@ -25,6 +26,9 @@ function Site() {
   return (
     <>
       <a className="skip-link" href="#about">{t.a11y.skip}</a>
+      {/* The sky the page sits on, behind everything and reacting to nothing
+          but the pointer. */}
+      <SpaceField />
       <Navbar />
       <main>
         <Hero />

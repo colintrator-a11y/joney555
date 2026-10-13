@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react'
 import { contactChannels, profile, stats } from '../data/profile.js'
 import { useLocale } from '../i18n/LocaleContext.jsx'
 import ParticleName from './ParticleName.jsx'
@@ -21,8 +22,50 @@ const CHANNEL_ICONS = {
   ),
 }
 
+// How long each word holds, and how long the secret one does.
+const HOLD_MS = 10000
+// Clicks further apart than this start the count again: four deliberate
+// clicks, not four over the course of a visit.
+const CLICK_GAP_MS = 1500
+
 export default function Hero() {
   const t = useLocale()
+
+  // The name, then the headline's stack, one after another.
+  const words = [profile.name, ...t.hero.cycle]
+  const [index, setIndex] = useState(0)
+  const [secret, setSecret] = useState(false)
+  const clicks = useRef({ count: 0, last: 0 })
+
+  useEffect(() => {
+    // The secret word holds for its ten seconds, then the name comes back and
+    // the cycle starts again from the top.
+    if (secret) {
+      const back = setTimeout(() => {
+        setSecret(false)
+        setIndex(0)
+      }, HOLD_MS)
+      return () => clearTimeout(back)
+    }
+    // Movement off, the name stays the name: a heading that keeps changing by
+    // itself is motion too.
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined
+    // A timeout per word rather than one interval, so every word — including
+    // the name after the secret one — gets its whole ten seconds.
+    const next = setTimeout(() => setIndex((current) => (current + 1) % words.length), HOLD_MS)
+    return () => clearTimeout(next)
+  }, [index, secret, words.length])
+
+  const onNameClick = () => {
+    const now = performance.now()
+    const tally = clicks.current
+    tally.count = now - tally.last < CLICK_GAP_MS ? tally.count + 1 : 1
+    tally.last = now
+    if (tally.count >= 4) {
+      tally.count = 0
+      setSecret(true)
+    }
+  }
 
   return (
     <section className="hero" id="top">
@@ -51,10 +94,17 @@ export default function Hero() {
           {t.hero.status}
         </p>
 
-        <div className="hero-name">
-          {/* The heading itself is live text; the canvas is the picture of it. */}
+        {/* Clicks only count towards the secret; there is nothing here to
+            operate, so it is not given a button's role. */}
+        <div className="hero-name" onClick={onNameClick}>
+          {/* The heading itself is live text and always the name; the canvas
+              is the picture of it, and the words it cycles through are the
+              headline's, which is printed in full just below. */}
           <h1 className="particle-name-text">{profile.name}</h1>
-          <ParticleName text={profile.name} />
+          <ParticleName
+            text={secret ? t.hero.secret : words[index]}
+            tone={secret ? 'wendy' : 'default'}
+          />
         </div>
 
         <p className="hero-headline">{t.hero.headline}</p>

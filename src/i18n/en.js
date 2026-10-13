@@ -40,6 +40,11 @@ export default {
     // The hero's two lines under the name: the title, then the stack it is
     // built on. Split so the title can be set wide and the stack small.
     headline: 'Senior Mobile & AI Software Engineer',
+    // The words the particle name cycles through after the name itself, ten
+    // seconds each: the headline's stack, short enough to set large.
+    cycle: ['Flutter', 'React Native', 'Python', 'Full-Stack', 'AI Integration'],
+    // Four clicks on the name.
+    secret: 'Wendy',
     stack: 'Flutter · React Native · Python · Full-Stack Development · AI Integration · 7+ Years of Software Engineering Experience',
     scroll: 'Scroll to explore',
     // Printed under the portrait in the About section.

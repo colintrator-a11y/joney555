@@ -175,7 +175,19 @@ Two canvases carry it:
   layer. The only thing the pointer does is light threads from the stars
   nearest it. It is painted in the page's own tokens, so the theme toggle takes
   the sky with it.
-- [`ParticleName.jsx`](src/components/ParticleName.jsx) — the name, drawn once
+- [`ParticleName.jsx`](src/components/ParticleName.jsx) — a word in points of
+  light. In the hero it **cycles**: the name, then the headline's stack —
+  Flutter, React Native, Python, Full-Stack, AI Integration — ten seconds each,
+  set in `hero.cycle` in `en.js`. The particles are not rebuilt between words:
+  each is given a home in the next word and travels there, so one word flows
+  into the next instead of being cut; a longer word gets new particles born
+  where existing ones are, and a shorter one fades its spares out as they
+  arrive. **Four clicks** on the name within a second and a half of each other
+  turn it into *Wendy*, in her lilac, for ten seconds, then the name comes back
+  and the cycle starts again. The `<h1>` is always the name whatever the dots
+  spell, and under `prefers-reduced-motion` the name does not cycle at all.
+
+  How each word is built: drawn once
   into an off-screen bitmap, sampled on a grid, and rebuilt as particles that
   fly in and scatter away from the pointer. The real `<h1>` is live text beside
   it, hidden from view but not from a screen reader or a search engine.

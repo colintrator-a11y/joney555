@@ -45,3 +45,34 @@
   .lightbox-stage img.is-zoomed { cursor: grab; }
   .lightbox-stage img.is-zoomed:active { cursor: grabbing; }
 }
+
+/*
+ * Daylight is Wendy's: a butterfly arriving at the point being clicked, where
+ * the night theme hangs a spider from it. Same hotspot, same fallbacks.
+ */
+@media (hover: hover) and (pointer: fine) {
+  [data-theme='light'] body {
+    cursor: url('../assets/cursor-butterfly.png') 4 4, auto;
+  }
+
+  [data-theme='light'] a,
+  [data-theme='light'] button,
+  [data-theme='light'] summary,
+  [data-theme='light'] select,
+  [data-theme='light'] [role='button'],
+  [data-theme='light'] .filter,
+  [data-theme='light'] .tag-button,
+  [data-theme='light'] .btn {
+    cursor: url('../assets/cursor-butterfly-link.png') 4 4, pointer;
+  }
+
+  /* The caret and the preview's own cursors still win, in either theme. */
+  [data-theme='light'] input,
+  [data-theme='light'] textarea {
+    cursor: text;
+  }
+
+  [data-theme='light'] .lightbox-stage img { cursor: zoom-in; }
+  [data-theme='light'] .lightbox-stage img.is-zoomed { cursor: grab; }
+  [data-theme='light'] .lightbox-stage img.is-zoomed:active { cursor: grabbing; }
+}

@@ -40,30 +40,32 @@
   --nav-h: 68px;
 }
 
-/* Daylight: the same design with the sky turned up. The canvas reads these
-   tokens too, so the starfield and the web come with it. */
+/* Daylight is Wendy's: the same structure in lilac and rose, with petals in
+   the sky instead of stars and a butterfly for a pointer. The canvas reads
+   these tokens too, so the sky changes with the page. Not a dimmer switch on
+   the night theme — a different hand. */
 [data-theme='light'] {
-  --bg: #f4f7fd;
+  --bg: #fbf7fe;
   --bg-raised: #ffffff;
-  --bg-sunken: #e9eef8;
-  --ink: #0d1726;
-  --ink-soft: #46556e;
-  --ink-faint: #74839b;
-  --line: #dde4f1;
-  --line-strong: #c3cede;
-  --accent: #1668c4;
-  --accent-soft: #dceaff;
-  --accent-ink: #0f4f98;
-  --glow: 22, 104, 196;
-  --shadow-sm: 0 1px 2px rgba(13, 23, 38, 0.06);
-  --shadow-md: 0 16px 40px -24px rgba(13, 23, 38, 0.45);
+  --bg-sunken: #f4ecfb;
+  --ink: #241a33;
+  --ink-soft: #574566;
+  --ink-faint: #8a7a9d;
+  --line: #eee3f8;
+  --line-strong: #dcc9ee;
+  --accent: #a855f7;
+  --accent-soft: #f6e9ff;
+  --accent-ink: #7c2fcb;
+  --glow: 168, 85, 247;
+  --shadow-sm: 0 1px 2px rgba(60, 30, 90, 0.06);
+  --shadow-md: 0 16px 40px -24px rgba(60, 30, 90, 0.45);
 
-  --p-violet: #6d5bd0;
+  --p-violet: #8b5cf6;
   --p-teal: #0f766e;
   --p-emerald: #2f8f5b;
   --p-amber: #b57614;
-  --p-rose: #b8506b;
-  --p-slate: #4b5b70;
+  --p-rose: #d4467f;
+  --p-slate: #5b5570;
 }
 
 *,

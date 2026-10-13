@@ -34,8 +34,17 @@ before sampling — the particles are cut from the real face, not the fallback.
 
 ## The look
 
-Night is the ground state: near-black navy, electric blue, and a web drawn
+Two skies, not one theme and its dimmer.
+
+**Night** is the ground state: near-black navy, electric blue, and a web drawn
 across it — the nickname is Blue-Spider, and the whole design follows from it.
+
+**Daylight is Wendy's**: lilac and rose, petals turning as they drift instead
+of stars, no threads between them, a bloom where the page is clicked instead of
+a cut web, and a butterfly for a pointer instead of a spider. Same structure,
+same canvas, same particles — a different hand. The palette is the
+`[data-theme='light']` block in [`global.css`](src/styles/global.css), and the
+canvas reads those tokens, so the sky changes with the page.
 The palette lives on bare `:root` in
 [`src/styles/global.css`](src/styles/global.css) and daylight is the override,
 which is the opposite of how the file used to read.
@@ -92,6 +101,9 @@ A spider, hanging by a thread from the point it is pointing at:
 [`src/styles/cursor.css`](src/styles/cursor.css), with a lit variant on
 anything clickable. The hotspot is the top of the thread, so the pixel being
 clicked is the one under the tip rather than somewhere inside the drawing.
+
+In daylight it is a butterfly instead, arriving at the same point the spider
+hangs from — the light theme is Wendy's, and the pointer belongs to it too.
 
 Three things it deliberately does not do. **Replace the caret** — a spider over
 the field you are typing in hides the thing you are aiming. **Replace the

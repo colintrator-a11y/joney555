@@ -2,9 +2,15 @@ import { useEffect, useRef } from 'react'
 import './SpaceField.css'
 
 /**
- * The sky the whole page sits on: drifting stars, and a web that draws itself
- * between the ones that happen to be near each other — and towards the
- * pointer, which is the only thing on the page it reacts to.
+ * The sky the whole page sits on, and it has two of them.
+ *
+ * At night: stars at every depth, and a web that draws itself between the ones
+ * that happen to be near each other — and towards the pointer, which is the
+ * only thing on the page it reacts to. A click cuts a web where it lands.
+ *
+ * By day it is Wendy's: the same points of light, drawn as petals turning as
+ * they drift, with no threads between them. A click opens a bloom instead of a
+ * web. One canvas, one set of particles, two hands.
  *
  * One fixed canvas behind everything rather than a background per section, so
  * scrolling moves the page over a still sky instead of dragging a gradient
@@ -81,6 +87,10 @@ export default function SpaceField() {
       }
     }
     let colours = palette()
+    // Which sky this is. Read from the document rather than passed in, so the
+    // toggle changes it without React re-rendering the canvas.
+    const isNight = () => document.documentElement.dataset.theme !== 'light'
+    let night = isNight()
 
     const resize = () => {
       width = window.innerWidth
@@ -116,6 +126,9 @@ export default function SpaceField() {
         // Signed: a star is as likely to be falling away as approaching.
         vz: (Math.random() - 0.5) * 2 * DRIFT_Z,
         twinkle: Math.random() * Math.PI * 2,
+        // Day only: the angle a petal is lying at, and how fast it turns.
+        spin: Math.random() * Math.PI * 2,
+        spinV: (Math.random() - 0.5) * 0.012,
       }
     }
 
@@ -131,6 +144,7 @@ export default function SpaceField() {
           star.x += star.vx
           star.y += star.vy
           star.z += star.vz
+          star.spin += star.spinV
 
           // Out of the volume at either end: born again at the far side of it,
           // so the field neither empties nor crowds the eye.
@@ -158,15 +172,34 @@ export default function SpaceField() {
         if (sx < -40 || sx > width + 40 || sy < -40 || sy > height + 40) continue
 
         const pulse = still.matches ? 0.8 : 0.74 + Math.sin(time / 1500 + star.twinkle) * 0.26
-        context.globalAlpha = (0.24 + near * 0.76) * pulse
-        context.fillStyle = near > 0.72 ? `rgb(${colours.glow})` : colours.star
         const size = 0.9 + near * 2.6
-        context.beginPath()
-        context.arc(sx, sy, size / 2, 0, Math.PI * 2)
-        context.fill()
+
+        if (night) {
+          context.globalAlpha = (0.24 + near * 0.76) * pulse
+          context.fillStyle = near > 0.72 ? `rgb(${colours.glow})` : colours.star
+          context.beginPath()
+          context.arc(sx, sy, size / 2, 0, Math.PI * 2)
+          context.fill()
+        } else {
+          // A petal: an ellipse lying at its own angle, pinched at one end, so
+          // the sky is full of things falling rather than things shining.
+          const lean = pointer.on
+            ? Math.max(0, 1 - Math.hypot(sx - pointer.x, sy - pointer.y) / POINTER_DISTANCE)
+            : 0
+          context.globalAlpha = (0.16 + near * 0.5) * pulse + lean * 0.3
+          context.fillStyle = near > 0.72 || lean > 0.4 ? `rgb(${colours.glow})` : colours.star
+          context.save()
+          context.translate(sx, sy)
+          context.rotate(star.spin + lean)
+          context.beginPath()
+          context.ellipse(0, 0, size * 1.7, size * 0.78, 0, 0, Math.PI * 2)
+          context.fill()
+          context.restore()
+        }
       }
 
-      // The web. Only near neighbours are joined, and a thread fades both with
+      // The web. Night only: by day the petals are not spun together.
+      // Only near neighbours are joined, and a thread fades both with
       // the distance across the screen and with how far back in the field the
       // two stars sit — so the near web is bright and the far one is a haze.
       //
@@ -175,6 +208,7 @@ export default function SpaceField() {
       // only reach the eight cells around its own.
       const cells = new Map()
       const key = (gx, gy) => `${gx},${gy}`
+      if (night) {
       screen.forEach((point, index) => {
         const k = key(Math.floor(point.x / LINK_DISTANCE), Math.floor(point.y / LINK_DISTANCE))
         const bucket = cells.get(k)
@@ -212,8 +246,10 @@ export default function SpaceField() {
         }
       }
 
+      }
+
       // Threads to the pointer, lit rather than grey: the web notices you.
-      if (pointer.on) {
+      if (night && pointer.on) {
         for (const point of screen) {
           const distance = Math.hypot(point.x - pointer.x, point.y - pointer.y)
           if (distance > POINTER_DISTANCE) continue
@@ -233,6 +269,37 @@ export default function SpaceField() {
         webs = webs.filter((web) => time - web.born < WEB_MS)
         for (const web of webs) {
           const t = (time - web.born) / WEB_MS
+
+          if (!night) {
+            // A bloom: petals thrown outwards from the point, turning as they
+            // go, with a ring of light opening ahead of them.
+            const spread = 1 - Math.pow(1 - t, 2.4)
+            const fade = Math.pow(1 - t, 1.3)
+            context.globalAlpha = fade * 0.6
+            context.strokeStyle = `rgb(${colours.glow})`
+            context.lineWidth = 1
+            context.beginPath()
+            context.arc(web.x, web.y, WEB_RADIUS * 0.82 * spread, 0, Math.PI * 2)
+            context.stroke()
+
+            context.fillStyle = `rgb(${colours.glow})`
+            for (const spoke of web.spokes) {
+              const distance = WEB_RADIUS * spoke.reach * spread
+              const px = web.x + Math.cos(spoke.angle) * distance
+              const py = web.y + Math.sin(spoke.angle) * distance
+              context.globalAlpha = fade * 0.85
+              context.save()
+              context.translate(px, py)
+              // Turned by how far it has flown, so the petals tumble outwards.
+              context.rotate(spoke.angle + spread * 2.4)
+              context.beginPath()
+              context.ellipse(0, 0, 9 * (1 - t * 0.4), 4 * (1 - t * 0.4), 0, 0, Math.PI * 2)
+              context.fill()
+              context.restore()
+            }
+            continue
+          }
+
           // Fast out, slow to settle: the snap of a thread being pulled taut.
           const spread = 1 - Math.pow(1 - t, 3)
           // Held, then let go: at 1.6 the web was gone before the eye found it.
@@ -333,7 +400,10 @@ export default function SpaceField() {
 
     // A hidden tab should not be drawing a sky nobody is looking at.
     const onVisibility = () => (document.hidden ? stop() : start())
-    const onTheme = () => { colours = palette() }
+    const onTheme = () => {
+      colours = palette()
+      night = isNight()
+    }
 
     resize()
     start()

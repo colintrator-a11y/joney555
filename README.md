@@ -237,7 +237,12 @@ has to be encoded — left raw it begins a fragment and the browser throws the
 rest of the drawing away, leaving a solid rectangle where the web should be.
 
 The hero is pulled up behind the dock by `--dock-h` and padded back down by
-the same amount. Left alone its box starts below the dock's row, and since it
+the same amount. The dock therefore has to sit above it in the stack, not
+merely in front of it: at the same z-index the hero — later in the document —
+takes every click meant for the dock, and the dock stops working entirely.
+Tailwind's `z-50` on the header cannot settle it either, since that utility is
+layered and the unlayered rule that puts the page above the sky beats it
+whatever the number; `.nav-shell` is given its z-index in that same rule. Left alone its box starts below the dock's row, and since it
 clips the webs they end in a line across the top of the window with a strip of
 empty sky above them. Two things follow from the pull-up: the hero centres its
 content with `margin-block: auto` rather than `align-items: center`, because

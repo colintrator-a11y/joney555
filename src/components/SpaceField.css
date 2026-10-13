@@ -72,3 +72,12 @@
 main,
 footer,
 .social-rail { position: relative; z-index: 1; }
+
+/*
+ * And the dock sits above the page, not beside it. The hero is pulled up
+ * behind the dock by its own height, so at the same z-index the hero — later
+ * in the document — takes every click meant for the dock. Tailwind's z-50 on
+ * the header cannot settle it: that utility is layered, and the unlayered rule
+ * above beats it whatever the number.
+ */
+.nav-shell { z-index: 50; }

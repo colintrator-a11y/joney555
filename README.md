@@ -63,7 +63,9 @@ The lean is the wave's slope — its derivative, a quarter turn out of step with
 the displacement — and that quarter turn is the whole reason a float rocks
 rather than simply bobbing. On a crest a petal is nearer the eye, so it is
 drawn a touch larger and brighter. The train fades over a few wavelengths
-rather than stopping at an edge, and tires as it spreads. Every one of them is the same colour — depth and the pointer change how
+rather than stopping at an edge, and tires as it spreads. Its swells are long —
+230px crest to crest, crossing the page over nearly three seconds — because at
+a shorter wavelength the petals chop up and down instead of riding. Every one of them is the same colour — depth and the pointer change how
 present a petal is, never what colour it is, or the sky reads as two sets of
 confetti. They fall at a third of the speed the stars sweep past: a night sky
 seen from a moving ship, a day sky of petals in still air. Same structure,
@@ -77,7 +79,18 @@ which is the opposite of how the file used to read.
 Two canvases carry it:
 
 - [`SpaceField.jsx`](src/components/SpaceField.jsx) — one fixed canvas behind
-  the whole page, and a volume rather than a pattern. Every star has a depth,
+  the whole page, and a volume rather than a pattern.
+
+  A field of even dots reads as a screensaver. What makes a night sky is that
+  it is *not* even: a third of the stars gather into a galactic band laid
+  across the view — swung below the middle, because through the centre it lands
+  exactly where the name is drawn and the name disappears into it — and those
+  band stars are drawn smaller and dimmer, so it reads as haze rather than a
+  second field of points. A sixth of all stars run warm rather than blue, the
+  nearest few throw the cross a bright point makes through a lens, and every
+  ten seconds or so something crosses the sky along the band, head bright and
+  tail stretched behind it. Behind all of it are three still clouds of colour,
+  in CSS. Every star has a depth,
   and what reaches the screen is its perspective projection: near ones are
   larger, brighter and sweep past faster, and when one passes the eye it is
   born again at the back. Threads are drawn only between stars at a similar

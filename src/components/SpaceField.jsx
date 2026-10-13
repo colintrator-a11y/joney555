@@ -32,6 +32,21 @@ const MAX_STARS = 430
 const FOCAL = 760          // distance from the eye to the screen, in px
 const NEAR = 120           // nearest a star comes before it is recycled
 const FAR = 1900           // furthest a star is born
+// Deep sky. A field of even dots reads as a screensaver; what makes a night
+// sky is that it is not even — a band where the galaxy runs, a few stars near
+// enough to burn, colour in them, and something crossing it now and then.
+const BAND_SHARE = 0.34    // how many stars belong to the galactic band
+const BAND_TILT = -0.42    // radians the band lies across the view
+const BAND_SPREAD = 0.15   // how tightly they gather to it
+// The band is swung below the middle of the view on purpose: run through the
+// centre it lands exactly where the name is drawn, and the name disappears
+// into it.
+const BAND_DROP = 0.3
+const GLINT_NEAR = 0.88    // a star this close earns diffraction spikes
+const SHOOT_MIN_MS = 7000  // and how long between things crossing the sky
+const SHOOT_VAR_MS = 11000
+const SHOOT_LIFE_MS = 1100
+
 // Each star carries its own velocity, drawn once when it is born: some come
 // towards the eye, some fall away, most mostly sideways. A single shared
 // direction read as one sheet of points sliding the same way.
@@ -63,19 +78,19 @@ const TILT_EASE = 0.06
 // Water. A petal on a surface does not travel in a line: it rides a swell,
 // rocks as it goes, and comes back to rest where it was.
 const BOB_AMP = 7          // px of sway at the near plane
-const BOB_RATE = 0.00042   // radians per millisecond
+const BOB_RATE = 0.00026   // radians per millisecond
 
 // The ring a click sends out: a wave train, not a shove. A petal on water does
 // not get pushed aside by a passing wave — it rides up the face of it, leans
 // with the slope, slides back as the crest goes by and ends up where it
 // started. So the ripple contributes an *offset* that oscillates, never a
 // velocity that accumulates.
-const RIPPLE_MS = 1700
+const RIPPLE_MS = 2900     // the train crosses the page slowly
 const RIPPLE_REACH = 680     // px the front of the train travels
-const RIPPLE_BAND = 120      // how far behind the front the swell still carries
-const RIPPLE_WAVE = 104      // crest to crest
+const RIPPLE_BAND = 170      // how far behind the front the swell still carries
+const RIPPLE_WAVE = 230      // crest to crest: long swells, not chop
 const RIPPLE_SWAY = 15       // px a petal rides, at the strongest
-const RIPPLE_ROCK = 0.52     // radians it leans on the steepest face
+const RIPPLE_ROCK = 0.46     // radians it leans on the steepest face
 const RIPPLE_LIFT = 0.16     // how much bigger it looks lifted on a crest
 
 /**
@@ -116,6 +131,10 @@ export default function SpaceField() {
     const pointer = { x: 0, y: 0, on: false }
     let webs = []
     let ripples = []
+    // Something crossing the sky, now and then. One at a time: two at once
+    // reads as a effect rather than an event.
+    let shoot = null
+    let nextShoot = performance.now() + SHOOT_MIN_MS
 
     // A web is cut once, at the click: the jitter in its spokes has to stay
     // the same for the life of the animation or it would shiver.
@@ -141,6 +160,9 @@ export default function SpaceField() {
       return {
         star: styles.getPropertyValue('--ink-soft').trim() || '#a6b4cd',
         glow: styles.getPropertyValue('--glow').trim() || '61, 169, 252',
+        // Not a token: nothing else on the page is this colour, and a sky
+        // with no warm light in it looks printed rather than seen.
+        warm: '#ffd9a8',
       }
     }
     let colours = palette()
@@ -186,9 +208,25 @@ export default function SpaceField() {
       // so no two stars share a direction for long.
       const heading = Math.random() * Math.PI * 2
       const pace = 0.35 + Math.random() * 0.65
+
+      // Most of the sky is scattered; a share of it gathers into the band,
+      // which is laid across the view at an angle and given a little depth of
+      // its own so it reads as something far away rather than a drawn line.
+      let bx = (Math.random() - 0.5) * width * spread * (z / FOCAL)
+      let by = (Math.random() - 0.5) * height * spread * (z / FOCAL)
+      let inBand = false
+      if (Math.random() < BAND_SHARE) {
+        const along = (Math.random() - 0.5) * width * spread * (z / FOCAL) * 1.4
+        const across = (Math.random() + Math.random() - 1) * height * BAND_SPREAD * (z / FOCAL)
+        bx = along * Math.cos(BAND_TILT) - across * Math.sin(BAND_TILT)
+        by = along * Math.sin(BAND_TILT) + across * Math.cos(BAND_TILT)
+        by += height * BAND_DROP * (z / FOCAL)
+        inBand = true
+      }
+
       return {
-        x: (Math.random() - 0.5) * width * spread * (z / FOCAL),
-        y: (Math.random() - 0.5) * height * spread * (z / FOCAL),
+        x: bx,
+        y: by,
         z,
         vx: Math.cos(heading) * DRIFT_XY * pace,
         vy: Math.sin(heading) * DRIFT_XY * pace,
@@ -200,6 +238,12 @@ export default function SpaceField() {
         spinV: (Math.random() - 0.5) * 0.012,
         tilt: 0,
         glint: 0,
+        // Starlight is not one colour. Most are cold, a few run warm, and the
+        // nearest are the ones that show it.
+        warm: Math.random() < 0.16,
+        // Band stars are the far ones seen edge-on: smaller and dimmer, so
+        // the band reads as a haze rather than a second field of points.
+        inBand,
         // Water: each petal rides its own swell.
         waveF: 0.7 + Math.random() * 0.8,
         waveA: 0.55 + Math.random() * 0.9,
@@ -255,11 +299,36 @@ export default function SpaceField() {
         const size = 0.9 + near * 2.6
 
         if (night) {
-          context.globalAlpha = (0.24 + near * 0.76) * pulse
-          context.fillStyle = near > 0.72 ? `rgb(${colours.glow})` : colours.star
+          context.globalAlpha = (0.24 + near * 0.76) * pulse * (star.inBand ? 0.62 : 1)
+          context.fillStyle = star.warm
+            ? colours.warm
+            : near > 0.72
+              ? `rgb(${colours.glow})`
+              : colours.star
           context.beginPath()
-          context.arc(sx, sy, size / 2, 0, Math.PI * 2)
+          context.arc(sx, sy, (size * (star.inBand ? 0.6 : 1)) / 2, 0, Math.PI * 2)
           context.fill()
+
+          // The nearest few burn: a soft halo and the cross a bright point
+          // makes through a lens.
+          if (near > GLINT_NEAR && !star.inBand) {
+            const burn = (near - GLINT_NEAR) / (1 - GLINT_NEAR)
+            const reach = size * (2.2 + burn * 5.5)
+            context.globalAlpha = burn * 0.5 * pulse
+            context.lineWidth = 0.7
+            context.strokeStyle = context.fillStyle
+            context.beginPath()
+            context.moveTo(sx - reach, sy)
+            context.lineTo(sx + reach, sy)
+            context.moveTo(sx, sy - reach)
+            context.lineTo(sx, sy + reach)
+            context.stroke()
+
+            context.globalAlpha = burn * 0.16 * pulse
+            context.beginPath()
+            context.arc(sx, sy, size * 2.6, 0, Math.PI * 2)
+            context.fill()
+          }
         } else {
           // A petal lying at its own angle, so the sky is full of things
           // falling rather than things shining. One colour throughout —
@@ -405,6 +474,55 @@ export default function SpaceField() {
           context.moveTo(point.x, point.y)
           context.lineTo(pointer.x, pointer.y)
           context.stroke()
+        }
+      }
+
+      // A meteor, every so often, falling along the band rather than across
+      // it — the sky it belongs to is the one being drawn.
+      if (night && !still.matches) {
+        if (!shoot && time > nextShoot) {
+          const from = Math.random() < 0.5
+          shoot = {
+            born: time,
+            x: from ? -80 : width * (0.2 + Math.random() * 0.6),
+            y: from ? height * (0.1 + Math.random() * 0.4) : -80,
+            angle: BAND_TILT + Math.PI + (Math.random() - 0.5) * 0.3 + (from ? Math.PI : 0),
+            reach: 420 + Math.random() * 520,
+          }
+        }
+
+        if (shoot) {
+          const age = (time - shoot.born) / SHOOT_LIFE_MS
+          if (age >= 1) {
+            shoot = null
+            nextShoot = time + SHOOT_MIN_MS + Math.random() * SHOOT_VAR_MS
+          } else {
+            // Bright head, tail stretched behind it, both fading out together.
+            const travelled = shoot.reach * (1 - Math.pow(1 - age, 2))
+            const hx = shoot.x + Math.cos(shoot.angle) * travelled
+            const hy = shoot.y + Math.sin(shoot.angle) * travelled
+            const tail = 120 + 90 * Math.sin(Math.PI * age)
+            const tx = hx - Math.cos(shoot.angle) * tail
+            const ty = hy - Math.sin(shoot.angle) * tail
+            const fade = Math.sin(Math.PI * age)
+
+            const trail = context.createLinearGradient(tx, ty, hx, hy)
+            trail.addColorStop(0, `rgba(${colours.glow}, 0)`)
+            trail.addColorStop(1, `rgba(${colours.glow}, ${0.85 * fade})`)
+            context.globalAlpha = 1
+            context.strokeStyle = trail
+            context.lineWidth = 1.6
+            context.beginPath()
+            context.moveTo(tx, ty)
+            context.lineTo(hx, hy)
+            context.stroke()
+
+            context.globalAlpha = fade
+            context.fillStyle = '#ffffff'
+            context.beginPath()
+            context.arc(hx, hy, 1.7, 0, Math.PI * 2)
+            context.fill()
+          }
         }
       }
 
@@ -569,5 +687,18 @@ export default function SpaceField() {
     }
   }, [])
 
-  return <canvas ref={canvasRef} className="space-field" aria-hidden="true" />
+  return (
+    <>
+      {/* The deep sky: clouds of light the stars sit in. CSS rather than
+          canvas — these are three enormous soft gradients, and painting them
+          every frame would cost more than everything else here put together,
+          where the compositor can keep them as layers and simply move them. */}
+      <div className="space-deep" aria-hidden="true">
+        <span className="space-cloud is-one" />
+        <span className="space-cloud is-two" />
+        <span className="space-cloud is-three" />
+      </div>
+      <canvas ref={canvasRef} className="space-field" aria-hidden="true" />
+    </>
+  )
 }

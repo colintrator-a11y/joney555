@@ -3,9 +3,69 @@
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  /* Behind the page, in front of the page's own background fill. */
+}
+
+/* ------------------------------ deep sky -------------------------------- */
+
+.space-deep {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
   background: radial-gradient(130% 90% at 50% -10%, var(--accent-soft) 0%, transparent 55%);
 }
+
+/* Three clouds, each larger than the window and moving at its own pace, so
+   the light behind the stars is never quite the same twice. */
+.space-cloud {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.55;
+  /*
+   * Still, and unblurred, both for the same reason: a layer this size costs a
+   * full-screen raster every time it changes. Blurring one took the sky from
+   * fifty frames a second to single figures; drifting them cost half the
+   * frame rate, and fading them cost half again. A radial gradient is soft
+   * enough without a blur, and the sky has stars, glints and meteors moving
+   * in it already — the clouds are the thing they move against.
+   */
+}
+
+.space-cloud.is-one {
+  top: -22%;
+  left: -14%;
+  width: 62vw;
+  height: 62vw;
+  background: radial-gradient(circle at 50% 50%, rgba(var(--glow), 0.26), transparent 68%);
+}
+
+.space-cloud.is-two {
+  right: -18%;
+  top: 12%;
+  width: 54vw;
+  height: 54vw;
+  /* A second hue: one colour of cloud is a vignette, two is a sky. */
+  background: radial-gradient(circle at 50% 50%, rgba(126, 86, 232, 0.22), transparent 66%);
+}
+
+.space-cloud.is-three {
+  left: 24%;
+  bottom: -26%;
+  width: 70vw;
+  height: 70vw;
+  background: radial-gradient(circle at 50% 50%, rgba(32, 198, 214, 0.14), transparent 70%);
+}
+
+[data-theme='light'] .space-cloud { opacity: 0.42; }
+[data-theme='light'] .space-cloud.is-two {
+  background: radial-gradient(circle at 50% 50%, rgba(236, 142, 214, 0.26), transparent 66%);
+}
+[data-theme='light'] .space-cloud.is-three {
+  background: radial-gradient(circle at 50% 50%, rgba(168, 196, 255, 0.24), transparent 70%);
+}
+
+
 
 /* Everything that is not the sky sits above it. */
 .nav-shell,

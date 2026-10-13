@@ -64,7 +64,7 @@ for (const locale of localeList) {
 
   // Lengths the layout assumes.
   const lengths = {
-    'about.best': [locale.about.best.length, 4],
+    'about.best': [locale.about.best.length, 3],
   }
 
   // Every role needs a title, how it was worked and something it involved: an

@@ -368,6 +368,24 @@ Content is split in two on purpose:
 - [`src/i18n/en.js`](src/i18n/en.js) — every string on the page, keyed by the
   ids above.
 
+## The work, curated
+
+The list is held to the headline — mobile apps, AI integration and full-stack
+systems — and shown in the order `profile.js` declares it, strongest mobile
+work first. Twelve projects are on it. The Shopify and WordPress sites, the
+games, the blockchain work and the agency landing pages are gone, with their
+screenshots, because a reviewer reads the first three or four rows and those
+rows should say what the title says.
+
+Four **empty slots** sit where the work history describes a kind of project the
+page cannot show yet: the flagship mobile-and-AI app from Originally US, the
+document-processing pipeline and the web platform from Tech JDI, and a Flutter
+product from Buuuk. Each is an entry in `projects` with `placeholder: true`, a
+`company`, and the `stack` it is expected to use; it renders as a dashed block
+with a description of what belongs there, and is left out of every count. To
+fill one, replace it with a real entry — name, category, media, tags, links —
+and its description under `projects.items.<id>` in `en.js`.
+
 ## Adding a project
 
 1. Put the screenshots, GIFs or video stills in `src/assets/projects/`. Any size
@@ -422,8 +440,8 @@ under `prefers-reduced-motion`.
 
 ## Browsing the work
 
-The list does not hand over all 47 rows: six are on the page, and the rest
-arrive six at a time behind **View more**, with a count underneath saying where
+The list does not hand over every row at once: six are on the page, and the
+rest arrive six at a time behind **View more**, with a count underneath saying where
 you are. Narrowing the list starts it again from the top, since a page count
 carried over from the last filter would show six of one set and twenty of the
 next.

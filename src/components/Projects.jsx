@@ -8,8 +8,8 @@ import './Projects.css'
 const ALL = 'all'
 
 // How many rows are on the page to begin with, and how many each press of the
-// button adds. Six rather than all forty-seven: the rest are a decision the
-// visitor makes, not a download they are handed.
+// button adds. The rest are a decision the visitor makes, not a download they
+// are handed.
 const PAGE = 6
 
 // How a row is laid out follows from its media. Three or more images cannot be
@@ -36,10 +36,11 @@ export default function Projects({ focus, onFocusChange }) {
   // which is translated, so switching language keeps the current selection.
   const categories = useMemo(() => {
     const counts = new Map()
-    projects.forEach((project) => {
+    const real = projects.filter((project) => !project.placeholder)
+    real.forEach((project) => {
       counts.set(project.category, (counts.get(project.category) ?? 0) + 1)
     })
-    return [[ALL, projects.length], ...counts.entries()]
+    return [[ALL, real.length], ...counts.entries()]
   }, [])
 
   // Sixty-nine tags in one flat alphabetical list means scrolling past fifty of
@@ -71,11 +72,8 @@ export default function Projects({ focus, onFocusChange }) {
 
   const inFocus = (project) => !focus || focusAreas[focus].includes(project.category)
 
-  // A row a visitor can open is worth more than one they can only read about,
-  // so anything with a live link sorts to the front. `filter` has already made
-  // a copy, and sort is stable, so the order inside each group is still the one
-  // declared in profile.js.
-  const hasLink = (project) => Boolean(project.links?.length)
+  // Shown in the order profile.js declares them: the list is curated to the
+  // headline, strongest mobile work first, and a sort here would undo that.
 
   const matching = projects
     .filter(
@@ -84,7 +82,6 @@ export default function Projects({ focus, onFocusChange }) {
         (category === ALL || project.category === category) &&
         (skill === ALL || project.tags.includes(skill)),
     )
-    .sort((a, b) => Number(hasLink(b)) - Number(hasLink(a)))
 
   const shown = matching.slice(0, limit)
   const remaining = matching.length - shown.length
@@ -208,7 +205,33 @@ export default function Projects({ focus, onFocusChange }) {
 
         {shown.length ? (
           <ol className="projects-list">
-            {shown.map((project) => (
+            {shown.map((project) => project.placeholder ? (
+              // An empty slot: where a project belongs that the page cannot
+              // show yet. Plain on purpose, so it is easy to find and hard to
+              // mistake for a finished entry.
+              <li key={project.id} data-reveal className={`project-row project-slot accent-${project.accent}`}>
+                <div className="project-slot-mark" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="22" height="22">
+                    <path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                  </svg>
+                </div>
+                <div className="project-content">
+                  <p className="project-category">
+                    {t.projects.categories[project.category]} · {t.projects.slot.from(project.company)}
+                  </p>
+                  <h3>{t.projects.slot.label}</h3>
+                  {t.projects.items[project.id].map((paragraph) => (
+                    <p key={paragraph.slice(0, 32)} className="project-body">{paragraph}</p>
+                  ))}
+                  <p className="project-slot-stack">{t.projects.slot.stack}</p>
+                  <ul className="project-tags">
+                    {project.stack.map((tag) => (
+                      <li key={tag} className="project-slot-tag">{tag}</li>
+                    ))}
+                  </ul>
+                </div>
+              </li>
+            ) : (
               <li key={project.id} data-tilt="soft" data-reveal className={`card project-row accent-${project.accent}${rowLayout(project)}`}>
                 <div className={`project-media${mediaLayout(project)}`}>
                   {shot(project, 0, 'media-lead')}
@@ -281,7 +304,12 @@ export default function Projects({ focus, onFocusChange }) {
               {t.projects.more(Math.min(PAGE, remaining))}
             </button>
             <p className="projects-progress" aria-live="polite">
-              {t.projects.progress(shown.length, matching.length)}
+              {/* Projects, not rows: an empty slot is not work, and the count
+                  has to agree with the filter chips above. */}
+              {t.projects.progress(
+                shown.filter((project) => !project.placeholder).length,
+                matching.filter((project) => !project.placeholder).length,
+              )}
             </p>
           </div>
         ) : null}

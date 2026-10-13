@@ -78,6 +78,30 @@ which is the opposite of how the file used to read.
 
 Two canvases carry it:
 
+- [`Galaxy.jsx`](src/components/Galaxy.jsx) — the hero's sky: a photograph of
+  a spiral galaxy, held perfectly still, with a canvas laid exactly over it.
+  Tens of thousands of particles can be made to turn, but not to look like
+  this, and a photograph costs one decode where the particles cost a frame of
+  work for ever.
+
+  The hundred stars on that canvas are **sampled from the picture's own
+  brightness** — rejection sampling against luminance squared — so they sit
+  along the arms rather than scattered over the window. Positions are kept in
+  the picture's coordinates and mapped through the same `cover` arithmetic the
+  background uses, so a star stays on its arm whatever shape the window is.
+  Nothing moves: only brightness changes.
+
+  A star is dim for most of its cycle and brightens briefly. Raising a sine to
+  the seventh narrows the peak, so ten to fifteen of the hundred are lit at any
+  moment and the sky never flashes. Eleven larger ones carry tapered cross
+  spikes. The core has a slow breath, a few per cent over ten seconds, drawn at
+  the core's measured place in the file rather than a guessed one. The halo
+  behind each star is a cached sprite: a gradient built per star per frame is a
+  hundred and eleven gradients a frame for a shape that never changes.
+
+  Canvas 2D, no WebGL, no library. Paused when the tab is hidden, fewer stars
+  on a phone, and under `prefers-reduced-motion` a single still frame.
+
 - [`SpaceField.jsx`](src/components/SpaceField.jsx) — one fixed canvas behind
   the whole page, and a volume rather than a pattern.
 

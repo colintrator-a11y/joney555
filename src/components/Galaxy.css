@@ -1,83 +1,57 @@
 /*
- * The galaxy sits behind everything, including the starfield: the stars are
- * between it and the reader, which is what gives the hero its depth.
+ * The sky, in three layers: the photograph, the twinkle over it, and a shade
+ * that keeps the hero readable against it. All fixed, all behind the page.
  */
 .galaxy {
   position: fixed;
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  /* Centred a little above the middle, as in the reference, so the name sits
-     across the brightest part of the disc. */
-  display: grid;
-  place-items: center;
 }
 
 /* Night only. By day the sky is Wendy's — petals, not deep space. */
 [data-theme='light'] .galaxy { display: none; }
 
-.galaxy-disc {
-  grid-area: 1 / 1;
+.galaxy-plate,
+.galaxy-stars,
+.galaxy-shade {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
-  /* The disc is drawn around the middle of the canvas; this lifts the whole
-     thing to 43% of the viewport without moving the canvas itself. */
-  transform: translateY(-7vh);
+}
+
+/* Still: no rotation, no drift, no scale. The image is the galaxy. */
+.galaxy-plate {
+  background-image: var(--galaxy-plate);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 /*
- * The core's bloom. A gradient rather than more particles: the brightest part
- * of a galaxy is light scattered in the gas, which has no grain to it, and
- * drawing it with points costs thousands of them to get a soft centre.
+ * The shade. Two jobs: hold the dotted letters of the name against the bright
+ * core behind them, and sink the edges of the frame so the picture reads as
+ * depth rather than wallpaper. Centred on the core, which the heading sits
+ * over, and the vignette rides on top of it.
  */
-/*
- * The disc the arms are embedded in. Particles alone leave the space between
- * the arms empty, where a real galaxy has light all through it.
- */
-.galaxy-haze {
-  grid-area: 1 / 1;
-  width: min(96vw, 1500px);
-  height: min(58vh, 720px);
-  transform: translateY(-7vh) rotate(-15deg);
-  border-radius: 50%;
+.galaxy-shade {
   background:
-    radial-gradient(closest-side, rgba(56, 120, 220, 0.26), rgba(40, 70, 160, 0.12) 44%, transparent 72%),
-    radial-gradient(closest-side at 64% 40%, rgba(124, 58, 237, 0.16), transparent 58%),
-    radial-gradient(closest-side at 32% 62%, rgba(168, 85, 247, 0.12), transparent 56%);
+    /* Behind the name and the two lines under it, which sit over the brightest
+       part of the picture and had nothing to be bright against. */
+    radial-gradient(46% 46% at 50% 44%, rgba(3, 7, 16, 0.74), rgba(3, 7, 16, 0.4) 52%, transparent 80%),
+    radial-gradient(70% 26% at 50% 60%, rgba(3, 7, 16, 0.5), transparent 76%),
+    radial-gradient(120% 100% at 50% 44%, transparent 40%, rgba(2, 5, 12, 0.5) 76%, rgba(2, 5, 12, 0.8) 100%),
+    linear-gradient(to bottom, rgba(2, 5, 12, 0.4), transparent 26%, transparent 60%, rgba(2, 5, 12, 0.74));
 }
 
-.galaxy-core {
-  grid-area: 1 / 1;
-  width: min(26vw, 400px);
-  height: min(19vh, 270px);
-  transform: translateY(-7vh) rotate(-15deg);
-  border-radius: 50%;
-  background:
-    radial-gradient(closest-side, rgba(255, 248, 226, 0.8), rgba(178, 220, 255, 0.34) 24%, rgba(90, 150, 255, 0.12) 48%, transparent 72%),
-    radial-gradient(closest-side, rgba(150, 70, 240, 0.22), transparent 76%);
-  filter: blur(3px);
-  animation: galaxy-breathe 8s ease-in-out infinite;
-}
-
-/* Five per cent either side: energetic, not flashing. */
-@keyframes galaxy-breathe {
-  0%, 100% { opacity: 0.92; }
-  50% { opacity: 1; }
-}
-
-@media (max-width: 1100px) {
-  .galaxy-haze { width: 110vw; height: 44vh; }
-  .galaxy-core { width: min(62vw, 520px); height: min(26vh, 320px); }
-}
-
-@media (max-width: 640px) {
-  .galaxy-disc,
-  .galaxy-haze,
-  .galaxy-core { transform: translateY(-4vh) rotate(0deg); }
-  .galaxy-haze { width: 130vw; height: 36vh; }
-  .galaxy-core { width: 76vw; height: 22vh; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .galaxy-core { animation: none; }
+@media (max-width: 760px) {
+  /* A narrow window crops the picture hard, so the core sits higher in it. */
+  .galaxy-shade {
+    background:
+      radial-gradient(62% 34% at 50% 36%, rgba(3, 7, 16, 0.74), rgba(3, 7, 16, 0.42) 54%, transparent 82%),
+      radial-gradient(84% 26% at 50% 58%, rgba(3, 7, 16, 0.52), transparent 78%),
+      radial-gradient(130% 100% at 50% 40%, transparent 38%, rgba(2, 5, 12, 0.6) 76%, rgba(2, 5, 12, 0.85) 100%),
+      linear-gradient(to bottom, rgba(2, 5, 12, 0.4), transparent 26%, transparent 58%, rgba(2, 5, 12, 0.78));
+  }
 }

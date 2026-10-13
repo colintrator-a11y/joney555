@@ -174,9 +174,33 @@ is imported last in `main.jsx`, after the component stylesheets, because
 `.btn` and `.filter` set `cursor: pointer` themselves and equal specificity is
 settled by order.
 
+## The web, as a signature
+
+The nickname is Blue-Spider, and the page says so in four places rather than
+everywhere: the **loading screen**, where a web spins itself; the **hero**,
+with a web strung in each top corner and the name between them; a small web at
+the **corner of every section title**; and the **mark** itself, which carries
+one behind the letter. The cursor, the emblem and the web a click cuts were
+already there. Everything else — the sky, the planets, the threads between
+stars — is the world the spider lives in, not more spider.
+
+The corner web is one drawing, `--web-corner` in
+[`global.css`](src/styles/global.css), used as a CSS **mask** rather than an
+image: the thread takes its colour from the page, so it follows the theme
+without a second copy, and the one file serves a 330px web in the hero and a
+54px one beside a heading. It is a data URI, which means the `#` in its colour
+has to be encoded — left raw it begins a fragment and the browser throws the
+rest of the drawing away, leaving a solid rectangle where the web should be.
+
+The mark drops the web below 64px. On a 32px favicon the threads are noise
+rather than a web, and the letter has to win.
+
 ## The loading screen
 
-Rings leaving the mark, one after another, held until the page is worth
+The web spins itself: every thread is a dashed line whose single dash is as
+long as the thread, so winding its offset back to zero draws it from one end to
+the other. The spokes go out first and the spirals are laid from the middle
+outwards, which is the order a spider works in. Held until the page is worth
 looking at.
 
 It is markup and inline CSS in [`index.html`](index.html), not a component: a
@@ -185,8 +209,8 @@ the wait being covered. [`src/utils/bootScreen.js`](src/utils/bootScreen.js)
 takes it away once the fonts have resolved and the portrait has decoded — at
 least 450ms so it reads as a transition rather than a flicker, and at most
 3.2s, because a font that never resolves must not leave anyone watching a cube.
-Under `prefers-reduced-motion` the rings hold still at three sizes and only the
-bar pulses.
+Under `prefers-reduced-motion` the web is shown spun rather than spinning, and
+only the bar pulses.
 
 ## The 3D layer
 

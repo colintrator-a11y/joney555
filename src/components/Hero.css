@@ -1,3 +1,39 @@
+/*
+ * The first screen says spider; the rest of the page says space. Two webs
+ * strung in the top corners, large and very faint, with the name between
+ * them — restrained on purpose, because louder they fight the particles.
+ */
+.hero::before,
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: clamp(180px, 23vw, 330px);
+  height: clamp(180px, 23vw, 330px);
+  background: var(--accent);
+  -webkit-mask-image: var(--web-corner);
+  mask-image: var(--web-corner);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  opacity: 0.17;
+  pointer-events: none;
+}
+
+.hero::before { left: 0; }
+
+/* The same drawing, flipped: a web in the other corner hangs the other way. */
+.hero::after {
+  right: 0;
+  transform: scaleX(-1);
+}
+
+@media (max-width: 560px) {
+  .hero::before,
+  .hero::after { opacity: 0.12; }
+}
+
 .hero {
   position: relative;
   min-height: calc(100vh - var(--nav-h));

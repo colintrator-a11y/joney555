@@ -28,6 +28,17 @@
   border: 2px solid var(--bg);
 }
 
+.timeline-dates { display: block; }
+
+.timeline-length {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--ink-faint);
+  opacity: 0.8;
+}
+
 .timeline-card { padding: 22px 24px; }
 
 .timeline-card h3 { font-size: 1.1rem; }
@@ -37,6 +48,12 @@
   font-size: 0.88rem;
   color: var(--accent-ink);
   font-weight: 500;
+}
+
+.timeline-meta {
+  margin-top: 2px;
+  font-size: 0.82rem;
+  color: var(--ink-faint);
 }
 
 .timeline-card ul {
@@ -64,8 +81,34 @@
   background: var(--line-strong);
 }
 
+/* The technologies, as chips rather than bullets: they are names, and a row
+   of them reads faster than another list.
+
+   Qualified by .timeline-card because the responsibilities rule above it is
+   `.timeline-card ul`, which is the more specific selector of the two and
+   would otherwise keep these in a column. */
+.timeline-card ul.timeline-skills {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+/* The bullet rules above are written for the responsibilities list; the chips
+   are the same element and would otherwise inherit the dot and the indent. */
+.timeline-card ul.timeline-skills li { padding-left: 0; }
+.timeline-card ul.timeline-skills li::before { display: none; }
+
 @media (max-width: 720px) {
   .timeline-item { grid-template-columns: minmax(0, 1fr); gap: 12px; }
   .timeline-period { border-left: 0; padding-left: 0; }
   .timeline-period::before { display: none; }
+
+  /* Side by side on a phone: a date and its length on two lines each, five
+     times over, is a lot of column for two short facts. */
+  .timeline-dates,
+  .timeline-length { display: inline; }
+  .timeline-length::before { content: ' · '; }
 }

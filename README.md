@@ -132,6 +132,20 @@ Content is split in two on purpose:
 
 The headline "projects" count in the hero follows `projects.length`.
 
+## Adding a role
+
+1. Add an entry to `experience` in [`src/data/profile.js`](src/data/profile.js),
+   newest first: `id`, `company`, `location`, `start` and `end` as ISO months
+   (`end: null` for the job you are in), and `skills`.
+2. Add `role`, `type` and `points` under `experience.items.<id>` in
+   [`src/i18n/en.js`](src/i18n/en.js).
+3. Run `npm run check:locales`, which fails if a role has no copy.
+
+The dates are printed and the length of each job worked out from `start` and
+`end`, so "1 yr 10 mos" on the current role keeps counting without anyone
+editing the file. Past roles are written in the past tense, the current one in
+the present.
+
 ## Browsing the work
 
 The four areas named in the About list — E-commerce, Web apps, Mobile, AI &

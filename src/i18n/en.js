@@ -345,15 +345,67 @@ export default {
   experience: {
     eyebrow: 'Experience',
     heading: 'Work history',
-    role: 'Full Stack & Mobile & AI automation Developer',
-    company: 'Remote Development — Freelance',
-    period: 'August 2019 — Present',
-    points: [
-      'Working remotely with clients worldwide, as the single developer on most of the work.',
-      'Building web applications with React, Next.js, Node.js and TypeScript, and back ends with Python, Django, PHP and Laravel.',
-      'Shipping Android and iOS apps with React Native, Flutter and Unity 3D.',
-      'Delivering WordPress sites and Shopify stores, from design through to launch.',
-    ],
+    present: 'Present',
+    // Shown as "1 yr 10 mos", the way a job's length is usually written.
+    year: 'yr',
+    years: 'yrs',
+    month: 'mo',
+    months: 'mos',
+    // The role title and what the job involved, keyed by the ids in
+    // src/data/profile.js. Written in the present tense for the job I am in
+    // and the past for the ones I have left.
+    items: {
+      originallyUs: {
+        role: 'Senior Mobile & AI Software Engineer',
+        type: 'Full-time · Hybrid',
+        points: [
+          'Lead cross-platform mobile development using Flutter and React Native.',
+          'Integrate Python-based AI services, LLM APIs and intelligent chat features.',
+          'Design scalable backend architecture using FastAPI, Node.js and PostgreSQL.',
+          'Mentor junior developers and improve CI/CD workflows.',
+        ],
+      },
+      techJdi: {
+        role: 'Full-Stack & AI Software Engineer',
+        type: 'Full-time · Hybrid',
+        points: [
+          'Developed web applications with React, TypeScript and Python.',
+          'Built REST APIs using FastAPI and Django.',
+          'Implemented AI-powered document processing and workflow automation.',
+          'Deployed containerised applications using Docker and AWS.',
+        ],
+      },
+      buuuk: {
+        role: 'Mobile Software Engineer',
+        type: 'Full-time · Hybrid',
+        points: [
+          'Built mobile applications using Flutter and React Native.',
+          'Integrated authentication, push notifications and third-party APIs.',
+          'Implemented state management using BLoC and Redux.',
+          'Improved application performance and maintained automated tests.',
+        ],
+      },
+      codigo: {
+        role: 'Mobile Application Developer',
+        type: 'Full-time · On-site',
+        points: [
+          'Developed cross-platform mobile apps using React Native and Flutter.',
+          'Converted UI/UX designs into reusable application components.',
+          'Integrated REST APIs and Firebase services.',
+          'Debugged application issues and prepared Android and iOS releases.',
+        ],
+      },
+      vinova: {
+        role: 'Junior Software Engineer',
+        type: 'Full-time · On-site',
+        points: [
+          'Developed web and mobile application features.',
+          'Built simple backend services using Python and Flask.',
+          'Integrated REST APIs and maintained MySQL databases.',
+          'Resolved bugs, wrote unit tests and took part in code reviews.',
+        ],
+      },
+    },
   },
 
   contact: {

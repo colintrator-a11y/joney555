@@ -32,6 +32,57 @@ export const focusAreas = {
   automation: ['chatbot', 'automation'],
 }
 
+/**
+ * Work history, newest first. What a translator would never touch lives here:
+ * employer, place, dates and the technologies, which are proper nouns.
+ *
+ * `start` and `end` are ISO months, not printed strings — the section formats
+ * them and works out how long each role lasted, so the current one does not
+ * need editing as the months pass. `end: null` means "to this day".
+ */
+export const experience = [
+  {
+    id: 'originallyUs',
+    company: 'Originally US',
+    location: 'Singapore',
+    start: '2025-01',
+    end: null,
+    skills: ['Flutter', 'React Native', 'Python', 'FastAPI', 'OpenAI API', 'PostgreSQL', 'AWS'],
+  },
+  {
+    id: 'techJdi',
+    company: 'Tech JDI',
+    location: 'Singapore',
+    start: '2023-07',
+    end: '2024-12',
+    skills: ['React', 'TypeScript', 'Python', 'Django', 'FastAPI', 'Docker', 'AWS'],
+  },
+  {
+    id: 'buuuk',
+    company: 'Buuuk',
+    location: 'Singapore',
+    start: '2022-01',
+    end: '2023-06',
+    skills: ['Flutter', 'Dart', 'React Native', 'TypeScript', 'Firebase', 'REST API'],
+  },
+  {
+    id: 'codigo',
+    company: 'Codigo',
+    location: 'Singapore',
+    start: '2020-07',
+    end: '2021-12',
+    skills: ['React Native', 'Flutter', 'JavaScript', 'Dart', 'Firebase', 'Git'],
+  },
+  {
+    id: 'vinova',
+    company: 'Vinova',
+    location: 'Singapore',
+    start: '2019-01',
+    end: '2020-06',
+    skills: ['Python', 'Flask', 'JavaScript', 'MySQL', 'REST API', 'Git'],
+  },
+]
+
 export const navSections = ['about', 'services', 'skills', 'work', 'experience', 'contact']
 
 export const serviceIds = ['web', 'mobile', 'ecommerce', 'automation']

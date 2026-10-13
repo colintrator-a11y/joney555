@@ -10,6 +10,7 @@
 import { localeList } from '../src/i18n/index.js'
 import {
   certifications,
+  experience,
   navSections,
   projects,
   serviceIds,
@@ -48,6 +49,7 @@ const coverage = {
   'about.certifications': certifications.map((certification) => certification.id),
   'services.items': serviceIds,
   'skills.groups': skillGroups.map((group) => group.id),
+  'experience.items': experience.map((job) => job.id),
   'projects.items': projects.map((project) => project.id),
   'projects.categories': [...new Set(projects.map((project) => project.category))],
 }
@@ -63,7 +65,17 @@ for (const locale of localeList) {
   // Lengths the layout assumes.
   const lengths = {
     'about.best': [locale.about.best.length, 4],
-    'experience.points': [locale.experience.points.length, 4],
+  }
+
+  // Every role needs a title, how it was worked and something it involved: an
+  // entry added to profile.js with no copy would otherwise render an empty
+  // card rather than failing here.
+  for (const job of experience) {
+    const copy = locale.experience.items[job.id]
+    if (!copy) continue
+    if (!copy.role) problems.push(`${locale.code}: experience.items.${job.id}.role is missing`)
+    if (!copy.type) problems.push(`${locale.code}: experience.items.${job.id}.type is missing`)
+    if (!copy.points?.length) problems.push(`${locale.code}: experience.items.${job.id}.points is empty`)
   }
 
   // A project's description is an array of paragraphs; a locale that dropped or

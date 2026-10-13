@@ -27,16 +27,16 @@ export default function About({ onFocus }) {
         {/* The opening claim and the figure behind it, side by side: the lead
             reads as the statement, the note as its evidence. */}
         <div className="about-intro" data-reveal>
-          {/* Lives in public/ so it can be swapped without touching the build. */}
+          {/* A web wound into a sphere: eight rings in one 3D space, turning
+              together, with the mark held still at the centre of them. */}
           <figure className="about-portrait" data-tilt>
-            <span className="about-portrait-frame">
-              <img
-                src={`${import.meta.env.BASE_URL}avatar.jpg`}
-                alt={`${profile.name}, ${t.hero.title}`}
-                width="900"
-                height="1125"
-                loading="lazy"
-              />
+            <span className="about-sphere" aria-hidden="true">
+              <span className="about-sphere-spin">
+                {Array.from({ length: 8 }, (_, ring) => (
+                  <span key={ring} className="about-ring" style={{ '--ring': ring }} />
+                ))}
+              </span>
+              <span className="about-core">{profile.name.charAt(0)}</span>
             </span>
 
             {/* The stack, hung off the corners of the frame. Decorative: the

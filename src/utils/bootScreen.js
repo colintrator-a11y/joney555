@@ -1,6 +1,6 @@
 /**
  * Takes the loading screen in index.html away once the page is worth looking
- * at: web fonts resolved and the portrait decoded, so the first thing a
+ * at: web fonts resolved and the first image decoded, so the first thing a
  * visitor sees is the finished hero rather than fallback type reflowing into
  * place.
  *
@@ -24,7 +24,9 @@ function whenPainted() {
 }
 
 function whenHeroReady() {
-  const image = document.querySelector('.portrait-frame img')
+  // The hero is drawn, not photographed, so there is no image to wait for —
+  // this stays for the first picture on the page, whatever it ends up being.
+  const image = document.querySelector('main img')
   if (!image) return Promise.resolve()
   if (image.complete) return Promise.resolve()
   return new Promise((resolve) => {

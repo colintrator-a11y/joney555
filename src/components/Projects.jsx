@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { focusAreas, projects } from '../data/profile.js'
 import { projectMedia } from '../data/projectMedia.js'
 import { useLocale } from '../i18n/LocaleContext.jsx'
@@ -6,6 +6,11 @@ import Lightbox from './Lightbox.jsx'
 import './Projects.css'
 
 const ALL = 'all'
+
+// How many rows are on the page to begin with, and how many each press of the
+// button adds. Six rather than all forty-seven: the rest are a decision the
+// visitor makes, not a download they are handed.
+const PAGE = 6
 
 // How a row is laid out follows from its media. Three or more images cannot be
 // read side by side in half a row, so those projects put the media above the
@@ -55,6 +60,7 @@ export default function Projects({ focus, onFocusChange }) {
   const [category, setCategory] = useState(ALL)
   const [skill, setSkill] = useState(ALL)
   const [preview, setPreview] = useState(null)
+  const [limit, setLimit] = useState(PAGE)
 
   // A focus and a category narrow the same axis, so choosing one clears the
   // other rather than intersecting to nothing.
@@ -71,7 +77,7 @@ export default function Projects({ focus, onFocusChange }) {
   // declared in profile.js.
   const hasLink = (project) => Boolean(project.links?.length)
 
-  const shown = projects
+  const matching = projects
     .filter(
       (project) =>
         inFocus(project) &&
@@ -79,6 +85,13 @@ export default function Projects({ focus, onFocusChange }) {
         (skill === ALL || project.tags.includes(skill)),
     )
     .sort((a, b) => Number(hasLink(b)) - Number(hasLink(a)))
+
+  const shown = matching.slice(0, limit)
+  const remaining = matching.length - shown.length
+
+  // Narrowing the list starts it again from the top: a page count carried over
+  // from the last filter would show six of one set and twenty of the next.
+  useEffect(() => { setLimit(PAGE) }, [category, skill, focus])
 
   const focusLabel = focus ? t.about.best.find((item) => item.id === focus)?.area : null
   const focusCount = focus ? projects.filter(inFocus).length : 0
@@ -261,6 +274,17 @@ export default function Projects({ focus, onFocusChange }) {
         ) : (
           <p className="projects-empty">{t.projects.empty}</p>
         )}
+
+        {remaining > 0 ? (
+          <div className="projects-more">
+            <button type="button" className="btn btn-ghost" data-press onClick={() => setLimit((current) => current + PAGE)}>
+              {t.projects.more(Math.min(PAGE, remaining))}
+            </button>
+            <p className="projects-progress" aria-live="polite">
+              {t.projects.progress(shown.length, matching.length)}
+            </p>
+          </div>
+        ) : null}
       </div>
 
       {previewProject ? (

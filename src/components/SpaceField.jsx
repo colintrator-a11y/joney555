@@ -13,11 +13,23 @@ import './SpaceField.css'
 
 // Stars per million pixels of viewport, so a laptop and a phone get a sky of
 // the same density rather than the same count.
-const DENSITY = 95
-const MAX_STARS = 260
-const LINK_DISTANCE = 132
-const POINTER_DISTANCE = 190
-const DRIFT = 0.052
+// Counted against the whole volume, not the screen: most of the box is off
+// to the sides at any one depth, so the sky needs more of them than a flat
+// field did to look as full.
+const DENSITY = 185
+const MAX_STARS = 430
+
+// The field is three-dimensional: every star has a depth, and what reaches the
+// screen is its projection. Near stars are bigger, brighter, and sweep past
+// faster than far ones, which is what makes the web read as a volume rather
+// than a pattern printed on the page.
+const FOCAL = 760          // distance from the eye to the screen, in px
+const NEAR = 120           // nearest a star comes before it is recycled
+const FAR = 1900           // furthest a star is born
+const APPROACH = 0.42      // px of depth per frame: a drift, not a flight
+const LINK_DISTANCE = 148  // in projected px, so the web thins with distance
+const POINTER_DISTANCE = 210
+const PARALLAX = 0.016     // how far the field leans towards the pointer
 
 export default function SpaceField() {
   const canvasRef = useRef(null)
@@ -59,70 +71,98 @@ export default function SpaceField() {
       context.setTransform(ratio, 0, 0, ratio, 0, 0)
 
       const count = Math.min(MAX_STARS, Math.round(((width * height) / 1e6) * DENSITY))
-      stars = Array.from({ length: count }, () => ({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        z: Math.random() * 0.75 + 0.25, // depth: size, brightness and speed
-        vx: (Math.random() - 0.5) * DRIFT,
-        vy: (Math.random() - 0.5) * DRIFT,
+      stars = Array.from({ length: count }, () => born(Math.random() * (FAR - NEAR) + NEAR))
+    }
+
+    // A star is placed in a box around the eye, wide enough that even the
+    // nearest ones are born off the edges of the screen rather than popping
+    // into the middle of it.
+    function born(z) {
+      const spread = 1.15
+      return {
+        x: (Math.random() - 0.5) * width * spread * (z / FOCAL),
+        y: (Math.random() - 0.5) * height * spread * (z / FOCAL),
+        z,
         twinkle: Math.random() * Math.PI * 2,
-      }))
+      }
     }
 
     const draw = (time) => {
       context.clearRect(0, 0, width, height)
 
+      const cx = width / 2
+      const cy = height / 2
+      // The whole field leans towards the pointer, so moving the mouse looks
+      // into the volume from a slightly different place.
+      const leanX = pointer.on ? (pointer.x - cx) * PARALLAX : 0
+      const leanY = pointer.on ? (pointer.y - cy) * PARALLAX : 0
+
+      const screen = []
       for (const star of stars) {
         if (!still.matches) {
-          star.x += star.vx
-          star.y += star.vy
-          // Off one edge, back on the other: the sky never runs out.
-          if (star.x < -8) star.x = width + 8
-          if (star.x > width + 8) star.x = -8
-          if (star.y < -8) star.y = height + 8
-          if (star.y > height + 8) star.y = -8
+          star.z -= APPROACH
+          // Past the eye: born again at the back of the field.
+          if (star.z <= NEAR) Object.assign(star, born(FAR))
         }
 
-        const pulse = still.matches ? 0.75 : 0.72 + Math.sin(time / 1400 + star.twinkle) * 0.28
-        context.globalAlpha = star.z * pulse * 0.6
-        context.fillStyle = colours.star
-        const size = star.z * 1.7
-        context.fillRect(star.x, star.y, size, size)
+        const scale = FOCAL / star.z
+        const sx = cx + (star.x - leanX) * scale
+        const sy = cy + (star.y - leanY) * scale
+        // Depth as a 0–1 reading, used for size, brightness and the web.
+        const near = Math.min(Math.max((FAR - star.z) / (FAR - NEAR), 0), 1)
+        screen.push({ x: sx, y: sy, near })
+
+        if (sx < -40 || sx > width + 40 || sy < -40 || sy > height + 40) continue
+
+        const pulse = still.matches ? 0.8 : 0.74 + Math.sin(time / 1500 + star.twinkle) * 0.26
+        context.globalAlpha = (0.24 + near * 0.76) * pulse
+        context.fillStyle = near > 0.72 ? `rgb(${colours.glow})` : colours.star
+        const size = 0.9 + near * 2.6
+        context.beginPath()
+        context.arc(sx, sy, size / 2, 0, Math.PI * 2)
+        context.fill()
       }
 
-      // The web. Only near neighbours are joined, and the line fades with the
-      // distance, so the pattern reads as threads rather than a mesh.
+      // The web. Only near neighbours are joined, and a thread fades both with
+      // the distance across the screen and with how far back in the field the
+      // two stars sit — so the near web is bright and the far one is a haze.
       //
       // Bucketed by a grid one link-distance across: comparing every star with
-      // every other is 34,000 pairs a frame at this count, where each star
-      // can only possibly reach the eight cells around its own.
+      // every other is 34,000 pairs a frame at this count, where each one can
+      // only reach the eight cells around its own.
       const cells = new Map()
-      const key = (cx, cy) => `${cx},${cy}`
-      for (const star of stars) {
-        const k = key(Math.floor(star.x / LINK_DISTANCE), Math.floor(star.y / LINK_DISTANCE))
+      const key = (gx, gy) => `${gx},${gy}`
+      screen.forEach((point, index) => {
+        const k = key(Math.floor(point.x / LINK_DISTANCE), Math.floor(point.y / LINK_DISTANCE))
         const bucket = cells.get(k)
-        if (bucket) bucket.push(star)
-        else cells.set(k, [star])
-      }
+        if (bucket) bucket.push(index)
+        else cells.set(k, [index])
+      })
 
-      context.strokeStyle = colours.star
-      context.lineWidth = 0.6
-      for (const star of stars) {
-        const cx = Math.floor(star.x / LINK_DISTANCE)
-        const cy = Math.floor(star.y / LINK_DISTANCE)
+      context.lineWidth = 0.75
+      for (let i = 0; i < screen.length; i += 1) {
+        const a = screen[i]
+        const gx = Math.floor(a.x / LINK_DISTANCE)
+        const gy = Math.floor(a.y / LINK_DISTANCE)
         for (let ox = 0; ox <= 1; ox += 1) {
           for (let oy = ox === 0 ? 0 : -1; oy <= 1; oy += 1) {
-            const bucket = cells.get(key(cx + ox, cy + oy))
+            const bucket = cells.get(key(gx + ox, gy + oy))
             if (!bucket) continue
-            for (const other of bucket) {
-              // Each pair once: the half-neighbourhood above plus this test.
-              if (other === star || (ox === 0 && oy === 0 && other.x < star.x)) continue
-              const distance = Math.hypot(star.x - other.x, star.y - other.y)
+            for (const j of bucket) {
+              if (j <= i) continue // each pair once
+              const b = screen[j]
+              const distance = Math.hypot(a.x - b.x, a.y - b.y)
               if (distance > LINK_DISTANCE) continue
-              context.globalAlpha = (1 - distance / LINK_DISTANCE) * 0.16
+              // Threads only between stars at a similar depth: joining the
+              // front of the field to the back is what made it look flat.
+              const depth = 1 - Math.abs(a.near - b.near)
+              if (depth < 0.32) continue
+              const strength = (1 - distance / LINK_DISTANCE) * depth
+              context.globalAlpha = strength * (0.16 + Math.max(a.near, b.near) * 0.62)
+              context.strokeStyle = Math.max(a.near, b.near) > 0.7 ? `rgb(${colours.glow})` : colours.star
               context.beginPath()
-              context.moveTo(star.x, star.y)
-              context.lineTo(other.x, other.y)
+              context.moveTo(a.x, a.y)
+              context.lineTo(b.x, b.y)
               context.stroke()
             }
           }
@@ -131,15 +171,15 @@ export default function SpaceField() {
 
       // Threads to the pointer, lit rather than grey: the web notices you.
       if (pointer.on) {
-        for (const star of stars) {
-          const distance = Math.hypot(star.x - pointer.x, star.y - pointer.y)
+        for (const point of screen) {
+          const distance = Math.hypot(point.x - pointer.x, point.y - pointer.y)
           if (distance > POINTER_DISTANCE) continue
           const strength = 1 - distance / POINTER_DISTANCE
-          context.globalAlpha = strength * 0.5
+          context.globalAlpha = strength * (0.2 + point.near * 0.5)
           context.strokeStyle = `rgb(${colours.glow})`
-          context.lineWidth = 0.8
+          context.lineWidth = 0.9
           context.beginPath()
-          context.moveTo(star.x, star.y)
+          context.moveTo(point.x, point.y)
           context.lineTo(pointer.x, pointer.y)
           context.stroke()
         }

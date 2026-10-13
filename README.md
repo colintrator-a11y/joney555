@@ -43,9 +43,15 @@ which is the opposite of how the file used to read.
 Two canvases carry it:
 
 - [`SpaceField.jsx`](src/components/SpaceField.jsx) — one fixed canvas behind
-  the whole page: drifting stars, threads between the ones that happen to be
-  near each other, and lit threads to the pointer. It is painted in the page's
-  own tokens, so the theme toggle takes the sky with it.
+  the whole page, and a volume rather than a pattern. Every star has a depth,
+  and what reaches the screen is its perspective projection: near ones are
+  larger, brighter and sweep past faster, and when one passes the eye it is
+  born again at the back. Threads are drawn only between stars at a similar
+  depth — joining the front of the field to the back is what made it read flat
+  — so the near web is bright and the far one is a haze. The whole field leans
+  towards the pointer, which looks into it from a slightly different place.
+  It is painted in the page's own tokens, so the theme toggle takes the sky
+  with it.
 - [`ParticleName.jsx`](src/components/ParticleName.jsx) — the name, drawn once
   into an off-screen bitmap, sampled on a grid, and rebuilt as particles that
   fly in and scatter away from the pointer. The real `<h1>` is live text beside
@@ -224,6 +230,12 @@ under `prefers-reduced-motion`.
 
 ## Browsing the work
 
+The list does not hand over all 47 rows: six are on the page, and the rest
+arrive six at a time behind **View more**, with a count underneath saying where
+you are. Narrowing the list starts it again from the top, since a page count
+carried over from the last filter would show six of one set and twenty of the
+next.
+
 The four areas named in the About list — E-commerce, Web apps, Mobile, AI &
 automation — are links into the work section. Each selects a **focus**: a set of
 categories broader than any single chip, defined by `focusAreas` in
@@ -300,20 +312,16 @@ To post to a real endpoint instead (Formspree, Getform, a function of your own),
 replace the body of `submit` with a `fetch` to it. The fields, the labels and
 the copy stay as they are.
 
-## The photo
+## The emblem
 
-The portrait is [`public/avatar.jpg`](public/avatar.jpg) — a plain file in
-`public/`, not a bundled asset, so it can be replaced without touching the code.
-It lives in the About section, in a squircle frame lit along one edge by a
-conic gradient, with a dashed ring turning around it and the four names in
-`orbitSkills` hung off its corners. Those labels are decoration: the same
-technologies are in the Skills section as text.
-
-Give the file any aspect ratio — it is cropped square by `object-fit`. The
-`height: auto` on it is load-bearing: an `<img>` with `width`/`height`
-attributes has both dimensions specified as far as CSS is concerned, and
-`aspect-ratio` is then ignored, which renders the photograph at its full
-1125px height.
+There is no photograph. In its place the About section has a web wound into a
+sphere: eight rings — six meridians and two around the waist — in one 3D space,
+turning together, with the mark held still at the centre so it faces the reader
+whatever the web is doing. The perspective is on the scene rather than on the
+thing that turns; applied to the rotating element it would be re-applied after
+its own rotation and the rings would shear. The four names in `orbitSkills`
+float around it, and they are decoration: the same technologies are in the
+Skills section as text.
 
 ## Structure
 
@@ -326,7 +334,7 @@ src/styles/tailwind.css Tailwind theme + utilities, without preflight
 src/styles/depth.css    the tilt / press / reveal vocabulary
 src/components/         one component + one stylesheet per section
 scripts/                copy coverage check, GIF optimiser
-public/                 avatar, logo, "J" tab icon, robots.txt, sitemap.xml
+public/                 "J" tab icon, robots.txt, sitemap.xml
 ```
 
 `src/styles/global.css` is imported before `App.jsx` in `main.jsx` so that

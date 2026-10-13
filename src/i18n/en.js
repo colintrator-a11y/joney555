@@ -127,6 +127,8 @@ export default {
     bySkill: 'Skill',
     allSkills: 'All skills',
     reset: 'Clear filters',
+    more: (count) => `View ${count} more`,
+    progress: (shown, total) => `${shown} of ${total} shown`,
     empty: 'No projects match these filters.',
       skillsCommon: 'Most used',
       skillsOther: 'Everything else',

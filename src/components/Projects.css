@@ -394,3 +394,20 @@
   .project-media.has-gallery { max-width: 100%; }
   .project-media.has-gallery img { max-height: 300px; }
 }
+
+/* ------------------------------- view more ------------------------------ */
+
+.projects-more {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 26px;
+}
+
+.projects-progress {
+  font-size: 0.76rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}

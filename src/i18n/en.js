@@ -108,6 +108,7 @@ export default {
       mobile: 'Mobile',
       ai: 'AI & automation',
       backend: 'Back end & data',
+      commerce: 'Games & e-commerce',
       frontend: 'Front end',
       other: 'Delivery',
     },
@@ -130,6 +131,8 @@ export default {
       mobile: 'Mobile',
       ai: 'AI integration',
       fullstack: 'Full-stack',
+      games: 'Games',
+      ecommerce: 'E-commerce',
     },
     // The empty slots. Shown on the page, deliberately plain, so the places
     // where a project belongs are easy to find.
@@ -208,6 +211,33 @@ export default {
       ],
       slotFlutterProduct: [
         'A Flutter product from Buuuk — authentication, push notifications, BLoC state management. Show the screens and one thing you improved, such as performance or test coverage.',
+      ],
+      mmorpg: [
+        'A Unity 3D mobile MMORPG for Android and iOS, in the massively multiplayer base-building strategy genre: players raise an army, upgrade a castle and its economy, and fight real-time battles against other players.',
+        'The build covers the whole live-game loop — troop training and barracks upgrades, a research tree for farming, stone, timber, gold and build speed, real-time siege combat with victory rewards, power and troops-killed leaderboards, hero and leader selection, seven-day login rewards, and an in-app purchase shop of chest packs, gem packs, memberships and subscriptions. The build shown runs with a Spanish-language interface.',
+      ],
+      tapio: [
+        'Introducing Tapio, the best tap-to-earn game available on Telegram. With every tap, users dive into a world of instant rewards, where each action brings new opportunities.',
+        'As players engage in the game, they not only earn rewards but also gather exclusive perks, unlocking more benefits as they rise up the rankings. Tapio makes earning fun, interactive, and rewarding, providing a dynamic experience that keeps users coming back for more.',
+      ],
+      rabbitRoyale: [
+        'Rabbit Royale is an innovative Telegram mini-app that offers users an exciting tap-to-earn game experience. Designed to keep players engaged, Rabbit Royale combines fun and rewards in a seamless, interactive platform.',
+        'As users tap their way through the game, they have the opportunity to earn rewards and watch their profits grow daily. With its easy-to-use interface and engaging gameplay, Rabbit Royale provides a thrilling way to earn while enjoying a dynamic, rewarding experience.',
+      ],
+      wooBulkDiscount: [
+        'A custom WordPress plugin that shows discounted prices dynamically. Built with PHP, HTML and CSS against WordPress and WooCommerce\u2019s own functions.',
+      ],
+      garnetMarketplace: [
+        'The product site for Garnet, a Shopify app that turns a single-vendor store into a multi-vendor B2B or B2C marketplace.',
+        'The site sells a platform rather than a product, so it is built as an argument: a scaling roadmap, integrations with Stripe, WooCommerce, Klaviyo and Google Analytics, onboarding times stated in minutes, and a booked consultation as the call to action.',
+      ],
+      tools4trade: [
+        'A Shopify store for Tools4Trade, a UK retailer of power tools, hand tools, workwear and site equipment.',
+        'This one is a catalogue problem. Thousands of lines across a dozen categories and every trade brand stocked side by side, with search by category, brand or part number, and merchandising that has to carry clearance, warehouse deals, new arrivals, brand redemptions and a rewards scheme without burying the products underneath them.',
+      ],
+      richmond: [
+        'Richmond offers rolling solutions, including wheels and castors, across Australia and New Zealand, supplying reliable, high-quality material handling and custom-engineered rolling products for a wide range of industries.',
+        'The site is a WordPress and WooCommerce store, with the range organised into product categories from castors, wheels and tyres through to pallet jacks, conveyors, roll cages and gate hardware, alongside site-wide product search and a store finder.',
       ],
     },
       links: { demo: 'Watch the demo', store: 'View on Google Play', site: 'Visit the site', appStore: 'View on the App Store' },

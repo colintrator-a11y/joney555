@@ -370,12 +370,14 @@ Content is split in two on purpose:
 
 ## The work, curated
 
-The list is held to the headline — mobile apps, AI integration and full-stack
-systems — and shown in the order `profile.js` declares it, strongest mobile
-work first. Twelve projects are on it. The Shopify and WordPress sites, the
-games, the blockchain work and the agency landing pages are gone, with their
-screenshots, because a reviewer reads the first three or four rows and those
-rows should say what the title says.
+The list leads with the headline — mobile apps, AI integration and full-stack
+systems — and is shown in the order `profile.js` declares it, strongest mobile
+work first. After those come three games and four e-commerce projects: real
+work, but placed below the headline's rows, because a reviewer reads the first
+three or four and those should say what the title says. The e-commerce ones are
+the four that show engineering — a custom WooCommerce plugin, a multi-vendor
+marketplace, a large-catalogue store and a WooCommerce build — rather than the
+storefronts; the blockchain work and the agency landing pages stay out.
 
 Four **empty slots** sit where the work history describes a kind of project the
 page cannot show yet: the flagship mobile-and-AI app from Originally US, the

@@ -29,6 +29,8 @@ export const focusAreas = {
   mobile: ['mobile'],
   ai: ['ai'],
   fullstack: ['fullstack'],
+  games: ['games'],
+  ecommerce: ['ecommerce'],
 }
 
 /**
@@ -106,6 +108,10 @@ export const skillGroups = [
   {
     id: 'frontend',
     items: ['React', 'TypeScript', 'JavaScript', 'HTML', 'CSS'],
+  },
+  {
+    id: 'commerce',
+    items: ['Unity 3D', 'Telegram Mini Apps', 'Shopify', 'WooCommerce', 'WordPress', 'PHP'],
   },
   {
     id: 'other',
@@ -322,6 +328,90 @@ export const projects = [
     stack: ['Flutter', 'Dart', 'BLoC', 'Firebase', 'REST API'],
     media: [],
     tags: [],
+  },
+  // Beyond the headline: games, then e-commerce. Real work, placed after
+  // the mobile, AI and full-stack rows so the first screen of the list
+  // still says what the title says.
+  {
+    id: 'mmorpg',
+    name: 'MMORPG Mobile Game',
+    category: 'games',
+    accent: 'amber',
+    media: [
+      { file: 'mmo-battle.jpg', width: 943, height: 518 },
+      { file: 'mmo-research.jpg', width: 800, height: 442 },
+      { file: 'mmo-barracks.jpg', width: 800, height: 439 },
+      { file: 'mmo-victory.jpg', width: 800, height: 440 },
+      { file: 'mmo-rewards.jpg', width: 800, height: 434 },
+      { file: 'mmo-shop.jpg', width: 800, height: 436 },
+      { file: 'mmo-leaderboard.jpg', width: 800, height: 436 },
+    ],
+    tags: ['Unity 3D', 'Android', 'iOS', 'Game Design', 'Game Development'],
+  },
+  {
+    id: 'tapio',
+    name: 'Tapio',
+    category: 'games',
+    accent: 'violet',
+    media: [{ file: 'tapio.jpg', width: 1600, height: 1200 }],
+    tags: ['Telegram Mini App', 'Frontend Development', 'Backend Development', 'Web Development'],
+  },
+  {
+    id: 'rabbitRoyale',
+    name: 'Rabbit Royale',
+    category: 'games',
+    accent: 'rose',
+    media: [{ file: 'rabbit-royale.jpg', width: 1400, height: 1050 }],
+    tags: ['Telegram Mini App', 'Game Development', 'Blockchain', 'Web Application'],
+  },
+  {
+    id: 'wooBulkDiscount',
+    name: 'WooCommerce Bulk Discount Display',
+    category: 'ecommerce',
+    accent: 'violet',
+    // A title card rather than a screenshot — the demo video is what shows the
+    // plugin working. Swap in a capture of it in a store when one exists.
+    media: [{ file: 'woo-bulk-discount.png', width: 1080, height: 1080 }],
+    links: [{ kind: 'demo', href: 'https://youtu.be/OedzSDjqZnk' }],
+    tags: ['WordPress', 'WooCommerce', 'PHP', 'jQuery', 'HTML', 'CSS'],
+  },
+  {
+    id: 'garnetMarketplace',
+    name: 'Garnet Marketplace',
+    category: 'ecommerce',
+    accent: 'emerald',
+    media: [
+      { file: 'garnet-home.jpg', width: 1400, height: 875 },
+      { file: 'garnet-sec1.jpg', width: 800, height: 500 },
+      { file: 'garnet-sec2.jpg', width: 800, height: 500 },
+    ],
+    links: [{ kind: 'site', href: 'https://garnetmarketplace.com/' }],
+    tags: ['Shopify', 'E-commerce', 'SaaS', 'Subscriptions'],
+  },
+  {
+    id: 'tools4trade',
+    name: 'Tools4Trade',
+    category: 'ecommerce',
+    accent: 'amber',
+    media: [
+      { file: 't4t-home.jpg', width: 1400, height: 875 },
+      { file: 't4t-sec1.jpg', width: 800, height: 500 },
+      { file: 't4t-sec2.jpg', width: 800, height: 500 },
+    ],
+    links: [{ kind: 'site', href: 'https://tools4trade.co.uk/' }],
+    tags: ['Shopify', 'E-commerce', 'Shopify Templates', 'JavaScript'],
+  },
+  {
+    id: 'richmond',
+    name: 'Wheels and Castors',
+    category: 'ecommerce',
+    accent: 'teal',
+    media: [
+      { file: 'richmond-home.jpg', width: 1400, height: 788 },
+      { file: 'richmond-range.jpg', width: 800, height: 450 },
+      { file: 'richmond-stores.jpg', width: 800, height: 450 },
+    ],
+    tags: ['WordPress', 'WooCommerce', 'JavaScript'],
   },
 ]
 

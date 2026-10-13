@@ -1,5 +1,6 @@
 import { certifications, orbitSkills, profile, stats } from '../data/profile.js'
 import { useLocale } from '../i18n/LocaleContext.jsx'
+import WebEmblem from './WebEmblem.jsx'
 import './About.css'
 
 export default function About({ onFocus }) {
@@ -27,31 +28,9 @@ export default function About({ onFocus }) {
         {/* The opening claim and the figure behind it, side by side: the lead
             reads as the statement, the note as its evidence. */}
         <div className="about-intro" data-reveal>
-          {/* A web wound into a sphere: eight rings in one 3D space, turning
-              together, with the mark held still at the centre of them. */}
-          <figure className="about-portrait" data-tilt>
-            <span className="about-sphere" aria-hidden="true">
-              <span className="about-sphere-spin">
-                {Array.from({ length: 9 }, (_, ring) => (
-                  <span key={ring} className="about-ring" style={{ '--ring': ring }} />
-                ))}
-              </span>
-              <span className="about-core">{profile.name.charAt(0)}</span>
-
-              {/* The same rings again, over the mark and clipped to a disc
-                  just larger than it: the half of the sphere nearest the
-                  reader has to pass in front of the mark, or the mark reads as
-                  something sitting outside the sphere rather than inside it.
-                  Clipped, because drawing the whole set twice would double
-                  every line everywhere else. */}
-              <span className="about-sphere-front">
-                <span className="about-sphere-spin">
-                  {Array.from({ length: 9 }, (_, ring) => (
-                    <span key={ring} className="about-ring" style={{ '--ring': ring }} />
-                  ))}
-                </span>
-              </span>
-            </span>
+          {/* A web, with the mark at the centre of it. */}
+          <figure className="about-portrait" data-tilt="soft">
+            <WebEmblem mark={profile.name.charAt(0)} />
 
             {/* The stack, hung off the corners of the frame. Decorative: the
                 same names are in the Skills section as text. */}

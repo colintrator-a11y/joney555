@@ -42,108 +42,101 @@
   position: relative;
   width: 252px;
   margin: 0;
-  padding: 26px 0 8px;
+  padding: 16px 0 8px;
   text-align: center;
 }
 
-/* The scene. The perspective lives here rather than on the thing that turns:
-   applied to the rotating element it would be re-applied after its own
-   rotation, and the rings would shear instead of orbiting. */
-.about-sphere {
+.web-emblem {
   position: relative;
   display: grid;
   place-items: center;
-  width: 176px;
-  height: 176px;
+  width: 196px;
+  height: 196px;
   margin: 0 auto;
-  perspective: 620px;
-  perspective-origin: 50% 50%;
 }
 
-.about-sphere-spin {
-  position: absolute;
-  inset: 0;
-  transform-style: preserve-3d;
-  animation: about-spin 22s linear infinite;
+.web-emblem-art {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  fill: none;
+  stroke-linecap: round;
 }
 
-/* Six meridians … */
-.about-ring {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  border: 1px solid color-mix(in srgb, var(--accent) 42%, transparent);
-  transform: rotateY(calc(var(--ring) * 30deg));
+/* The whole web turns, slowly enough that it reads as hanging in a draught
+   rather than spinning. */
+.web-emblem-turn {
+  transform-origin: 50% 50%;
+  animation: web-turn 54s linear infinite;
 }
 
-/* … and three around the waist — equator, and one either side of it — to
-   close the web into a sphere. Without the lower one the sphere is top-heavy
-   and the mark at its centre looks as though it has slipped. */
-.about-ring:nth-child(7) {
-  transform: rotateX(90deg) scale(0.99);
-  border-color: color-mix(in srgb, var(--accent) 26%, transparent);
+@keyframes web-turn {
+  to { transform: rotate(360deg); }
 }
 
-.about-ring:nth-child(8) {
-  transform: rotateX(90deg) translateZ(42px) scale(0.78);
-  border-color: color-mix(in srgb, var(--accent) 22%, transparent);
+.web-emblem-spokes path {
+  stroke: color-mix(in srgb, var(--accent) 46%, transparent);
+  stroke-width: 0.9;
 }
 
-.about-ring:nth-child(9) {
-  transform: rotateX(90deg) translateZ(-42px) scale(0.78);
-  border-color: color-mix(in srgb, var(--accent) 22%, transparent);
+/* The outer threads are the ones a web carries its weight on, so they are the
+   ones that read; the inner ones are finer. */
+.web-emblem-threads path {
+  stroke: color-mix(in srgb, var(--accent) 60%, transparent);
+  stroke-width: 1.1;
+  opacity: calc(0.45 + var(--ring) * 0.14);
 }
 
-@keyframes about-spin {
-  from { transform: rotateX(-14deg) rotateY(0deg); }
-  to { transform: rotateX(-14deg) rotateY(360deg); }
+.web-emblem-dew circle {
+  fill: rgb(var(--glow));
+  filter: drop-shadow(0 0 4px rgba(var(--glow), 0.9));
+  animation: web-dew 4.2s ease-in-out infinite;
+  animation-delay: calc(var(--dew) * -1.4s);
 }
 
-/* The mark sits outside the turning element, so it faces the reader however
-   far round the web has gone.
+@keyframes web-dew {
+  0%, 100% { opacity: 0.35; r: 1.9px; }
+  50% { opacity: 1; r: 2.9px; }
+}
 
-   Pinned to the middle rather than left to the grid: the rings are drawn in
-   perspective and the eye reads their centre, not the box's, so the mark has
-   to be put there exactly. */
-.about-core {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  translate: -50% -50%;
+/* The mark sits at the centre, where its maker would. It does not turn with
+   the web: it faces the reader. */
+.web-emblem-mark {
+  grid-area: 1 / 1;
   display: grid;
   place-items: center;
-  width: 56px;
-  height: 56px;
-  border-radius: 18px;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
   font-family: var(--display);
-  font-size: 1.7rem;
+  font-size: 1.55rem;
   font-weight: 600;
   color: var(--accent-ink);
-  background: color-mix(in srgb, var(--bg-raised) 72%, transparent);
-  backdrop-filter: blur(6px);
-  border: 1px solid color-mix(in srgb, var(--accent) 50%, transparent);
-  box-shadow: 0 0 38px -8px rgba(var(--glow), 0.75), inset 0 0 20px -10px rgba(var(--glow), 0.9);
-  animation: about-breathe 3.4s ease-in-out infinite;
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 45%, transparent),
+    0 0 34px -6px rgba(var(--glow), 0.75);
+  animation: about-breathe 3.6s ease-in-out infinite;
 }
 
 @keyframes about-breathe {
   0%, 100% { scale: 1; }
-  50% { scale: 1.06; }
+  50% { scale: 1.05; }
 }
 
-/* The front half, drawn over the mark. Same rings, same colours, same
-   animation started at the same moment, so the two copies turn as one and a
-   thread crossing the mark is the same thread it was a pixel earlier.
+.about-portrait figcaption {
+  margin-top: 18px;
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
 
-   Masked rather than clipped: a clip ends a line with a cut edge, and those
-   cut ends read as little shadows lying inside the sphere. A mask lets each
-   thread fade out instead, so there is nothing to see but the thread. */
-.about-sphere-front {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 48%, transparent 76%);
-  mask-image: radial-gradient(circle at 50% 50%, #000 48%, transparent 76%);
+@media (prefers-reduced-motion: reduce) {
+  .web-emblem-turn,
+  .web-emblem-dew circle,
+  .web-emblem-mark,
+  .about-orbit span { animation: none; }
 }
 
 /* --------------------------- orbiting labels ---------------------------- */

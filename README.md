@@ -369,26 +369,21 @@ the copy stay as they are.
 
 ## The emblem
 
-There is no photograph. In its place the About section has a web wound into a
-sphere: nine rings — six meridians, and the equator with one either side of it,
-without which the sphere is top-heavy and the mark at its centre looks as
-though it has slipped — in one 3D space,
-turning together, with the mark held still at the centre so it faces the reader
-whatever the web is doing. The perspective is on the scene rather than on the
-thing that turns; applied to the rotating element it would be re-applied after
-its own rotation and the rings would shear. The four names in `orbitSkills`
-float around it, and they are decoration: the same technologies are in the
-Skills section as text.
+There is no photograph. In its place the About section has a web, spun from the
+middle out with the mark sitting at its centre the way its maker would:
+[`WebEmblem.jsx`](src/components/WebEmblem.jsx). Twelve spokes, five spiral
+threads strung between them, and each segment of a thread is a curve pulled in
+towards the middle — a real orb web is strung slack, and drawn taut it looks
+like a dartboard. Three drops of dew catch the light on it.
 
-The rings are drawn twice. The second copy sits over the mark, because the half
-of the sphere nearest the reader has to cross in front of it — without that the
-mark reads as something sitting outside the sphere rather than at the heart of
-it. It is masked down to a disc around the mark, since drawing the whole set
-twice would double every line everywhere else, and it is masked rather than
-clipped: a clip ends each thread with a cut edge, and those cut ends read as
-short shadows lying inside the sphere. The copy keeps the colours of the
-original, so a thread crossing the mark is the same thread it was a pixel
-earlier.
+It is the same geometry the click effect draws on the canvas, so the page's two
+webs are recognisably the same web; by day, in lilac, the figure reads as a
+flower rather than a trap. SVG rather than a stack of rotated rings: a thread
+is one path instead of a whole element, and the shape stays exact at any size
+rather than depending on how the browser rounds a border radius. The web turns
+slowly; the mark does not turn with it, and the four names in `orbitSkills`
+float around the outside. Those labels are decoration: the same technologies
+are in the Skills section as text.
 
 ## Structure
 

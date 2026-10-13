@@ -207,11 +207,21 @@ rather than a web, and the letter has to win.
 
 ## The loading screen
 
-The web spins itself: every thread is a dashed line whose single dash is as
-long as the thread, so winding its offset back to zero draws it from one end to
-the other. The spokes go out first and the spirals are laid from the middle
+A spider sits at the middle of a web spinning itself.
+
+The web: every thread is a dashed line whose single dash is as long as the
+thread, so winding its offset back to zero draws it from one end to the
+other. The spokes go out first and the spirals are laid from the middle
 outwards, which is the order a spider works in. Held until the page is worth
 looking at.
+
+The spider is [`public/spider.webp`](public/spider.webp) — artwork, not
+drawing, so it is a plain file in `public/` and the loader can show it before
+the bundle exists. Its background was matted out by brightness rather than cut
+by hand: the piece is a glow on near-black, so everything below the threshold
+goes transparent and the glow stays. The threshold has to be high enough that
+the near-black *fringe* goes too, or the spider arrives on the daylight theme
+sitting in a grey smear.
 
 It is markup and inline CSS in [`index.html`](index.html), not a component: a
 React loader cannot paint until the bundle it lives in has downloaded, which is

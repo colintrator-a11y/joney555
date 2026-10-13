@@ -48,10 +48,19 @@ Two canvases carry it:
   larger, brighter and sweep past faster, and when one passes the eye it is
   born again at the back. Threads are drawn only between stars at a similar
   depth — joining the front of the field to the back is what made it read flat
-  — so the near web is bright and the far one is a haze. The whole field leans
-  towards the pointer, which looks into it from a slightly different place.
-  It is painted in the page's own tokens, so the theme toggle takes the sky
-  with it.
+  — so the near web is bright and the far one is a haze.
+
+  Every star is given its own heading and its own depth speed when it is born:
+  some come towards the eye, some fall away, and sideways they each go their
+  own way. One shared direction read as a single sheet of points sliding past.
+  Sideways a star wraps around a box measured at its own depth, so a near one
+  has further to travel than a far one; at either end of the depth range it is
+  born again at the other end.
+
+  The field itself does not follow the pointer — it is a sky, not a parallax
+  layer. The only thing the pointer does is light threads from the stars
+  nearest it. It is painted in the page's own tokens, so the theme toggle takes
+  the sky with it.
 - [`ParticleName.jsx`](src/components/ParticleName.jsx) — the name, drawn once
   into an off-screen bitmap, sampled on a grid, and rebuilt as particles that
   fly in and scatter away from the pointer. The real `<h1>` is live text beside

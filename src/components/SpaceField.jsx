@@ -26,10 +26,13 @@ const MAX_STARS = 430
 const FOCAL = 760          // distance from the eye to the screen, in px
 const NEAR = 120           // nearest a star comes before it is recycled
 const FAR = 1900           // furthest a star is born
-const APPROACH = 0.42      // px of depth per frame: a drift, not a flight
+// Each star carries its own velocity, drawn once when it is born: some come
+// towards the eye, some fall away, most mostly sideways. A single shared
+// direction read as one sheet of points sliding the same way.
+const DRIFT_XY = 0.09      // world px per frame, sideways
+const DRIFT_Z = 0.34       // world px per frame, towards or away
 const LINK_DISTANCE = 148  // in projected px, so the web thins with distance
 const POINTER_DISTANCE = 210
-const PARALLAX = 0.016     // how far the field leans towards the pointer
 
 export default function SpaceField() {
   const canvasRef = useRef(null)
@@ -79,10 +82,18 @@ export default function SpaceField() {
     // into the middle of it.
     function born(z) {
       const spread = 1.15
+      // An angle for the sideways drift and an independent one for the depth,
+      // so no two stars share a direction for long.
+      const heading = Math.random() * Math.PI * 2
+      const pace = 0.35 + Math.random() * 0.65
       return {
         x: (Math.random() - 0.5) * width * spread * (z / FOCAL),
         y: (Math.random() - 0.5) * height * spread * (z / FOCAL),
         z,
+        vx: Math.cos(heading) * DRIFT_XY * pace,
+        vy: Math.sin(heading) * DRIFT_XY * pace,
+        // Signed: a star is as likely to be falling away as approaching.
+        vz: (Math.random() - 0.5) * 2 * DRIFT_Z,
         twinkle: Math.random() * Math.PI * 2,
       }
     }
@@ -92,22 +103,33 @@ export default function SpaceField() {
 
       const cx = width / 2
       const cy = height / 2
-      // The whole field leans towards the pointer, so moving the mouse looks
-      // into the volume from a slightly different place.
-      const leanX = pointer.on ? (pointer.x - cx) * PARALLAX : 0
-      const leanY = pointer.on ? (pointer.y - cy) * PARALLAX : 0
 
       const screen = []
       for (const star of stars) {
         if (!still.matches) {
-          star.z -= APPROACH
-          // Past the eye: born again at the back of the field.
+          star.x += star.vx
+          star.y += star.vy
+          star.z += star.vz
+
+          // Out of the volume at either end: born again at the far side of it,
+          // so the field neither empties nor crowds the eye.
           if (star.z <= NEAR) Object.assign(star, born(FAR))
+          else if (star.z >= FAR) Object.assign(star, born(NEAR + 1))
+          else {
+            // Sideways it wraps rather than respawning: the box is measured at
+            // this star's own depth, so a near one has further to travel.
+            const halfW = (width * 1.15 * (star.z / FOCAL)) / 2
+            const halfH = (height * 1.15 * (star.z / FOCAL)) / 2
+            if (star.x > halfW) star.x = -halfW
+            else if (star.x < -halfW) star.x = halfW
+            if (star.y > halfH) star.y = -halfH
+            else if (star.y < -halfH) star.y = halfH
+          }
         }
 
         const scale = FOCAL / star.z
-        const sx = cx + (star.x - leanX) * scale
-        const sy = cy + (star.y - leanY) * scale
+        const sx = cx + star.x * scale
+        const sy = cy + star.y * scale
         // Depth as a 0–1 reading, used for size, brightness and the web.
         const near = Math.min(Math.max((FAR - star.z) / (FAR - NEAR), 0), 1)
         screen.push({ x: sx, y: sy, near })

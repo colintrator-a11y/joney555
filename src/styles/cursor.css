@@ -17,7 +17,7 @@
  */
 @media (hover: hover) and (pointer: fine) {
   body {
-    cursor: url('../assets/cursor-spider.png') 4 4, auto;
+    cursor: url('../assets/cursor-spider.png') 12 9, auto;
   }
 
   /* The lit variant, on anything that answers a click. */
@@ -29,7 +29,7 @@
   .filter,
   .tag-button,
   .btn {
-    cursor: url('../assets/cursor-spider-link.png') 4 4, pointer;
+    cursor: url('../assets/cursor-spider-link.png') 12 9, pointer;
   }
 
   /* Text still wants a text cursor: a spider sitting over the field you are

@@ -458,21 +458,27 @@ the copy stay as they are.
 
 ## The emblem
 
-There is no photograph. In its place the About section has a web, spun from the
-middle out with the spider sitting at its centre the way its maker would:
-[`WebEmblem.jsx`](src/components/WebEmblem.jsx). Twelve spokes, five spiral
-threads strung between them, and each segment of a thread is a curve pulled in
-towards the middle — a real orb web is strung slack, and drawn taut it looks
-like a dartboard. Three drops of dew catch the light on it.
+There is no photograph. In its place the About section has the spider itself,
+[`SpiderMark.jsx`](src/components/SpiderMark.jsx): the artwork's two spheres
+for a body, and eight legs drawn around them in SVG so they can move. A painted
+leg cannot be lifted, which is the whole reason the legs are not part of the
+picture.
 
-It is the same geometry the click effect draws on the canvas, so the page's two
-webs are recognisably the same web; by day, in lilac, the figure reads as a
-flower rather than a trap. SVG rather than a stack of rotated rings: a thread
-is one path instead of a whole element, and the shape stays exact at any size
-rather than depending on how the browser rounds a border radius. The web turns
-slowly; the spider does not turn with it, and the four names in `orbitSkills`
-float around the outside. Those labels are decoration: the same technologies
-are in the Skills section as text.
+Each leg is two straight segments meeting at a knee, not one smooth arc — an
+arc reads as a rib, and what makes a leg look like a leg is the joint halfway
+along it. The thigh is drawn heavier than the shin, the way the artwork tapers.
+Each sits in a group that rocks a few degrees about the **shoulder**, since a
+leg hinged at its own middle swings its foot and its root in opposite
+directions and looks detached. The groups run on four phases, so the legs
+lifting are never the ones holding the spider up, and the body itself shifts
+its weight on a slower cycle. All of it stops under `prefers-reduced-motion`.
+
+The web it belongs to is elsewhere: spun on the loading screen, strung in the
+hero's corners, marked beside every section title, and cut wherever the page is
+clicked.
+
+The four names in `orbitSkills` float around it, and they are decoration: the
+same technologies are in the Skills section as text.
 
 ## Structure
 

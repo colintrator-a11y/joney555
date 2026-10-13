@@ -309,24 +309,38 @@ export default function SpaceField() {
           context.arc(sx, sy, (size * (star.inBand ? 0.6 : 1)) / 2, 0, Math.PI * 2)
           context.fill()
 
-          // The nearest few burn: a soft halo and the cross a bright point
-          // makes through a lens.
+          // The nearest few burn. Spikes as tapered slivers rather than lines:
+          // a line of even width reads as a plus sign drawn on the sky, where
+          // a spike that narrows to nothing reads as light.
           if (near > GLINT_NEAR && !star.inBand) {
             const burn = (near - GLINT_NEAR) / (1 - GLINT_NEAR)
-            const reach = size * (2.2 + burn * 5.5)
-            context.globalAlpha = burn * 0.5 * pulse
-            context.lineWidth = 0.7
-            context.strokeStyle = context.fillStyle
-            context.beginPath()
-            context.moveTo(sx - reach, sy)
-            context.lineTo(sx + reach, sy)
-            context.moveTo(sx, sy - reach)
-            context.lineTo(sx, sy + reach)
-            context.stroke()
+            const reach = size * (3 + burn * 7)
+            const half = size * 0.3
 
-            context.globalAlpha = burn * 0.16 * pulse
+            context.globalAlpha = burn * 0.55 * pulse
             context.beginPath()
-            context.arc(sx, sy, size * 2.6, 0, Math.PI * 2)
+            for (const turn of [0, Math.PI / 2]) {
+              const ux = Math.cos(turn)
+              const uy = Math.sin(turn)
+              // Across the axis, to give each sliver its width at the middle.
+              const px = -uy * half
+              const py = ux * half
+              context.moveTo(sx + ux * reach, sy + uy * reach)
+              context.lineTo(sx + px, sy + py)
+              context.lineTo(sx - ux * reach, sy - uy * reach)
+              context.lineTo(sx - px, sy - py)
+            }
+            context.fill()
+
+            // And the bloom around it, which is most of what the eye reads.
+            const halo = context.createRadialGradient(sx, sy, 0, sx, sy, size * 3.4)
+            halo.addColorStop(0, `rgba(255, 255, 255, ${0.5 * burn * pulse})`)
+            halo.addColorStop(0.45, `rgba(${colours.glow}, ${0.22 * burn * pulse})`)
+            halo.addColorStop(1, `rgba(${colours.glow}, 0)`)
+            context.globalAlpha = 1
+            context.fillStyle = halo
+            context.beginPath()
+            context.arc(sx, sy, size * 3.4, 0, Math.PI * 2)
             context.fill()
           }
         } else {
@@ -697,6 +711,13 @@ export default function SpaceField() {
         <span className="space-cloud is-one" />
         <span className="space-cloud is-two" />
         <span className="space-cloud is-three" />
+
+        {/* Worlds. In the backdrop rather than on the canvas: a planet is a
+            large, soft, barely moving thing, and the compositor keeps one for
+            nothing where the canvas would repaint it sixty times a second. */}
+        <span className="space-world is-near" />
+        <span className="space-world is-ringed" />
+        <span className="space-world is-far" />
       </div>
       <canvas ref={canvasRef} className="space-field" aria-hidden="true" />
     </>

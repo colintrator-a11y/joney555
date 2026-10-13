@@ -207,7 +207,7 @@ a {
      backdrop blur: that is a full-screen filter per card, and the work list
      alone puts forty-eight of them on the page. The blur is kept for the few
      surfaces that float over the page — the dock and the hero's tiles. */
-  background: color-mix(in srgb, var(--bg-raised) 92%, transparent);
+  background: color-mix(in srgb, var(--bg-raised) 72%, transparent);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   box-shadow: var(--shadow-sm);

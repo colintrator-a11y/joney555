@@ -179,12 +179,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .about-sphere-spin,
-  .about-core,
   .about-orbit span { animation: none; }
-
-  /* Held at an angle that still reads as a sphere rather than a flat circle. */
-  .about-sphere-spin { transform: rotateX(-14deg) rotateY(26deg); }
 }
 
 /* --------------------------------- lead --------------------------------- */

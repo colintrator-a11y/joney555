@@ -48,13 +48,13 @@
 
 .galaxy-core {
   grid-area: 1 / 1;
-  width: min(30vw, 460px);
-  height: min(21vh, 300px);
+  width: min(26vw, 400px);
+  height: min(19vh, 270px);
   transform: translateY(-7vh) rotate(-15deg);
   border-radius: 50%;
   background:
-    radial-gradient(closest-side, rgba(255, 252, 240, 0.72), rgba(150, 205, 255, 0.34) 26%, transparent 64%),
-    radial-gradient(closest-side, rgba(124, 58, 237, 0.2), transparent 78%);
+    radial-gradient(closest-side, rgba(255, 248, 226, 0.8), rgba(178, 220, 255, 0.34) 24%, rgba(90, 150, 255, 0.12) 48%, transparent 72%),
+    radial-gradient(closest-side, rgba(150, 70, 240, 0.22), transparent 76%);
   filter: blur(3px);
   animation: galaxy-breathe 8s ease-in-out infinite;
 }

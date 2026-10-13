@@ -36,8 +36,12 @@ export default function ParticleName({ text }) {
     let intro = 0
     const pointer = { x: -9999, y: -9999 }
 
+    // Near-white rather than the accent: the name is drawn over the galaxy's
+    // brightest part, and in accent blue it disappears into it.
     const ink = () =>
-      getComputedStyle(document.documentElement).getPropertyValue('--accent-ink').trim() || '#7cc8ff'
+      document.documentElement.dataset.theme === 'light'
+        ? getComputedStyle(document.documentElement).getPropertyValue('--accent-ink').trim() || '#7c2fcb'
+        : '#eaf6ff'
     let colour = ink()
 
     const build = () => {

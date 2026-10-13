@@ -48,10 +48,13 @@ const SHOOT_VAR_MS = 11000
 const SHOOT_LIFE_MS = 1100
 
 // Each star carries its own velocity, drawn once when it is born: some come
-// towards the eye, some fall away, most mostly sideways. A single shared
-// direction read as one sheet of points sliding the same way.
-const DRIFT_XY = 0.09      // world px per frame, sideways
-const DRIFT_Z = 0.34       // world px per frame, towards or away
+// towards the eye, some fall away, most mostly sideways.
+//
+// Barely any of it, now that the galaxy turns behind them. Two systems moving
+// at their own speeds read as two pictures over each other; fixed, the stars
+// become the sky the galaxy is turning in.
+const DRIFT_XY = 0.012     // world px per frame, sideways
+const DRIFT_Z = 0.05       // world px per frame, towards or away
 const LINK_DISTANCE = 104  // in projected px, so the web thins with distance
 // How near the pointer has to be for a petal to notice it. Daylight only —
 // at night the stars take no notice of the pointer at all, since threads

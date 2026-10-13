@@ -4,9 +4,9 @@ import './SpaceField.css'
 /**
  * The sky the whole page sits on, and it has two of them.
  *
- * At night: stars at every depth, and a web that draws itself between the ones
- * that happen to be near each other — and towards the pointer, which is the
- * only thing on the page it reacts to. A click cuts a web where it lands.
+ * At night: stars at every depth, with a thread here and there between two
+ * that are close to each other and at the same sort of distance. A click cuts
+ * a web where it lands. Nothing follows the pointer.
  *
  * By day it is Wendy's: the same points of light, drawn as petals turning as
  * they drift, with no threads between them. A click opens a bloom instead of a
@@ -52,14 +52,17 @@ const SHOOT_LIFE_MS = 1100
 // direction read as one sheet of points sliding the same way.
 const DRIFT_XY = 0.09      // world px per frame, sideways
 const DRIFT_Z = 0.34       // world px per frame, towards or away
-const LINK_DISTANCE = 148  // in projected px, so the web thins with distance
+const LINK_DISTANCE = 104  // in projected px, so the web thins with distance
+// How near the pointer has to be for a petal to notice it. Daylight only —
+// at night the stars take no notice of the pointer at all, since threads
+// reaching for the cursor made an already busy sky unreadable.
 const POINTER_DISTANCE = 210
 
 // The web that snaps open where the page is clicked: spokes from the point,
 // and spiral threads strung between them, sagging inwards the way a real orb
 // web does. It draws itself outwards and fades as it goes.
 const WEB_MS = 900
-const WEB_RADIUS = 190
+const WEB_RADIUS = 124
 const WEB_SPOKES = 13
 const WEB_RINGS = 3
 const WEB_MAX = 3          // at once: a drummed mouse should not stack up
@@ -460,9 +463,9 @@ export default function SpaceField() {
               // Threads only between stars at a similar depth: joining the
               // front of the field to the back is what made it look flat.
               const depth = 1 - Math.abs(a.near - b.near)
-              if (depth < 0.32) continue
+              if (depth < 0.48) continue
               const strength = (1 - distance / LINK_DISTANCE) * depth
-              context.globalAlpha = strength * (0.16 + Math.max(a.near, b.near) * 0.62)
+              context.globalAlpha = strength * (0.1 + Math.max(a.near, b.near) * 0.4)
               context.strokeStyle = Math.max(a.near, b.near) > 0.7 ? `rgb(${colours.glow})` : colours.star
               context.beginPath()
               context.moveTo(a.x, a.y)
@@ -473,22 +476,6 @@ export default function SpaceField() {
         }
       }
 
-      }
-
-      // Threads to the pointer, lit rather than grey: the web notices you.
-      if (night && pointer.on) {
-        for (const point of screen) {
-          const distance = Math.hypot(point.x - pointer.x, point.y - pointer.y)
-          if (distance > POINTER_DISTANCE) continue
-          const strength = 1 - distance / POINTER_DISTANCE
-          context.globalAlpha = strength * (0.2 + point.near * 0.5)
-          context.strokeStyle = `rgb(${colours.glow})`
-          context.lineWidth = 0.9
-          context.beginPath()
-          context.moveTo(point.x, point.y)
-          context.lineTo(pointer.x, pointer.y)
-          context.stroke()
-        }
       }
 
       // A meteor, every so often, falling along the band rather than across

@@ -106,9 +106,11 @@ Two canvases carry it:
   Every star has a depth,
   and what reaches the screen is its perspective projection: near ones are
   larger, brighter and sweep past faster, and when one passes the eye it is
-  born again at the back. Threads are drawn only between stars at a similar
-  depth — joining the front of the field to the back is what made it read flat
-  — so the near web is bright and the far one is a haze.
+  born again at the back. Threads are drawn only between stars that are close
+  on screen *and* at a similar distance — joining the front of the field to the
+  back made it read flat, and joining too freely made it read as a net thrown
+  over the page. Nothing is drawn towards the pointer: threads reaching for the
+  cursor were the single busiest thing in the sky.
 
   Every star is given its own heading and its own depth speed when it is born:
   some come towards the eye, some fall away, and sideways they each go their

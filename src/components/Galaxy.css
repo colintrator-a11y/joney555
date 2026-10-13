@@ -1,0 +1,83 @@
+/*
+ * The galaxy sits behind everything, including the starfield: the stars are
+ * between it and the reader, which is what gives the hero its depth.
+ */
+.galaxy {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  /* Centred a little above the middle, as in the reference, so the name sits
+     across the brightest part of the disc. */
+  display: grid;
+  place-items: center;
+}
+
+/* Night only. By day the sky is Wendy's — petals, not deep space. */
+[data-theme='light'] .galaxy { display: none; }
+
+.galaxy-disc {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: 100%;
+  /* The disc is drawn around the middle of the canvas; this lifts the whole
+     thing to 43% of the viewport without moving the canvas itself. */
+  transform: translateY(-7vh);
+}
+
+/*
+ * The core's bloom. A gradient rather than more particles: the brightest part
+ * of a galaxy is light scattered in the gas, which has no grain to it, and
+ * drawing it with points costs thousands of them to get a soft centre.
+ */
+/*
+ * The disc the arms are embedded in. Particles alone leave the space between
+ * the arms empty, where a real galaxy has light all through it.
+ */
+.galaxy-haze {
+  grid-area: 1 / 1;
+  width: min(96vw, 1500px);
+  height: min(58vh, 720px);
+  transform: translateY(-7vh) rotate(-15deg);
+  border-radius: 50%;
+  background:
+    radial-gradient(closest-side, rgba(56, 120, 220, 0.26), rgba(40, 70, 160, 0.12) 44%, transparent 72%),
+    radial-gradient(closest-side at 64% 40%, rgba(124, 58, 237, 0.16), transparent 58%),
+    radial-gradient(closest-side at 32% 62%, rgba(168, 85, 247, 0.12), transparent 56%);
+}
+
+.galaxy-core {
+  grid-area: 1 / 1;
+  width: min(30vw, 460px);
+  height: min(21vh, 300px);
+  transform: translateY(-7vh) rotate(-15deg);
+  border-radius: 50%;
+  background:
+    radial-gradient(closest-side, rgba(255, 252, 240, 0.72), rgba(150, 205, 255, 0.34) 26%, transparent 64%),
+    radial-gradient(closest-side, rgba(124, 58, 237, 0.2), transparent 78%);
+  filter: blur(3px);
+  animation: galaxy-breathe 8s ease-in-out infinite;
+}
+
+/* Five per cent either side: energetic, not flashing. */
+@keyframes galaxy-breathe {
+  0%, 100% { opacity: 0.92; }
+  50% { opacity: 1; }
+}
+
+@media (max-width: 1100px) {
+  .galaxy-haze { width: 110vw; height: 44vh; }
+  .galaxy-core { width: min(62vw, 520px); height: min(26vh, 320px); }
+}
+
+@media (max-width: 640px) {
+  .galaxy-disc,
+  .galaxy-haze,
+  .galaxy-core { transform: translateY(-4vh) rotate(0deg); }
+  .galaxy-haze { width: 130vw; height: 36vh; }
+  .galaxy-core { width: 76vw; height: 22vh; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .galaxy-core { animation: none; }
+}

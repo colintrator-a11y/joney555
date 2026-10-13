@@ -699,12 +699,6 @@ export default function SpaceField() {
         <span className="space-cloud is-two" />
         <span className="space-cloud is-three" />
 
-        {/* Worlds. In the backdrop rather than on the canvas: a planet is a
-            large, soft, barely moving thing, and the compositor keeps one for
-            nothing where the canvas would repaint it sixty times a second. */}
-        <span className="space-world is-near" />
-        <span className="space-world is-ringed" />
-        <span className="space-world is-far" />
       </div>
       <canvas ref={canvasRef} className="space-field" aria-hidden="true" />
     </>

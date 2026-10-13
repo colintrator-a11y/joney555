@@ -30,26 +30,46 @@
 }
 
 .spider-leg-shade {
-  stroke: #06152c;
-  stroke-width: 6.6;
+  stroke: #040d1d;
+  stroke-width: 7.4;
   stroke-linecap: round;
 }
 
-.spider-leg-shade.is-thigh { stroke-width: 8.4; }
+.spider-leg-shade.is-thigh { stroke-width: 9.4; }
 
 .spider-leg-lit {
   stroke: url(#spider-leg);
-  stroke-width: 3.8;
+  stroke-width: 5;
   stroke-linecap: round;
 }
 
-.spider-leg-lit.is-thigh { stroke-width: 5.4; }
+.spider-leg-lit.is-thigh { stroke-width: 6.8; }
+
+/* The highlight: thin, pale, and offset off the centre line — a capsule lit
+   from above, which is what makes the artwork's legs look turned rather than
+   drawn. */
+.spider-leg-gloss {
+  stroke: #e8f6ff;
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  stroke-opacity: 0.42;
+  transform: translate(-0.4px, -1.1px);
+}
+
+.spider-leg-gloss.is-thigh { stroke-width: 2.1; }
 
 .spider-leg-joint {
-  fill: #0a1c38;
-  stroke: #3da9fc;
-  stroke-width: 0.8;
-  stroke-opacity: 0.55;
+  fill: #050f22;
+  stroke: #2f86e8;
+  stroke-width: 0.7;
+  stroke-opacity: 0.5;
+}
+
+.spider-leg-claw {
+  fill: #06152c;
+  stroke: #7cc8ff;
+  stroke-width: 0.6;
+  stroke-opacity: 0.45;
 }
 
 .spider-mark-body {

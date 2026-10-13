@@ -43,7 +43,9 @@ export default function SpiderMark({ label }) {
           // joint halfway along it.
           thigh: `M${px(leg.root).toFixed(1)} ${py(leg.root).toFixed(1)} L${px(leg.knee).toFixed(1)} ${py(leg.knee).toFixed(1)}`,
           shin: `M${px(leg.knee).toFixed(1)} ${py(leg.knee).toFixed(1)} L${px(leg.foot).toFixed(1)} ${py(leg.foot).toFixed(1)}`,
+          root: [px(leg.root), py(leg.root)],
           knee: [px(leg.knee), py(leg.knee)],
+          foot: [px(leg.foot), py(leg.foot)],
           // Diagonal pairs move together, as a walking spider's do.
           step: (index + (side === 1 ? 2 : 0)) % 4,
         })
@@ -56,23 +58,35 @@ export default function SpiderMark({ label }) {
     <span className="spider-mark" role="img" aria-label={label}>
       <svg className="spider-mark-legs" viewBox="0 0 200 200" aria-hidden="true">
         <defs>
-          <linearGradient id="spider-leg" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="#8fd4ff" />
-            <stop offset="0.55" stopColor="#2f86e8" />
-            <stop offset="1" stopColor="#14407c" />
+          {/* The artwork's legs are glossy capsules: a bright edge along the
+              top, full colour through the middle, and a dark underside. Three
+              stops rather than two, because what reads as 3D is the highlight
+              sitting off-centre. */}
+          <linearGradient id="spider-leg" x1="0" y1="0" x2="0.2" y2="1">
+            <stop offset="0" stopColor="#bfe6ff" />
+            <stop offset="0.28" stopColor="#4aa6f5" />
+            <stop offset="0.72" stopColor="#1559b8" />
+            <stop offset="1" stopColor="#0a2b63" />
           </linearGradient>
         </defs>
 
         {legs.map((leg) => (
           <g key={leg.key} className="spider-leg" style={{ '--step': leg.step }}>
-            {/* The dark underside first, so every leg keeps an edge against
-                whatever is behind it. The thigh is drawn heavier than the
-                shin, which is how the artwork's legs taper. */}
+            {/* Each segment is built up the way the artwork paints it: a dark
+                casing, the blue capsule inside it, and a specular line along
+                the top. The thigh is heavier than the shin, as it tapers. */}
             <path d={leg.thigh} className="spider-leg-shade is-thigh" />
             <path d={leg.shin} className="spider-leg-shade" />
             <path d={leg.thigh} className="spider-leg-lit is-thigh" />
             <path d={leg.shin} className="spider-leg-lit" />
-            <circle cx={leg.knee[0]} cy={leg.knee[1]} r="3.1" className="spider-leg-joint" />
+            <path d={leg.thigh} className="spider-leg-gloss is-thigh" />
+            <path d={leg.shin} className="spider-leg-gloss" />
+
+            {/* The dark joints: one where the leg leaves the body, one at the
+                knee, and a claw at the foot. */}
+            <circle cx={leg.root[0]} cy={leg.root[1]} r="4" className="spider-leg-joint" />
+            <circle cx={leg.knee[0]} cy={leg.knee[1]} r="3.4" className="spider-leg-joint" />
+            <circle cx={leg.foot[0]} cy={leg.foot[1]} r="1.7" className="spider-leg-claw" />
           </g>
         ))}
       </svg>

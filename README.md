@@ -105,8 +105,16 @@ Two canvases carry it:
   Canvas 2D, no WebGL, no library. Paused when the tab is hidden, fewer stars
   on a phone, and under `prefers-reduced-motion` a single still frame.
 
-- [`SpaceField.jsx`](src/components/SpaceField.jsx) — one fixed canvas behind
-  the whole page, and a volume rather than a pattern.
+- [`SpaceField.jsx`](src/components/SpaceField.jsx) — one fixed canvas over
+  it. At night it now draws almost nothing: the photograph is the sky, and a
+  field of stars drifting over a picture of stars read as two skies at once.
+  What is left of it after dark is the web a click cuts and the meteor that
+  crosses now and then. By day it is the whole of Wendy's sky — petals, their
+  ripples and the bloom a click opens.
+
+  What follows describes the field as it is still built for daylight, and as
+  it was at night before the photograph replaced it: a volume rather than a
+  pattern.
 
   A field of even dots reads as a screensaver. What makes a night sky is that
   it is *not* even: a third of the stars gather into a galactic band laid

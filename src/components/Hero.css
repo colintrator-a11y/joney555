@@ -90,6 +90,12 @@
   background:
     radial-gradient(62% 76% at 50% 50%, rgba(4, 8, 18, 0.5), transparent 72%),
     radial-gradient(68% 82% at 50% 50%, rgba(var(--glow), 0.2), transparent 72%);
+}
+
+/* Daylight has no galaxy behind the name — only petals on a pale sky — so the
+   scrim has nothing to do there but sit as a grey smudge. */
+[data-theme='light'] .hero-name::before {
+  background: radial-gradient(68% 82% at 50% 50%, rgba(var(--glow), 0.18), transparent 72%);
   pointer-events: none;
 }
 

@@ -4,9 +4,9 @@ import './SpaceField.css'
 /**
  * The sky the whole page sits on, and it has two of them.
  *
- * At night: stars at every depth, with a thread here and there between two
- * that are close to each other and at the same sort of distance. A click cuts
- * a web where it lands. Nothing follows the pointer.
+ * At night it draws almost nothing: the galaxy photograph is the sky, and the
+ * stars twinkling in its arms are Galaxy.jsx's. What is left here is the web a
+ * click cuts, and the meteor that crosses now and then.
  *
  * By day it is Wendy's: the same points of light, drawn as petals turning as
  * they drift, with no threads between them. A click opens a bloom instead of a
@@ -55,7 +55,6 @@ const SHOOT_LIFE_MS = 1100
 // become the sky the galaxy is turning in.
 const DRIFT_XY = 0.012     // world px per frame, sideways
 const DRIFT_Z = 0.05       // world px per frame, towards or away
-const LINK_DISTANCE = 104  // in projected px, so the web thins with distance
 // How near the pointer has to be for a petal to notice it. Daylight only —
 // at night the stars take no notice of the pointer at all, since threads
 // reaching for the cursor made an already busy sky unreadable.
@@ -264,8 +263,11 @@ export default function SpaceField() {
 
       if (!night) ripples = ripples.filter((r) => time - r.born < RIPPLE_MS)
 
-      const screen = []
-      for (const star of stars) {
+      // Night draws no stars of its own. The photograph behind the page is
+      // already a sky, and a second one drifting over it read as two skies at
+      // once; its twinkle is drawn by Galaxy.jsx, on the arms where it
+      // belongs. The loop is still the daylight petals' though.
+      if (!night) for (const star of stars) {
         if (!still.matches) {
           // Petals fall slower than stars sweep past.
           const pace = night ? 1 : DAY_SPEED
@@ -297,59 +299,12 @@ export default function SpaceField() {
         let sy = cy + star.y * scale
         // Depth as a 0–1 reading, used for size, brightness and the web.
         const near = Math.min(Math.max((FAR - star.z) / (FAR - NEAR), 0), 1)
-        screen.push({ x: sx, y: sy, near })
-
         if (sx < -40 || sx > width + 40 || sy < -40 || sy > height + 40) continue
 
         const pulse = still.matches ? 0.8 : 0.74 + Math.sin(time / 1500 + star.twinkle) * 0.26
         const size = 0.9 + near * 2.6
 
-        if (night) {
-          context.globalAlpha = (0.24 + near * 0.76) * pulse * (star.inBand ? 0.62 : 1)
-          context.fillStyle = star.warm
-            ? colours.warm
-            : near > 0.72
-              ? `rgb(${colours.glow})`
-              : colours.star
-          context.beginPath()
-          context.arc(sx, sy, (size * (star.inBand ? 0.6 : 1)) / 2, 0, Math.PI * 2)
-          context.fill()
-
-          // The nearest few burn. Spikes as tapered slivers rather than lines:
-          // a line of even width reads as a plus sign drawn on the sky, where
-          // a spike that narrows to nothing reads as light.
-          if (near > GLINT_NEAR && !star.inBand) {
-            const burn = (near - GLINT_NEAR) / (1 - GLINT_NEAR)
-            const reach = size * (3 + burn * 7)
-            const half = size * 0.3
-
-            context.globalAlpha = burn * 0.55 * pulse
-            context.beginPath()
-            for (const turn of [0, Math.PI / 2]) {
-              const ux = Math.cos(turn)
-              const uy = Math.sin(turn)
-              // Across the axis, to give each sliver its width at the middle.
-              const px = -uy * half
-              const py = ux * half
-              context.moveTo(sx + ux * reach, sy + uy * reach)
-              context.lineTo(sx + px, sy + py)
-              context.lineTo(sx - ux * reach, sy - uy * reach)
-              context.lineTo(sx - px, sy - py)
-            }
-            context.fill()
-
-            // And the bloom around it, which is most of what the eye reads.
-            const halo = context.createRadialGradient(sx, sy, 0, sx, sy, size * 3.4)
-            halo.addColorStop(0, `rgba(255, 255, 255, ${0.5 * burn * pulse})`)
-            halo.addColorStop(0.45, `rgba(${colours.glow}, ${0.22 * burn * pulse})`)
-            halo.addColorStop(1, `rgba(${colours.glow}, 0)`)
-            context.globalAlpha = 1
-            context.fillStyle = halo
-            context.beginPath()
-            context.arc(sx, sy, size * 3.4, 0, Math.PI * 2)
-            context.fill()
-          }
-        } else {
+        {
           // A petal lying at its own angle, so the sky is full of things
           // falling rather than things shining. One colour throughout —
           // depth and the pointer change how present a petal is, never what
@@ -429,56 +384,6 @@ export default function SpaceField() {
           context.fill()
           context.restore()
         }
-      }
-
-      // The web. Night only: by day the petals are not spun together.
-      // Only near neighbours are joined, and a thread fades both with
-      // the distance across the screen and with how far back in the field the
-      // two stars sit — so the near web is bright and the far one is a haze.
-      //
-      // Bucketed by a grid one link-distance across: comparing every star with
-      // every other is 34,000 pairs a frame at this count, where each one can
-      // only reach the eight cells around its own.
-      const cells = new Map()
-      const key = (gx, gy) => `${gx},${gy}`
-      if (night) {
-      screen.forEach((point, index) => {
-        const k = key(Math.floor(point.x / LINK_DISTANCE), Math.floor(point.y / LINK_DISTANCE))
-        const bucket = cells.get(k)
-        if (bucket) bucket.push(index)
-        else cells.set(k, [index])
-      })
-
-      context.lineWidth = 0.75
-      for (let i = 0; i < screen.length; i += 1) {
-        const a = screen[i]
-        const gx = Math.floor(a.x / LINK_DISTANCE)
-        const gy = Math.floor(a.y / LINK_DISTANCE)
-        for (let ox = 0; ox <= 1; ox += 1) {
-          for (let oy = ox === 0 ? 0 : -1; oy <= 1; oy += 1) {
-            const bucket = cells.get(key(gx + ox, gy + oy))
-            if (!bucket) continue
-            for (const j of bucket) {
-              if (j <= i) continue // each pair once
-              const b = screen[j]
-              const distance = Math.hypot(a.x - b.x, a.y - b.y)
-              if (distance > LINK_DISTANCE) continue
-              // Threads only between stars at a similar depth: joining the
-              // front of the field to the back is what made it look flat.
-              const depth = 1 - Math.abs(a.near - b.near)
-              if (depth < 0.48) continue
-              const strength = (1 - distance / LINK_DISTANCE) * depth
-              context.globalAlpha = strength * (0.1 + Math.max(a.near, b.near) * 0.4)
-              context.strokeStyle = Math.max(a.near, b.near) > 0.7 ? `rgb(${colours.glow})` : colours.star
-              context.beginPath()
-              context.moveTo(a.x, a.y)
-              context.lineTo(b.x, b.y)
-              context.stroke()
-            }
-          }
-        }
-      }
-
       }
 
       // A meteor, every so often, falling along the band rather than across

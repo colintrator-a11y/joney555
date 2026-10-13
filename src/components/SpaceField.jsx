@@ -273,7 +273,14 @@ export default function SpaceField() {
               const by = web.y + Math.sin(b.angle) * b.length * step
               // The control point sits between the two anchors but nearer the
               // centre: that is the sag.
-              const mid = (a.angle + b.angle) / 2
+              //
+              // The midpoint has to be found by stepping from one angle to the
+              // next, not by averaging them: the last thread runs from nearly
+              // 2π back to nearly 0, and the mean of those is π — the far side
+              // of the web, which is why that thread used to be slung straight
+              // across the middle.
+              const sweep = ((b.angle - a.angle + Math.PI * 3) % (Math.PI * 2)) - Math.PI
+              const mid = a.angle + sweep / 2
               const sag = ((a.length + b.length) / 2) * step * 0.82
               context.moveTo(ax, ay)
               context.quadraticCurveTo(

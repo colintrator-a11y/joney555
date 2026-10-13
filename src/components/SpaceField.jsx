@@ -52,6 +52,23 @@ const WEB_MAX = 3          // at once: a drummed mouse should not stack up
 // travel as far as a web's spokes read as an explosion rather than a flower.
 const BLOOM_RADIUS = 86
 
+// Daylight drifts. The night sky is a field seen from a ship; this is petals
+// falling in still air, and it should look like it.
+const DAY_SPEED = 0.3
+
+/**
+ * One petal, drawn at the origin: pointed at both ends and full in the middle,
+ * the way a petal is, rather than the ellipse this used to be. Two curves meet
+ * at the tips, and the control points sit out at the widest part.
+ */
+function petalPath(context, length, width) {
+  context.beginPath()
+  context.moveTo(0, -length)
+  context.bezierCurveTo(width, -length * 0.45, width, length * 0.45, 0, length)
+  context.bezierCurveTo(-width, length * 0.45, -width, -length * 0.45, 0, -length)
+  context.closePath()
+}
+
 export default function SpaceField() {
   const canvasRef = useRef(null)
 
@@ -144,10 +161,12 @@ export default function SpaceField() {
       const screen = []
       for (const star of stars) {
         if (!still.matches) {
-          star.x += star.vx
-          star.y += star.vy
-          star.z += star.vz
-          star.spin += star.spinV
+          // Petals fall slower than stars sweep past.
+          const pace = night ? 1 : DAY_SPEED
+          star.x += star.vx * pace
+          star.y += star.vy * pace
+          star.z += star.vz * pace
+          star.spin += star.spinV * (night ? 1 : 0.6)
 
           // Out of the volume at either end: born again at the far side of it,
           // so the field neither empties nor crowds the eye.
@@ -184,18 +203,19 @@ export default function SpaceField() {
           context.arc(sx, sy, size / 2, 0, Math.PI * 2)
           context.fill()
         } else {
-          // A petal: an ellipse lying at its own angle, pinched at one end, so
-          // the sky is full of things falling rather than things shining.
+          // A petal lying at its own angle, so the sky is full of things
+          // falling rather than things shining. One colour throughout —
+          // depth and the pointer change how present a petal is, never what
+          // colour it is, or the sky looks like two sets of confetti.
           const lean = pointer.on
             ? Math.max(0, 1 - Math.hypot(sx - pointer.x, sy - pointer.y) / POINTER_DISTANCE)
             : 0
-          context.globalAlpha = (0.16 + near * 0.5) * pulse + lean * 0.3
-          context.fillStyle = near > 0.72 || lean > 0.4 ? `rgb(${colours.glow})` : colours.star
+          context.globalAlpha = (0.18 + near * 0.5) * pulse + lean * 0.28
+          context.fillStyle = `rgb(${colours.glow})`
           context.save()
           context.translate(sx, sy)
           context.rotate(star.spin + lean)
-          context.beginPath()
-          context.ellipse(0, 0, size * 1.7, size * 0.78, 0, 0, Math.PI * 2)
+          petalPath(context, size * 2.1, size * 0.92)
           context.fill()
           context.restore()
         }
@@ -289,9 +309,10 @@ export default function SpaceField() {
               context.save()
               context.translate(px, py)
               // Turned by how far it has flown, so the petals tumble outwards.
-              context.rotate(spoke.angle + spread * 2.4)
-              context.beginPath()
-              context.ellipse(0, 0, 9 * (1 - t * 0.4), 4 * (1 - t * 0.4), 0, 0, Math.PI * 2)
+              // Pointing the way it flew, and turning a little as it goes.
+              context.rotate(spoke.angle + Math.PI / 2 + spread * 1.6)
+              const shrink = 1 - t * 0.35
+              petalPath(context, 10 * shrink, 4.4 * shrink)
               context.fill()
               context.restore()
             }

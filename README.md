@@ -41,7 +41,12 @@ across it — the nickname is Blue-Spider, and the whole design follows from it.
 
 **Daylight is Wendy's**: lilac and rose, petals turning as they drift instead
 of stars, no threads between them, a bloom where the page is clicked instead of
-a cut web, and a butterfly for a pointer instead of a spider. Same structure,
+a cut web, and a butterfly for a pointer instead of a spider. A petal is two
+bezier curves meeting at the tips, pointed at both ends and full in the middle,
+and every one of them is the same colour — depth and the pointer change how
+present a petal is, never what colour it is, or the sky reads as two sets of
+confetti. They fall at a third of the speed the stars sweep past: a night sky
+seen from a moving ship, a day sky of petals in still air. Same structure,
 same canvas, same particles — a different hand. The palette is the
 `[data-theme='light']` block in [`global.css`](src/styles/global.css), and the
 canvas reads those tokens, so the sky changes with the page.

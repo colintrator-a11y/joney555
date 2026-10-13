@@ -57,6 +57,15 @@ Two canvases carry it:
   has further to travel than a far one; at either end of the depth range it is
   born again at the other end.
 
+  Clicking anywhere cuts a web where the pointer is: thirteen spokes with a
+  little jitter in their angles, and spiral threads strung between them, each
+  pulled in towards the middle so it hangs rather than cuts straight. It draws
+  itself outwards on a cubic ease — the snap of a thread pulled taut — and
+  fades as it goes. The spokes and the jitter are decided once, at the click,
+  or the web would shiver for the three-quarters of a second it is up. Three
+  can be open at once; a drummed mouse replaces the oldest rather than stacking
+  them. A tap does it too.
+
   The field itself does not follow the pointer — it is a sky, not a parallax
   layer. The only thing the pointer does is light threads from the stars
   nearest it. It is painted in the page's own tokens, so the theme toggle takes

@@ -34,6 +34,15 @@ const DRIFT_Z = 0.34       // world px per frame, towards or away
 const LINK_DISTANCE = 148  // in projected px, so the web thins with distance
 const POINTER_DISTANCE = 210
 
+// The web that snaps open where the page is clicked: spokes from the point,
+// and spiral threads strung between them, sagging inwards the way a real orb
+// web does. It draws itself outwards and fades as it goes.
+const WEB_MS = 900
+const WEB_RADIUS = 190
+const WEB_SPOKES = 13
+const WEB_RINGS = 3
+const WEB_MAX = 3          // at once: a drummed mouse should not stack up
+
 export default function SpaceField() {
   const canvasRef = useRef(null)
 
@@ -49,6 +58,18 @@ export default function SpaceField() {
     let ratio = 1
     let frame = 0
     const pointer = { x: 0, y: 0, on: false }
+    let webs = []
+
+    // A web is cut once, at the click: the jitter in its spokes has to stay
+    // the same for the life of the animation or it would shiver.
+    const cutWeb = (x, y) => {
+      const spokes = Array.from({ length: WEB_SPOKES }, (_, i) => {
+        const angle = (i / WEB_SPOKES) * Math.PI * 2 + (Math.random() - 0.5) * 0.22
+        return { angle, reach: 0.72 + Math.random() * 0.45 }
+      })
+      webs.push({ x, y, born: performance.now(), spokes })
+      if (webs.length > WEB_MAX) webs = webs.slice(-WEB_MAX)
+    }
 
     // The canvas is painted in the page's own colours, so the sky follows the
     // theme without a second palette to keep in step.
@@ -207,6 +228,73 @@ export default function SpaceField() {
         }
       }
 
+      // The clicked webs, newest last so a fresh one draws over an old one.
+      if (webs.length) {
+        webs = webs.filter((web) => time - web.born < WEB_MS)
+        for (const web of webs) {
+          const t = (time - web.born) / WEB_MS
+          // Fast out, slow to settle: the snap of a thread being pulled taut.
+          const spread = 1 - Math.pow(1 - t, 3)
+          // Held, then let go: at 1.6 the web was gone before the eye found it.
+          const fade = Math.pow(1 - t, 1.1)
+          const points = web.spokes.map((spoke) => ({
+            angle: spoke.angle,
+            length: WEB_RADIUS * spoke.reach * spread,
+          }))
+
+          context.strokeStyle = `rgb(${colours.glow})`
+
+          // The spokes.
+          context.globalAlpha = fade * 0.55
+          context.lineWidth = 0.9
+          context.beginPath()
+          for (const point of points) {
+            context.moveTo(web.x, web.y)
+            context.lineTo(
+              web.x + Math.cos(point.angle) * point.length,
+              web.y + Math.sin(point.angle) * point.length,
+            )
+          }
+          context.stroke()
+
+          // The spiral threads, strung between neighbouring spokes and pulled
+          // in towards the middle so each one hangs rather than cuts straight.
+          context.globalAlpha = fade * 0.42
+          context.lineWidth = 0.7
+          context.beginPath()
+          for (let ring = 1; ring <= WEB_RINGS; ring += 1) {
+            const step = ring / WEB_RINGS
+            for (let i = 0; i < points.length; i += 1) {
+              const a = points[i]
+              const b = points[(i + 1) % points.length]
+              const ax = web.x + Math.cos(a.angle) * a.length * step
+              const ay = web.y + Math.sin(a.angle) * a.length * step
+              const bx = web.x + Math.cos(b.angle) * b.length * step
+              const by = web.y + Math.sin(b.angle) * b.length * step
+              // The control point sits between the two anchors but nearer the
+              // centre: that is the sag.
+              const mid = (a.angle + b.angle) / 2
+              const sag = ((a.length + b.length) / 2) * step * 0.82
+              context.moveTo(ax, ay)
+              context.quadraticCurveTo(
+                web.x + Math.cos(mid) * sag,
+                web.y + Math.sin(mid) * sag,
+                bx,
+                by,
+              )
+            }
+          }
+          context.stroke()
+
+          // The point it was cut from.
+          context.globalAlpha = fade * 0.8
+          context.beginPath()
+          context.arc(web.x, web.y, 1.6, 0, Math.PI * 2)
+          context.fillStyle = `rgb(${colours.glow})`
+          context.fill()
+        }
+      }
+
       context.globalAlpha = 1
       frame = requestAnimationFrame(draw)
     }
@@ -227,6 +315,15 @@ export default function SpaceField() {
     }
     const onLeave = () => { pointer.on = false }
 
+    // Any press anywhere, including a tap: the canvas itself takes no pointer
+    // events, so this never stands between a visitor and a button.
+    const onPress = (event) => {
+      if (still.matches) return
+      if (event.button !== undefined && event.button !== 0) return
+      cutWeb(event.clientX, event.clientY)
+      start() // a click on a hidden tab's page should not go unanswered
+    }
+
     // A hidden tab should not be drawing a sky nobody is looking at.
     const onVisibility = () => (document.hidden ? stop() : start())
     const onTheme = () => { colours = palette() }
@@ -236,6 +333,7 @@ export default function SpaceField() {
 
     window.addEventListener('resize', resize)
     window.addEventListener('pointermove', onPointer, { passive: true })
+    window.addEventListener('pointerdown', onPress, { passive: true })
     document.addEventListener('pointerleave', onLeave)
     document.addEventListener('visibilitychange', onVisibility)
     // The theme toggle rewrites the attribute these colours are read from.
@@ -246,6 +344,7 @@ export default function SpaceField() {
       stop()
       window.removeEventListener('resize', resize)
       window.removeEventListener('pointermove', onPointer)
+      window.removeEventListener('pointerdown', onPress)
       document.removeEventListener('pointerleave', onLeave)
       document.removeEventListener('visibilitychange', onVisibility)
       themeWatch.disconnect()

@@ -91,8 +91,152 @@
         ]
       }
     </script>
+
+    <!--
+      The loading screen. Inline and before the bundle on purpose: a React
+      component cannot paint until the JavaScript it lives in has downloaded,
+      which is the very wait this is covering. Pure CSS 3D — a cube turning in
+      perspective — so it costs nothing to start.
+    -->
+    <style>
+      #boot {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 34px;
+        background: #f7f5f1;
+        transition: opacity 0.5s ease, visibility 0.5s ease;
+      }
+
+      html[data-theme='dark'] #boot { background: #101214; }
+
+      #boot.is-done {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+
+      /* The perspective lives on the parent: on the cube itself it would be
+         applied after its own rotation and the faces would shear. */
+      .boot-scene {
+        width: 86px;
+        height: 86px;
+        perspective: 520px;
+      }
+
+      .boot-cube {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transform-style: preserve-3d;
+        animation: boot-spin 4.6s cubic-bezier(0.62, 0.02, 0.38, 0.98) infinite;
+      }
+
+      .boot-face {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        border: 1px solid rgba(15, 118, 110, 0.5);
+        border-radius: 12px;
+        background: rgba(15, 118, 110, 0.14);
+        box-shadow: inset 0 0 24px rgba(15, 118, 110, 0.18);
+        font: 600 30px/1 'Instrument Serif', Georgia, serif;
+        color: #0f766e;
+      }
+
+      html[data-theme='dark'] .boot-face {
+        border-color: rgba(79, 195, 181, 0.45);
+        background: rgba(79, 195, 181, 0.12);
+        box-shadow: inset 0 0 24px rgba(79, 195, 181, 0.16);
+        color: #7fd6ca;
+      }
+
+      /* 43px is half the cube: each face is pushed out to its own side. */
+      .boot-face.front  { transform: translateZ(43px); }
+      .boot-face.back   { transform: rotateY(180deg) translateZ(43px); }
+      .boot-face.right  { transform: rotateY(90deg) translateZ(43px); }
+      .boot-face.left   { transform: rotateY(-90deg) translateZ(43px); }
+      .boot-face.top    { transform: rotateX(90deg) translateZ(43px); }
+      .boot-face.bottom { transform: rotateX(-90deg) translateZ(43px); }
+
+      @keyframes boot-spin {
+        0%   { transform: rotateX(-24deg) rotateY(0deg); }
+        50%  { transform: rotateX(-24deg) rotateY(180deg); }
+        100% { transform: rotateX(-24deg) rotateY(360deg); }
+      }
+
+      .boot-text {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        font: 500 0.72rem/1 Inter, system-ui, sans-serif;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: #8c857c;
+      }
+
+      html[data-theme='dark'] .boot-text { color: #8b9390; }
+
+      .boot-track {
+        width: 132px;
+        height: 2px;
+        border-radius: 999px;
+        background: rgba(15, 118, 110, 0.16);
+        overflow: hidden;
+      }
+
+      /* Indeterminate: it reports that work is happening, and never claims a
+         percentage it cannot know. */
+      .boot-track i {
+        display: block;
+        width: 42%;
+        height: 100%;
+        border-radius: inherit;
+        background: #0f766e;
+        animation: boot-slide 1.25s ease-in-out infinite;
+      }
+
+      html[data-theme='dark'] .boot-track i { background: #4fc3b5; }
+
+      @keyframes boot-slide {
+        0%   { transform: translateX(-110%); }
+        100% { transform: translateX(260%); }
+      }
+
+      /* Movement off: the cube holds one readable angle and only the bar
+         fades, so the screen still says "working" without animating. */
+      @media (prefers-reduced-motion: reduce) {
+        .boot-cube { animation: none; transform: rotateX(-20deg) rotateY(-28deg); }
+        .boot-track i { animation: boot-fade 1.4s ease-in-out infinite; width: 100%; }
+        @keyframes boot-fade { 0%, 100% { opacity: 0.25; } 50% { opacity: 1; } }
+      }
+    </style>
   </head>
   <body>
+    <div id="boot" role="status" aria-live="polite" aria-label="Loading the portfolio">
+      <div class="boot-scene">
+        <div class="boot-cube">
+          <div class="boot-face front">J</div>
+          <div class="boot-face back">J</div>
+          <div class="boot-face right">J</div>
+          <div class="boot-face left">J</div>
+          <div class="boot-face top"></div>
+          <div class="boot-face bottom"></div>
+        </div>
+      </div>
+
+      <p class="boot-text">
+        Loading
+        <span class="boot-track" aria-hidden="true"><i></i></span>
+      </p>
+    </div>
+
     <div id="root"></div>
     <noscript>
       Joney — full stack and mobile developer with 7+ years of experience in React,

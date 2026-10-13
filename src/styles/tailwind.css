@@ -1,0 +1,18 @@
+/*
+ * Tailwind's theme and utilities only — no preflight.
+ *
+ * Preflight would reset the elements the hand-written stylesheets in
+ * src/components/ already style, and those sheets are unlayered: an unlayered
+ * rule beats any layered one whatever the order, so the reset would be the one
+ * thing Tailwind could not take back. The sections written before Tailwind
+ * keep their own CSS; the dock and the loader are Tailwind.
+ */
+@layer theme, base, components, utilities;
+
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+
+/* The class lists in these files are what Tailwind scans to decide which
+   utilities to emit; without a source the build ships an empty sheet. */
+@source '../components';
+@source '../App.jsx';

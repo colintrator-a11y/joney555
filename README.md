@@ -4,8 +4,9 @@ A single-page portfolio: everything a client needs to judge the work is on one
 screen-scroll — who you are, what you build, the stack, the projects, work
 history, languages and how to reach you.
 
-Built with Vite + React 18, in English, with no UI framework and no runtime
-dependencies beyond React.
+Built with Vite + React 18, in English, with no runtime dependencies beyond
+React. The sections written first carry their own CSS; the loading screen and
+the header dock are CSS3 and Tailwind.
 
 ## Run it
 
@@ -16,6 +17,45 @@ npm run build          # production build into dist/
 npm run preview        # serve the built site on :4173
 npm run check:locales  # verify every id has its string
 ```
+
+## The loading screen
+
+A CSS3 cube turning in perspective, held until the page is worth looking at.
+
+It is markup and inline CSS in [`index.html`](index.html), not a component: a
+React loader cannot paint until the bundle it lives in has downloaded, which is
+the wait being covered. [`src/utils/bootScreen.js`](src/utils/bootScreen.js)
+takes it away once the fonts have resolved and the portrait has decoded — at
+least 450ms so it reads as a transition rather than a flicker, and at most
+3.2s, because a font that never resolves must not leave anyone watching a cube.
+Under `prefers-reduced-motion` the cube holds one angle and only the bar
+pulses.
+
+## The header
+
+A dock: a floating pill of icons, centred, as wide as its contents rather than
+the window. [`src/components/Navbar.jsx`](src/components/Navbar.jsx), in
+Tailwind utilities.
+
+Each section is one circle, labelled for screen readers and captioned on hover
+for everyone else; the section being read is filled with the accent colour,
+worked out on scroll rather than with an observer, since "the last section whose
+top has passed the dock" is what the eye agrees with. It is `sticky`, not
+`fixed`, so it takes its own height in the flow and nothing underneath has to be
+padded out of its way. The row fits six sections, the mark and the theme toggle
+down to 320px.
+
+## Tailwind
+
+Tailwind v4 through `@tailwindcss/vite`, configured in
+[`src/styles/tailwind.css`](src/styles/tailwind.css) — theme and utilities
+only, **no preflight**. Preflight would reset the elements the stylesheets in
+`src/components/` already style, and those sheets are unlayered: an unlayered
+rule beats a layered one whatever the order, so the reset would be the one part
+of Tailwind that could not be overridden. Buttons are the exception preflight
+usually handles, so `global.css` resets those four properties by hand.
+
+New work can use either; what exists keeps its own stylesheet.
 
 ## Copy
 
@@ -155,6 +195,7 @@ index.html              meta tags, JSON-LD, fonts, pre-paint theme script
 src/data/profile.js     language-independent structure
 src/i18n/               English copy (en.js) and the React context that serves it
 src/styles/global.css   design tokens (light + dark) and shared primitives
+src/styles/tailwind.css Tailwind theme + utilities, without preflight
 src/components/         one component + one stylesheet per section
 scripts/                copy coverage check, GIF optimiser
 public/                 avatar, logo, "J" tab icon, robots.txt, sitemap.xml

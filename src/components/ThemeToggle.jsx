@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useLocale } from '../i18n/LocaleContext.jsx'
+import { DOCK_BUTTON } from './Navbar.jsx'
 
 /**
  * The very first paint is handled by the inline script in index.html; this
@@ -33,7 +34,7 @@ export default function ThemeToggle() {
   return (
     <button
       type="button"
-      className="theme-toggle"
+      className={DOCK_BUTTON}
       onClick={toggle}
       aria-label={label}
       title={label}

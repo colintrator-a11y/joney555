@@ -30,7 +30,9 @@
   --radius: 14px;
   --radius-sm: 9px;
   --shell: 1180px;
-  --nav-h: 62px;
+  /* The dock's own height plus the gap above it: what an anchored section
+     has to clear when the browser jumps to it. */
+  --nav-h: 68px;
 }
 
 [data-theme='dark'] {
@@ -92,6 +94,19 @@ img { max-width: 100%; display: block; }
    pushed the project rows off-centre against every other card on the page. */
 ul,
 ol { margin: 0; padding: 0; list-style: none; }
+
+/* Tailwind ships without preflight here, so buttons would otherwise keep the
+   browser's own grey face, border and centred text. Every button on the page
+   draws its own surface. */
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  text-align: inherit;
+  cursor: pointer;
+}
 
 a {
   color: inherit;
@@ -159,6 +174,21 @@ a {
   color: var(--ink-faint);
 }
 
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: -60px;
+  z-index: 60;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  transition: top 0.15s ease;
+}
+
+.skip-link:focus { top: 12px; }
+
 .card {
   background: var(--bg-raised);
   border: 1px solid var(--line);
@@ -220,11 +250,6 @@ a {
   clip: rect(0 0 0 0);
   white-space: nowrap;
   border: 0;
-}
-
-@media (max-width: 900px) {
-  /* The nav grows a second row of links on narrower screens. */
-  html { scroll-padding-top: 118px; }
 }
 
 @media (max-width: 640px) {

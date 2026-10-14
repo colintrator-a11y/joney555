@@ -8,8 +8,10 @@
   --bg-raised: #0b1322;
   --bg-sunken: #070c17;
   --ink: #e8eefb;
-  --ink-soft: #a6b4cd;
-  --ink-faint: #6f7f9b;
+  /* Both greys are set for the galaxy behind the cards, not for black: over
+     its lighter blues the dimmer pair this replaced fell to about 3.5:1. */
+  --ink-soft: #c9d3e6;
+  --ink-faint: #9aa9c4;
   --line: #16213a;
   --line-strong: #24344f;
   --accent: #3da9fc;
@@ -288,20 +290,113 @@ a {
 /* The lift and the push on press are in src/styles/depth.css, with every
    other clickable surface. */
 
-.btn-primary {
-  background: var(--accent);
+/*
+ * Buttons in the headline's language: light rather than paint. The primary
+ * is a band of the galaxy's own colours that glows onto the sky, with the
+ * same sweep of light that crosses the name; the ghost is a pane of glass
+ * with a lit edge. Both brighten under the pointer rather than changing
+ * colour outright.
+ *
+ * Qualified as .btn.btn-* so these outrank depth.css's .btn transition, which
+ * is loaded later and would otherwise drop the glow and gradient from it.
+ */
+:root {
+  --btn-from: #3da9fc;
+  --btn-to: #8b5cf6;
+}
+
+[data-theme='light'] {
+  --btn-from: #a855f7;
+  --btn-to: #ec4899;
+}
+
+.btn.btn-primary,
+.btn.btn-ghost {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  letter-spacing: 0.02em;
+  transition: transform 0.18s var(--tilt-ease, ease), box-shadow 0.25s ease,
+    background-position 0.5s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.btn.btn-primary {
   color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.18);
+  background: linear-gradient(110deg, var(--btn-from), var(--btn-to) 55%, var(--btn-from));
+  background-size: 220% 100%;
+  background-position: 0% 50%;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 0 0 1px color-mix(in srgb, var(--btn-from) 40%, transparent),
+    0 8px 26px -8px color-mix(in srgb, var(--btn-from) 80%, transparent),
+    0 0 34px -10px color-mix(in srgb, var(--btn-to) 90%, transparent);
 }
 
-[data-theme='light'] .btn-primary { color: #ffffff; }
+.btn.btn-primary:hover,
+.btn.btn-primary:focus-visible {
+  background-position: 100% 50%;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    0 0 0 1px color-mix(in srgb, var(--btn-to) 60%, transparent),
+    0 12px 34px -8px color-mix(in srgb, var(--btn-from) 95%, transparent),
+    0 0 48px -6px color-mix(in srgb, var(--btn-to) 95%, transparent);
+}
 
-.btn-ghost {
-  background: transparent;
+/* The sweep: a band of light crossing the button every few seconds, on the
+   same beat as the one crossing the name above it. */
+.btn.btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    105deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.45) 50%,
+    transparent 65%
+  );
+  transform: translateX(-130%);
+  animation: btn-sweep 4.2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes btn-sweep {
+  0%, 55% { transform: translateX(-130%); }
+  85%, 100% { transform: translateX(130%); }
+}
+
+/* The ghost: glass over the sky, its edge lit in the same two colours. The
+   border is a gradient, so it is drawn as a second background clipped to the
+   border box under a solid one clipped to the padding box. */
+.btn.btn-ghost {
   color: var(--ink);
-  border-color: var(--line-strong);
+  border: 1px solid transparent;
+  background:
+    linear-gradient(color-mix(in srgb, var(--bg-raised) 62%, transparent), color-mix(in srgb, var(--bg-raised) 62%, transparent)) padding-box,
+    linear-gradient(110deg, color-mix(in srgb, var(--btn-from) 70%, transparent), color-mix(in srgb, var(--btn-to) 70%, transparent)) border-box;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 6px 22px -14px color-mix(in srgb, var(--btn-from) 70%, transparent);
 }
 
-.btn-ghost:hover { border-color: var(--accent); color: var(--accent-ink); }
+.btn.btn-ghost:hover,
+.btn.btn-ghost:focus-visible {
+  color: #ffffff;
+  background:
+    linear-gradient(110deg, color-mix(in srgb, var(--btn-from) 42%, var(--bg-raised)), color-mix(in srgb, var(--btn-to) 42%, var(--bg-raised))) padding-box,
+    linear-gradient(110deg, var(--btn-from), var(--btn-to)) border-box;
+  box-shadow:
+    0 10px 30px -10px color-mix(in srgb, var(--btn-from) 85%, transparent),
+    0 0 32px -10px color-mix(in srgb, var(--btn-to) 90%, transparent);
+}
+
+[data-theme='light'] .btn.btn-ghost:hover,
+[data-theme='light'] .btn.btn-ghost:focus-visible { color: var(--ink); }
+
+@media (prefers-reduced-motion: reduce) {
+  .btn.btn-primary::after { animation: none; opacity: 0; }
+}
 
 .sr-only {
   position: absolute;

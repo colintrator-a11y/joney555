@@ -19,7 +19,7 @@ import './ParticleName.css'
  * whichever word the dots are spelling.
  */
 
-const GAP = 6 // sampling grid: smaller is denser, and costs more particles
+const GAP = 5 // sampling grid: smaller is denser, and costs more particles
 const RETURN = 0.052 // how hard a particle is pulled home
 const FRICTION = 0.86
 const PUSH_RADIUS = 92
@@ -28,6 +28,74 @@ const PUSH_FORCE = 38
 // Dark-mode ink, per tone. Near-white by default: the word is drawn over the
 // galaxy's brightest part, and in accent blue it disappears into it.
 const TONES = { default: '#eaf6ff', wendy: '#e3b6ff' }
+// The colour of the light that sweeps across the word, per tone.
+const SHINE = { default: '#5cc2ff', wendy: '#ff8ae2' }
+const SWEEP_PERIOD = 4.2 // seconds between one sweep and the next
+const SWEEP_WIDTH = 70 // half-width of the band of light, in CSS pixels
+const TAU = Math.PI * 2
+
+/**
+ * A soft round glow in one colour, drawn once and stamped under every
+ * particle: far cheaper per frame than a canvas shadow blur.
+ */
+function glowSprite(colour) {
+  const sprite = document.createElement('canvas')
+  sprite.width = sprite.height = 32
+  const g = sprite.getContext('2d')
+  const gradient = g.createRadialGradient(16, 16, 0, 16, 16, 16)
+  gradient.addColorStop(0, colour)
+  gradient.addColorStop(0.35, `${colour}88`)
+  gradient.addColorStop(1, `${colour}00`)
+  g.fillStyle = gradient
+  g.fillRect(0, 0, 32, 32)
+  return sprite
+}
+
+/**
+ * A four-pointed star: a long cross of tapering rays, a shorter diagonal one,
+ * and a bright core. Stamped over a particle at the peak of its flare.
+ */
+function sparkleSprite(colour) {
+  const S = 64
+  const c = S / 2
+  const sprite = document.createElement('canvas')
+  sprite.width = sprite.height = S
+  const g = sprite.getContext('2d')
+  const ray = (length, thickness, angle) => {
+    g.save()
+    g.translate(c, c)
+    g.rotate(angle)
+    const gradient = g.createLinearGradient(-length, 0, length, 0)
+    gradient.addColorStop(0, `${colour}00`)
+    gradient.addColorStop(0.5, '#ffffff')
+    gradient.addColorStop(1, `${colour}00`)
+    g.fillStyle = gradient
+    g.beginPath()
+    g.moveTo(-length, 0)
+    g.lineTo(0, -thickness)
+    g.lineTo(length, 0)
+    g.lineTo(0, thickness)
+    g.closePath()
+    g.fill()
+    g.restore()
+  }
+  ray(c, 1.6, 0)
+  ray(c, 1.6, Math.PI / 2)
+  ray(c * 0.45, 1.1, Math.PI / 4)
+  ray(c * 0.45, 1.1, -Math.PI / 4)
+  const core = g.createRadialGradient(c, c, 0, c, c, c * 0.35)
+  core.addColorStop(0, '#ffffff')
+  core.addColorStop(0.4, `${colour}aa`)
+  core.addColorStop(1, `${colour}00`)
+  g.fillStyle = core
+  g.fillRect(0, 0, S, S)
+  return sprite
+}
+
+// Share of the word's particles that flare into a star now and then.
+const STAR_SHARE = 0.16
+// One loose star around the word per this many square CSS pixels of canvas.
+const DUST_AREA = 1300
 
 export default function ParticleName({ text, tone = 'default' }) {
   const canvasRef = useRef(null)
@@ -56,7 +124,40 @@ export default function ParticleName({ text, tone = 'default' }) {
       document.documentElement.dataset.theme === 'light'
         ? getComputedStyle(document.documentElement).getPropertyValue('--accent-ink').trim() || '#7c2fcb'
         : TONES[wordTone] ?? TONES.default
+    const isLight = () => document.documentElement.dataset.theme === 'light'
     let colour = ink()
+    let shine = SHINE[wordTone] ?? SHINE.default
+    let glow = glowSprite(colour)
+    let shineGlow = glowSprite(shine)
+    let sparkle = sparkleSprite(shine)
+    const recolour = () => {
+      colour = ink()
+      shine = SHINE[wordTone] ?? SHINE.default
+      glow = glowSprite(colour)
+      shineGlow = glowSprite(shine)
+      sparkle = sparkleSprite(shine)
+    }
+
+    // Loose stars scattered around the word, twinkling on their own.
+    let dust = []
+    const scatterDust = () => {
+      const count = Math.round((width * height) / DUST_AREA)
+      dust = Array.from({ length: count }, () => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        size: 0.5 + Math.random() * 1.1,
+        phase: Math.random() * TAU,
+        speed: 0.8 + Math.random() * 2.2,
+        // A few of them flare, slowly, like the stars in the word.
+        flare: Math.random() < 0.3 ? 0.25 + Math.random() * 0.5 : 0,
+      }))
+    }
+
+    /**
+     * How far into a flare a star is, 0 to 1: a sharp peak that comes round
+     * every few seconds and is dark the rest of the time.
+     */
+    const flareAt = (t, rate, phase) => Math.pow(Math.max(0, Math.sin(t * rate + phase)), 18)
 
     const size = () => {
       const parent = canvas.parentElement
@@ -113,7 +214,11 @@ export default function ParticleName({ text, tone = 'default' }) {
       vy: 0,
       // A little variation so the swarm does not arrive as one block.
       ease: RETURN * (0.6 + Math.random() * 0.8),
-      size: Math.random() < 0.12 ? 2.4 : 1.6,
+      size: Math.random() < 0.15 ? 1.7 : 1.15,
+      // Each particle twinkles and drifts on its own clock.
+      phase: Math.random() * TAU,
+      speed: 1.5 + Math.random() * 3,
+      star: Math.random() < STAR_SHARE ? 0.35 + Math.random() * 0.6 : 0,
       fading: false,
     })
 
@@ -121,6 +226,7 @@ export default function ParticleName({ text, tone = 'default' }) {
     const build = () => {
       size()
       particles = sample(word).map((home) => spawn(home))
+      scatterDust()
       intro = 0
     }
 
@@ -134,6 +240,16 @@ export default function ParticleName({ text, tone = 'default' }) {
       const homes = sample(value)
       if (!homes.length) return
       const live = particles.filter((p) => !p.fading)
+      // The old word bursts before it reforms, so the change reads as an
+      // event rather than a slide.
+      if (!still.matches) {
+        for (const p of live) {
+          const angle = Math.random() * TAU
+          const kick = 6 + Math.random() * 10
+          p.vx += Math.cos(angle) * kick
+          p.vy += Math.sin(angle) * kick
+        }
+      }
       const next = []
       for (let i = 0; i < homes.length; i += 1) {
         const p = live[i]
@@ -168,6 +284,34 @@ export default function ParticleName({ text, tone = 'default' }) {
       context.clearRect(0, 0, width, height)
       intro = Math.min(intro + 0.012 * step, 1)
 
+      const t = now / 1000
+      const light = isLight()
+      // The sweep runs along a slight diagonal, from off the left edge to off
+      // the right, then rests before the next one.
+      const sweepX = ((t % SWEEP_PERIOD) / SWEEP_PERIOD) * (width + SWEEP_WIDTH * 8) - SWEEP_WIDTH * 4
+
+      // The loose stars first, so the word is drawn over them.
+      if (!still.matches) {
+        if (!light) context.globalCompositeOperation = 'lighter'
+        context.fillStyle = light ? colour : '#ffffff'
+        for (const d of dust) {
+          const tw = 0.5 + 0.5 * Math.sin(t * d.speed + d.phase)
+          context.globalAlpha = intro * tw * tw * (light ? 0.45 : 0.85)
+          context.beginPath()
+          context.arc(d.x, d.y, d.size, 0, TAU)
+          context.fill()
+          if (d.flare) {
+            const f = flareAt(t, d.flare, d.phase)
+            if (f > 0.02) {
+              const r = 7 + d.size * 9 * f
+              context.globalAlpha = intro * f
+              context.drawImage(sparkle, d.x - r, d.y - r, r * 2, r * 2)
+            }
+          }
+        }
+        context.globalCompositeOperation = 'source-over'
+      }
+
       for (const p of particles) {
         if (still.matches) {
           p.x = p.homeX
@@ -197,10 +341,63 @@ export default function ParticleName({ text, tone = 'default' }) {
         // Spare particles fade as they arrive, rather than vanishing mid-air.
         if (p.fading) p.fade = Math.max(0, p.fade - 0.025 * step)
 
-        const base = still.matches ? 1 : 0.45 + intro * 0.55
-        context.globalAlpha = p.fading ? base * p.fade : base
-        context.fillStyle = colour
-        context.fillRect(p.x, p.y, p.size, p.size)
+        const base = still.matches ? 1 : 0.5 + intro * 0.5
+        const fade = p.fading ? p.fade : 1
+
+        // Twinkle, drift, the passing sweep, and the light of the pointer.
+        let twinkle = 1
+        let x = p.x
+        let y = p.y
+        let highlight = 0
+        let near = 0
+        if (!still.matches) {
+          twinkle = 0.55 + 0.45 * Math.sin(t * p.speed + p.phase)
+          x += Math.sin(t * 0.9 + p.phase) * 0.7
+          y += Math.cos(t * 1.1 + p.phase) * 0.7
+          const d = p.homeX + p.homeY * 0.45 - sweepX
+          highlight = Math.exp(-(d * d) / (2 * SWEEP_WIDTH * SWEEP_WIDTH))
+          const reach = PUSH_RADIUS * 1.8
+          const pd = Math.hypot(p.x - pointer.x, p.y - pointer.y)
+          if (pd < reach) near = 1 - pd / reach
+        }
+        const lit = Math.min(1, highlight + near * 0.8)
+        const alpha = base * fade
+        const radius = p.size * (1 + lit * 0.7)
+
+        // The halo, added onto the sky so the word brightens what is behind it
+        // instead of being lost in it. Skipped on the light page, where adding
+        // light only washes out.
+        if (!light) {
+          context.globalCompositeOperation = 'lighter'
+          const halo = radius * 3.6
+          context.globalAlpha = alpha * (0.22 + 0.12 * twinkle)
+          context.drawImage(glow, x - halo, y - halo, halo * 2, halo * 2)
+          if (lit > 0.04) {
+            const big = halo * 1.5
+            context.globalAlpha = alpha * lit * 0.75
+            context.drawImage(shineGlow, x - big, y - big, big * 2, big * 2)
+          }
+          context.globalCompositeOperation = 'source-over'
+        }
+
+        // The point itself.
+        context.globalAlpha = Math.min(1, alpha * (0.85 * twinkle + lit * 0.4))
+        context.fillStyle = lit > 0.35 ? (light ? shine : '#ffffff') : colour
+        context.beginPath()
+        context.arc(x, y, radius, 0, TAU)
+        context.fill()
+
+        // Now and then one of the word's own points flares into a star.
+        if (p.star && !still.matches) {
+          const f = flareAt(t, p.star, p.phase)
+          if (f > 0.02) {
+            const r = 9 + 12 * f
+            if (!light) context.globalCompositeOperation = 'lighter'
+            context.globalAlpha = alpha * f
+            context.drawImage(sparkle, x - r, y - r, r * 2, r * 2)
+            context.globalCompositeOperation = 'source-over'
+          }
+        }
       }
 
       // The faded-out spares have no further part to play.
@@ -241,7 +438,7 @@ export default function ParticleName({ text, tone = 'default' }) {
     }
     retone.current = (value) => {
       wordTone = value
-      colour = ink()
+      recolour()
     }
 
     // Scrolled past, the swarm is still being animated for nobody. The sky is
@@ -258,10 +455,11 @@ export default function ParticleName({ text, tone = 'default' }) {
     const onResize = () => {
       if (!built) return
       size()
+      scatterDust()
       flowTo(word)
     }
     const onVisibility = () => (document.hidden ? stop() : start())
-    const onTheme = () => { colour = ink() }
+    const onTheme = () => recolour()
 
     window.addEventListener('resize', onResize)
     window.addEventListener('pointermove', onPointer, { passive: true })

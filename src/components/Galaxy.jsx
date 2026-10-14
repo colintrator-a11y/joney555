@@ -21,17 +21,18 @@ import './Galaxy.css'
 // on the core itself at any window shape.
 const CORE = { u: 0.482, v: 0.39 }
 
-const STARS = { desktop: 100, mobile: 58 }
-const FLARES = { desktop: 11, mobile: 6 }
+const STARS = { desktop: 240, mobile: 120 }
+const FLARES = { desktop: 28, mobile: 14 }
 
 // A star is dim for most of its cycle and brightens briefly. Raising a sine to
-// a power narrows the peak, and the exponent is what sets how many of the
-// hundred are lit at once. Simulated over two minutes of the curve below: at 7
-// about nineteen are visibly brightening at a time, at 13 about fourteen, at
-// 18 about twelve. 14 holds the ten-to-fifteen this is meant to keep.
-const TWINKLE_MIN = 2000
-const TWINKLE_MAX = 6000
-const PEAK = 14
+// a power narrows the peak, and the exponent is what sets how many are lit
+// at once. Over a hundred stars, at 7 about nineteen are visibly brightening
+// at a time, at 13 about fourteen, at 18 about twelve. The sky is meant to be
+// busy with them now, so with 240 stars and a wider peak, roughly fifty to
+// sixty are lit at any moment.
+const TWINKLE_MIN = 1600
+const TWINKLE_MAX = 5000
+const PEAK = 9
 
 const TINTS = [
   [214, 238, 255],
@@ -182,10 +183,11 @@ export default function Galaxy() {
       // The core's breath: a few per cent either way, over about ten seconds.
       const core = at(CORE)
       const breath = still.matches ? 1 : 1 + Math.sin((now / 10000) * Math.PI * 2) * 0.07
-      const reach = Math.min(fit.w, fit.h) * 0.18 * breath
+      const reach = Math.min(fit.w, fit.h) * 0.36 * breath
       const glow = context.createRadialGradient(core.x, core.y, 0, core.x, core.y, reach)
-      glow.addColorStop(0, `rgba(226, 240, 255, ${0.16 * breath})`)
-      glow.addColorStop(0.45, `rgba(130, 190, 255, ${0.07 * breath})`)
+      glow.addColorStop(0, `rgba(255, 246, 232, ${0.55 * breath})`)
+      glow.addColorStop(0.2, `rgba(214, 232, 255, ${0.36 * breath})`)
+      glow.addColorStop(0.5, `rgba(130, 190, 255, ${0.16 * breath})`)
       glow.addColorStop(1, 'rgba(90, 150, 255, 0)')
       context.fillStyle = glow
       context.beginPath()

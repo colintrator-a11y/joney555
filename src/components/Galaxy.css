@@ -41,10 +41,10 @@
  */
 .galaxy-shade {
   background:
-    /* A pocket of night behind the name and the two lines under it — tight,
-       so it darkens the type's background and not the whole picture. */
-    radial-gradient(36% 36% at 50% 42%, rgba(3, 7, 16, 0.72), rgba(3, 7, 16, 0.32) 56%, transparent 82%),
-    radial-gradient(56% 21% at 50% 58%, rgba(3, 7, 16, 0.6), transparent 76%),
+    /* No shade over the core: it is the brightest part of the picture and
+       the name's dots carry their own glow. Only the band under the name,
+       where the smaller lines of text sit, is held back a little. */
+    radial-gradient(56% 16% at 50% 62%, rgba(3, 7, 16, 0.42), transparent 76%),
     /* And the frame, sunk just enough to hold the picture in. */
     radial-gradient(130% 110% at 50% 44%, transparent 52%, rgba(2, 5, 12, 0.3) 84%, rgba(2, 5, 12, 0.6) 100%),
     linear-gradient(to bottom, rgba(2, 5, 12, 0.26), transparent 24%, transparent 66%, rgba(2, 5, 12, 0.6));
@@ -54,7 +54,6 @@
   /* A narrow window crops the picture hard, so the core sits higher in it. */
   .galaxy-shade {
     background:
-      radial-gradient(56% 28% at 50% 34%, rgba(3, 7, 16, 0.72), rgba(3, 7, 16, 0.34) 56%, transparent 82%),
       radial-gradient(76% 22% at 50% 56%, rgba(3, 7, 16, 0.6), transparent 78%),
       radial-gradient(140% 110% at 50% 40%, transparent 48%, rgba(2, 5, 12, 0.34) 82%, rgba(2, 5, 12, 0.64) 100%),
       linear-gradient(to bottom, rgba(2, 5, 12, 0.3), transparent 24%, transparent 62%, rgba(2, 5, 12, 0.66));

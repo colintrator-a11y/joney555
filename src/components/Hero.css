@@ -118,6 +118,18 @@
   color: var(--ink-faint);
 }
 
+/* At night the line sits over the galaxy's bright core, which is left
+   unshaded so the centre of the picture stays lit: the text carries its own
+   shadow instead, and a little more ink. */
+:root:not([data-theme='light']) .hero-stack {
+  color: var(--ink-soft);
+  text-shadow: 0 1px 2px rgba(2, 5, 12, 0.9), 0 0 12px rgba(2, 5, 12, 0.8);
+}
+
+:root:not([data-theme='light']) .hero-headline {
+  text-shadow: 0 1px 2px rgba(2, 5, 12, 0.8), 0 0 14px rgba(2, 5, 12, 0.6);
+}
+
 .hero-actions {
   display: flex;
   flex-wrap: wrap;

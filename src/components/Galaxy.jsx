@@ -295,37 +295,11 @@ export default function Galaxy() {
     }
   }, [])
 
-  // The sky is fixed, so its bright core sits behind whatever section is in
-  // the middle of the window, not only behind the name. Lit for the hero, it
-  // drowns the paragraphs below; so a veil comes over it as the hero scrolls
-  // away, and lifts again on the way back up.
-  const veilRef = useRef(null)
-  useEffect(() => {
-    const veil = veilRef.current
-    if (!veil) return undefined
-    let queued = 0
-    const update = () => {
-      queued = 0
-      const progress = Math.min(Math.max(window.scrollY / (window.innerHeight * 0.6), 0), 1)
-      veil.style.opacity = progress.toFixed(3)
-    }
-    const onScroll = () => { if (!queued) queued = requestAnimationFrame(update) }
-    update()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('resize', onScroll)
-    return () => {
-      cancelAnimationFrame(queued)
-      window.removeEventListener('scroll', onScroll)
-      window.removeEventListener('resize', onScroll)
-    }
-  }, [])
-
   return (
     <div className="galaxy" aria-hidden="true" style={{ '--galaxy-plate': `url(${galaxy})` }}>
       {SHOW_PLATE && <div className="galaxy-plate" />}
       <canvas ref={canvasRef} className="galaxy-stars" />
       <div className="galaxy-shade" />
-      <div ref={veilRef} className="galaxy-veil" />
     </div>
   )
 }

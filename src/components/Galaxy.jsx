@@ -21,6 +21,11 @@ import './Galaxy.css'
 // on the core itself at any window shape.
 const CORE = { u: 0.482, v: 0.39 }
 
+// The photograph, on or off. Off for now: the sky is the stars alone, on the
+// page's own night. Set back to true to bring the galaxy (and the glow on its
+// core) back; the stars are still placed along its arms either way.
+const SHOW_PLATE = false
+
 const STARS = { desktop: 240, mobile: 120 }
 const FLARES = { desktop: 28, mobile: 14 }
 
@@ -181,18 +186,21 @@ export default function Galaxy() {
       context.globalCompositeOperation = 'lighter'
 
       // The core's breath: a few per cent either way, over about ten seconds.
-      const core = at(CORE)
-      const breath = still.matches ? 1 : 1 + Math.sin((now / 10000) * Math.PI * 2) * 0.07
-      const reach = Math.min(fit.w, fit.h) * 0.36 * breath
-      const glow = context.createRadialGradient(core.x, core.y, 0, core.x, core.y, reach)
-      glow.addColorStop(0, `rgba(255, 246, 232, ${0.55 * breath})`)
-      glow.addColorStop(0.2, `rgba(214, 232, 255, ${0.36 * breath})`)
-      glow.addColorStop(0.5, `rgba(130, 190, 255, ${0.16 * breath})`)
-      glow.addColorStop(1, 'rgba(90, 150, 255, 0)')
-      context.fillStyle = glow
-      context.beginPath()
-      context.arc(core.x, core.y, reach, 0, Math.PI * 2)
-      context.fill()
+      // Only with the picture: without it the glow is a smudge on empty sky.
+      if (SHOW_PLATE) {
+        const core = at(CORE)
+        const breath = still.matches ? 1 : 1 + Math.sin((now / 10000) * Math.PI * 2) * 0.07
+        const reach = Math.min(fit.w, fit.h) * 0.36 * breath
+        const glow = context.createRadialGradient(core.x, core.y, 0, core.x, core.y, reach)
+        glow.addColorStop(0, `rgba(255, 246, 232, ${0.55 * breath})`)
+        glow.addColorStop(0.2, `rgba(214, 232, 255, ${0.36 * breath})`)
+        glow.addColorStop(0.5, `rgba(130, 190, 255, ${0.16 * breath})`)
+        glow.addColorStop(1, 'rgba(90, 150, 255, 0)')
+        context.fillStyle = glow
+        context.beginPath()
+        context.arc(core.x, core.y, reach, 0, Math.PI * 2)
+        context.fill()
+      }
 
       for (const star of stars) {
         const { x, y } = at(star)
@@ -314,7 +322,7 @@ export default function Galaxy() {
 
   return (
     <div className="galaxy" aria-hidden="true" style={{ '--galaxy-plate': `url(${galaxy})` }}>
-      <div className="galaxy-plate" />
+      {SHOW_PLATE && <div className="galaxy-plate" />}
       <canvas ref={canvasRef} className="galaxy-stars" />
       <div className="galaxy-shade" />
       <div ref={veilRef} className="galaxy-veil" />

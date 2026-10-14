@@ -138,30 +138,37 @@
 
       /* A glint on every crossing, lit once its ring has been spun, then
          twinkling until the web lets go. */
-      /* The glint is defined once in <defs>, outside the group of glints, and
-         is a path like the threads: it is kept off their dash animation. */
+      /* Each glint is a star drawn about 0,0 inside a group moved onto its
+         crossing, so it grows and shrinks on the crossing itself. (Scaled as
+         a placed <use>, it scaled about the corner of the web instead, and the
+         glints were thrown off the threads.) It is a path like the threads, so
+         it is kept off their dash animation. */
       .boot-web .glint {
         fill: #ffffff;
         stroke: none;
         stroke-dasharray: none;
-        animation: none;
         filter: drop-shadow(0 0 2px #ffffff);
-      }
-
-      .boot-glints use {
         opacity: 0;
-        transform-box: fill-box;
-        transform-origin: center;
+        transform-box: view-box;
+        transform-origin: 0 0;
         animation: boot-glint 2.6s ease-in-out infinite;
-        animation-delay: calc(0.62s + var(--ring) * 0.22s + var(--k) * 0.035s);
+        /* On its ring's beat (the .ring delay below), so a crossing lights
+           only once the thread through it has been spun. */
+        animation-delay: calc(0.5s + var(--ring) * 0.22s + var(--k) * 0.04s);
       }
 
+      /* The same 2.6s as the threads: dark while they are spun (to 38%),
+         twinkling while the web holds, gone as it lets go (from 86%). */
       @keyframes boot-glint {
-        0% { opacity: 0; transform: scale(0.3); }
-        14% { opacity: 1; transform: scale(1.25); }
-        28% { opacity: 0.35; transform: scale(0.75); }
-        42% { opacity: 1; transform: scale(1.1); }
-        60%, 100% { opacity: 0; transform: scale(0.4); }
+        0%, 36% { opacity: 0; transform: scale(0.3); }
+        42% { opacity: 1; transform: scale(1.35); }
+        50% { opacity: 0.35; transform: scale(0.7); }
+        58% { opacity: 1; transform: scale(1.15); }
+        66% { opacity: 0.4; transform: scale(0.75); }
+        74% { opacity: 1; transform: scale(1.25); }
+        82% { opacity: 0.5; transform: scale(0.85); }
+        88% { opacity: 0.9; transform: scale(1); }
+        96%, 100% { opacity: 0; transform: scale(0.4); }
       }
 
       html[data-theme='light'] .boot-web { stroke: #a855f7; filter: none; }
@@ -254,7 +261,7 @@
       /* Movement off: the web is shown spun rather than spinning. */
       @media (prefers-reduced-motion: reduce) {
         .boot-web path { animation: none; stroke-dashoffset: 0; }
-        .boot-glints use { animation: none; opacity: 0.8; }
+        .boot-web .glint { animation: none; opacity: 0.8; }
         .boot-mark { animation: none; }
         .boot-track i { animation: boot-fade 1.6s ease-in-out infinite; width: 100%; }
         @keyframes boot-fade { 0%, 100% { opacity: 0.25; } 50% { opacity: 1; } }
@@ -273,10 +280,6 @@
               <stop offset="0.62" stop-color="#c8def8" />
               <animateTransform attributeName="gradientTransform" type="translate" from="-200 -200" to="200 200" dur="2.6s" repeatCount="indefinite" />
             </linearGradient>
-            <!-- A four-pointed glint, centred on 0,0, placed on each crossing. -->
-            <symbol id="boot-glint" overflow="visible">
-              <path class="glint" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" />
-            </symbol>
           </defs>
           <path class="spoke" d="M100 100L183.1 122.3" />
           <path class="spoke" d="M100 100L160.8 160.8" />
@@ -295,54 +298,54 @@
           <path class="ring" style="--ring: 2" d="M161.5 116.5Q148.5 128.0 145.0 145.0Q128.0 148.5 116.5 161.5Q100.0 156.0 83.5 161.5Q72.0 148.5 55.0 145.0Q51.5 128.0 38.5 116.5Q44.0 100.0 38.5 83.5Q51.5 72.0 55.0 55.0Q72.0 51.5 83.5 38.5Q100.0 44.0 116.5 38.5Q128.0 51.5 145.0 55.0Q148.5 72.0 161.5 83.5Q156.0 100.0 161.5 116.5" />
           <path class="ring" style="--ring: 3" d="M179.7 121.4Q162.9 136.3 158.4 158.4Q136.3 162.9 121.4 179.7Q100.0 172.7 78.6 179.7Q63.7 162.9 41.6 158.4Q37.1 136.3 20.3 121.4Q27.3 100.0 20.3 78.6Q37.1 63.7 41.6 41.6Q63.7 37.1 78.6 20.3Q100.0 27.3 121.4 20.3Q136.3 37.1 158.4 41.6Q162.9 63.7 179.7 78.6Q172.7 100.0 179.7 121.4" />
           <g class="boot-glints">
-            <use href="#boot-glint" x="124.9" y="106.7" style="--ring: 0; --k: 0" />
-            <use href="#boot-glint" x="118.2" y="118.2" style="--ring: 0; --k: 1" />
-            <use href="#boot-glint" x="106.7" y="124.9" style="--ring: 0; --k: 2" />
-            <use href="#boot-glint" x="93.3" y="124.9" style="--ring: 0; --k: 3" />
-            <use href="#boot-glint" x="81.8" y="118.2" style="--ring: 0; --k: 4" />
-            <use href="#boot-glint" x="75.1" y="106.7" style="--ring: 0; --k: 5" />
-            <use href="#boot-glint" x="75.1" y="93.3" style="--ring: 0; --k: 6" />
-            <use href="#boot-glint" x="81.8" y="81.8" style="--ring: 0; --k: 7" />
-            <use href="#boot-glint" x="93.3" y="75.1" style="--ring: 0; --k: 8" />
-            <use href="#boot-glint" x="106.7" y="75.1" style="--ring: 0; --k: 9" />
-            <use href="#boot-glint" x="118.2" y="81.8" style="--ring: 0; --k: 10" />
-            <use href="#boot-glint" x="124.9" y="93.3" style="--ring: 0; --k: 11" />
-            <use href="#boot-glint" x="143.2" y="111.6" style="--ring: 1; --k: 0" />
-            <use href="#boot-glint" x="131.6" y="131.6" style="--ring: 1; --k: 1" />
-            <use href="#boot-glint" x="111.6" y="143.2" style="--ring: 1; --k: 2" />
-            <use href="#boot-glint" x="88.4" y="143.2" style="--ring: 1; --k: 3" />
-            <use href="#boot-glint" x="68.4" y="131.6" style="--ring: 1; --k: 4" />
-            <use href="#boot-glint" x="56.8" y="111.6" style="--ring: 1; --k: 5" />
-            <use href="#boot-glint" x="56.8" y="88.4" style="--ring: 1; --k: 6" />
-            <use href="#boot-glint" x="68.4" y="68.4" style="--ring: 1; --k: 7" />
-            <use href="#boot-glint" x="88.4" y="56.8" style="--ring: 1; --k: 8" />
-            <use href="#boot-glint" x="111.6" y="56.8" style="--ring: 1; --k: 9" />
-            <use href="#boot-glint" x="131.6" y="68.4" style="--ring: 1; --k: 10" />
-            <use href="#boot-glint" x="143.2" y="88.4" style="--ring: 1; --k: 11" />
-            <use href="#boot-glint" x="161.5" y="116.5" style="--ring: 2; --k: 0" />
-            <use href="#boot-glint" x="145.0" y="145.0" style="--ring: 2; --k: 1" />
-            <use href="#boot-glint" x="116.5" y="161.5" style="--ring: 2; --k: 2" />
-            <use href="#boot-glint" x="83.5" y="161.5" style="--ring: 2; --k: 3" />
-            <use href="#boot-glint" x="55.0" y="145.0" style="--ring: 2; --k: 4" />
-            <use href="#boot-glint" x="38.5" y="116.5" style="--ring: 2; --k: 5" />
-            <use href="#boot-glint" x="38.5" y="83.5" style="--ring: 2; --k: 6" />
-            <use href="#boot-glint" x="55.0" y="55.0" style="--ring: 2; --k: 7" />
-            <use href="#boot-glint" x="83.5" y="38.5" style="--ring: 2; --k: 8" />
-            <use href="#boot-glint" x="116.5" y="38.5" style="--ring: 2; --k: 9" />
-            <use href="#boot-glint" x="145.0" y="55.0" style="--ring: 2; --k: 10" />
-            <use href="#boot-glint" x="161.5" y="83.5" style="--ring: 2; --k: 11" />
-            <use href="#boot-glint" x="179.7" y="121.4" style="--ring: 3; --k: 0" />
-            <use href="#boot-glint" x="158.4" y="158.4" style="--ring: 3; --k: 1" />
-            <use href="#boot-glint" x="121.4" y="179.7" style="--ring: 3; --k: 2" />
-            <use href="#boot-glint" x="78.6" y="179.7" style="--ring: 3; --k: 3" />
-            <use href="#boot-glint" x="41.6" y="158.4" style="--ring: 3; --k: 4" />
-            <use href="#boot-glint" x="20.3" y="121.4" style="--ring: 3; --k: 5" />
-            <use href="#boot-glint" x="20.3" y="78.6" style="--ring: 3; --k: 6" />
-            <use href="#boot-glint" x="41.6" y="41.6" style="--ring: 3; --k: 7" />
-            <use href="#boot-glint" x="78.6" y="20.3" style="--ring: 3; --k: 8" />
-            <use href="#boot-glint" x="121.4" y="20.3" style="--ring: 3; --k: 9" />
-            <use href="#boot-glint" x="158.4" y="41.6" style="--ring: 3; --k: 10" />
-            <use href="#boot-glint" x="179.7" y="78.6" style="--ring: 3; --k: 11" />
+            <g transform="translate(124.9 106.7)"><path class="glint" style="--ring: 0; --k: 0" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(118.2 118.2)"><path class="glint" style="--ring: 0; --k: 1" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(106.7 124.9)"><path class="glint" style="--ring: 0; --k: 2" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(93.3 124.9)"><path class="glint" style="--ring: 0; --k: 3" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(81.8 118.2)"><path class="glint" style="--ring: 0; --k: 4" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(75.1 106.7)"><path class="glint" style="--ring: 0; --k: 5" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(75.1 93.3)"><path class="glint" style="--ring: 0; --k: 6" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(81.8 81.8)"><path class="glint" style="--ring: 0; --k: 7" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(93.3 75.1)"><path class="glint" style="--ring: 0; --k: 8" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(106.7 75.1)"><path class="glint" style="--ring: 0; --k: 9" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(118.2 81.8)"><path class="glint" style="--ring: 0; --k: 10" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(124.9 93.3)"><path class="glint" style="--ring: 0; --k: 11" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(143.2 111.6)"><path class="glint" style="--ring: 1; --k: 0" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(131.6 131.6)"><path class="glint" style="--ring: 1; --k: 1" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(111.6 143.2)"><path class="glint" style="--ring: 1; --k: 2" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(88.4 143.2)"><path class="glint" style="--ring: 1; --k: 3" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(68.4 131.6)"><path class="glint" style="--ring: 1; --k: 4" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(56.8 111.6)"><path class="glint" style="--ring: 1; --k: 5" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(56.8 88.4)"><path class="glint" style="--ring: 1; --k: 6" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(68.4 68.4)"><path class="glint" style="--ring: 1; --k: 7" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(88.4 56.8)"><path class="glint" style="--ring: 1; --k: 8" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(111.6 56.8)"><path class="glint" style="--ring: 1; --k: 9" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(131.6 68.4)"><path class="glint" style="--ring: 1; --k: 10" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(143.2 88.4)"><path class="glint" style="--ring: 1; --k: 11" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(161.5 116.5)"><path class="glint" style="--ring: 2; --k: 0" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(145.0 145.0)"><path class="glint" style="--ring: 2; --k: 1" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(116.5 161.5)"><path class="glint" style="--ring: 2; --k: 2" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(83.5 161.5)"><path class="glint" style="--ring: 2; --k: 3" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(55.0 145.0)"><path class="glint" style="--ring: 2; --k: 4" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(38.5 116.5)"><path class="glint" style="--ring: 2; --k: 5" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(38.5 83.5)"><path class="glint" style="--ring: 2; --k: 6" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(55.0 55.0)"><path class="glint" style="--ring: 2; --k: 7" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(83.5 38.5)"><path class="glint" style="--ring: 2; --k: 8" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(116.5 38.5)"><path class="glint" style="--ring: 2; --k: 9" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(145.0 55.0)"><path class="glint" style="--ring: 2; --k: 10" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(161.5 83.5)"><path class="glint" style="--ring: 2; --k: 11" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(179.7 121.4)"><path class="glint" style="--ring: 3; --k: 0" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(158.4 158.4)"><path class="glint" style="--ring: 3; --k: 1" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(121.4 179.7)"><path class="glint" style="--ring: 3; --k: 2" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(78.6 179.7)"><path class="glint" style="--ring: 3; --k: 3" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(41.6 158.4)"><path class="glint" style="--ring: 3; --k: 4" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(20.3 121.4)"><path class="glint" style="--ring: 3; --k: 5" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(20.3 78.6)"><path class="glint" style="--ring: 3; --k: 6" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(41.6 41.6)"><path class="glint" style="--ring: 3; --k: 7" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(78.6 20.3)"><path class="glint" style="--ring: 3; --k: 8" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(121.4 20.3)"><path class="glint" style="--ring: 3; --k: 9" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(158.4 41.6)"><path class="glint" style="--ring: 3; --k: 10" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g transform="translate(179.7 78.6)"><path class="glint" style="--ring: 3; --k: 11" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
           </g>
         </svg>
         <!--

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { navSections, profile } from '../data/profile.js'
 import { useLocale } from '../i18n/LocaleContext.jsx'
 import ThemeToggle from './ThemeToggle.jsx'
+import './Navbar.css'
 // The spider in its ring: the same mark as the tab icon and the loader.
 import LOGO from '../assets/logo.webp'
 
@@ -29,7 +30,7 @@ const ICONS = {
 
 // Shared by every circle in the dock, including the theme toggle.
 export const DOCK_BUTTON =
-  'group relative grid h-9 w-9 place-items-center rounded-full text-[var(--ink-soft)] ' +
+  'dock-btn group relative grid h-9 w-9 place-items-center rounded-full text-[var(--ink-soft)] ' +
   // Hover only lightens: the buttons hold still, since a tilt towards the
   // pointer read as the icons slipping out of line.
   'transition-[background-color,color,box-shadow] duration-200 ' +
@@ -84,12 +85,26 @@ export default function Navbar() {
     }
   }, [])
 
+  // A click flashes the button it landed on (Navbar.css). One listener for the
+  // whole dock; the class is taken off and put back so a second click on the
+  // same button plays the flash again rather than being ignored.
+  const flash = (event) => {
+    const button = event.target.closest('.dock-btn')
+    if (!button) return
+    button.classList.remove('is-flashing')
+    void button.offsetWidth
+    button.classList.add('is-flashing')
+    clearTimeout(button.flashTimer)
+    button.flashTimer = setTimeout(() => button.classList.remove('is-flashing'), 650)
+  }
+
   return (
     // Sticky rather than fixed: the pill still takes its own height in the
     // flow, so nothing has to be padded out of the way underneath it.
     <header className="nav-shell sticky top-3 z-50 flex justify-center px-3">
       <nav
         aria-label={t.a11y.sections}
+        onClick={flash}
         className="flex max-w-full items-center gap-0.5 overflow-x-auto rounded-full border
                    border-[var(--line)] bg-[var(--bg-raised)]/85 px-1.5 py-1.5
                    shadow-[0_16px_44px_-18px_rgba(0,0,0,0.85),0_0_28px_-10px_rgba(var(--glow),0.55)]

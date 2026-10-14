@@ -1,0 +1,99 @@
+/*
+ * The dock's flash. The buttons themselves never move (a tilt read as the
+ * icons slipping out of line); the light happens on layers behind and around
+ * the icon instead.
+ *
+ * Hover: a burst of light blooms behind the icon and fades, and the icon
+ * flares bright for a moment. Click: the same, stronger, and a ring of light
+ * leaves the button — set by script (.is-flashing), since :active is over
+ * before an animation could finish.
+ */
+.dock-btn {
+  isolation: isolate;
+}
+
+.dock-btn::before,
+.dock-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.dock-btn::before {
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(var(--silk), 0.7) 28%,
+    rgba(var(--glow), 0.45) 52%,
+    transparent 72%
+  );
+}
+
+.dock-btn:hover::before,
+.dock-btn:focus-visible::before {
+  animation: dock-flash 0.55s ease-out;
+}
+
+.dock-btn:hover > svg,
+.dock-btn:hover > img,
+.dock-btn:focus-visible > svg,
+.dock-btn:focus-visible > img {
+  animation: dock-icon-flash 0.55s ease-out;
+}
+
+/* Clicked: the stronger flash, and the ring. Kept inside the pill's padding,
+   which clips anything that spills further. */
+.dock-btn.is-flashing::before {
+  animation: dock-flash-strong 0.6s ease-out;
+}
+
+.dock-btn.is-flashing > svg,
+.dock-btn.is-flashing > img {
+  animation: dock-icon-flash 0.6s ease-out;
+}
+
+.dock-btn::after {
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 10px rgba(var(--glow), 0.9), inset 0 0 8px rgba(var(--glow), 0.7);
+  z-index: 1;
+}
+
+.dock-btn.is-flashing::after {
+  animation: dock-burst 0.6s ease-out;
+}
+
+@keyframes dock-flash {
+  0% { opacity: 0; transform: scale(0.35); }
+  22% { opacity: 1; transform: scale(1.12); }
+  100% { opacity: 0; transform: scale(1.2); }
+}
+
+@keyframes dock-flash-strong {
+  0% { opacity: 1; transform: scale(0.5); }
+  20% { opacity: 1; transform: scale(1.15); }
+  100% { opacity: 0; transform: scale(1.2); }
+}
+
+@keyframes dock-burst {
+  0% { opacity: 1; transform: scale(0.55); }
+  100% { opacity: 0; transform: scale(1.25); }
+}
+
+@keyframes dock-icon-flash {
+  0% { filter: brightness(1); }
+  22% { filter: brightness(2.4) drop-shadow(0 0 6px #ffffff) drop-shadow(0 0 10px rgb(var(--glow))); }
+  100% { filter: brightness(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dock-btn::before,
+  .dock-btn::after,
+  .dock-btn > svg,
+  .dock-btn > img {
+    animation: none !important;
+  }
+}

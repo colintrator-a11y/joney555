@@ -36,6 +36,22 @@ export default function Hero() {
   const [index, setIndex] = useState(0)
   const [secret, setSecret] = useState(false)
   const clicks = useRef({ count: 0, last: 0 })
+  // Which rail channel just copied its address, for the label to say so.
+  const [copied, setCopied] = useState(null)
+
+  // A mailto link does nothing for a visitor with no mail app set up, so the
+  // address goes on the clipboard as well as to the mail app: one of the two
+  // always works. The link still follows, so nothing is taken away.
+  const onChannelClick = (channel) => {
+    if (channel.id !== 'email') return
+    navigator.clipboard?.writeText(channel.value).then(
+      () => {
+        setCopied(channel.id)
+        setTimeout(() => setCopied(null), 2200)
+      },
+      () => {},
+    )
+  }
 
   useEffect(() => {
     // The secret word holds for its ten seconds, then the name comes back and
@@ -76,17 +92,27 @@ export default function Hero() {
           <li key={channel.id}>
             <a
               href={channel.href}
-              aria-label={t.contact.channels[channel.id]}
-              title={t.contact.channels[channel.id]}
+              className={copied === channel.id ? 'is-copied' : undefined}
+              aria-label={`${t.contact.channels[channel.id]}: ${channel.value}`}
+              onClick={() => onChannelClick(channel)}
               {...(channel.id === 'email' ? {} : { target: '_blank', rel: 'noreferrer noopener' })}
             >
               <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 {CHANNEL_ICONS[channel.id]}
               </svg>
+              {/* What the icon is and where it goes, sliding out on hover:
+                  the mark alone does not say it can be clicked. */}
+              <span className="social-rail-label" aria-hidden="true">
+                <strong>{t.contact.channels[channel.id]}</strong>
+                <span>{copied === channel.id ? t.contact.copied : channel.value}</span>
+              </span>
             </a>
           </li>
         ))}
       </ul>
+      {/* The label above is decoration to a screen reader; the copy is
+          announced here instead. */}
+      <p className="sr-only" aria-live="polite">{copied ? t.contact.copied : ''}</p>
 
       <div className="shell hero-inner">
         <p className="hero-status">

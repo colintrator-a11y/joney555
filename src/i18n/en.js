@@ -322,6 +322,8 @@ export default {
       telegram: 'Telegram',
       whatsapp: 'WhatsApp',
     },
+    // Shown in the hero rail's label once the address is on the clipboard.
+    copied: 'Address copied',
     heading: 'Get in touch',
     body: 'Questions about my work, a role or a project? Send a message and I will get back to you.',
     form: {

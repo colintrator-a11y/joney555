@@ -27,7 +27,7 @@ const PUSH_FORCE = 38
 
 // Dark-mode ink, per tone. Near-white by default: the word is drawn over the
 // galaxy's brightest part, and in accent blue it disappears into it.
-const TONES = { default: '#eaf6ff', wendy: '#e3b6ff' }
+const TONES = { default: '#ffffff', wendy: '#f0d4ff' }
 // The colour of the light that sweeps across the word, per tone.
 const SHINE = { default: '#5cc2ff', wendy: '#ff8ae2' }
 const SWEEP_PERIOD = 4.2 // seconds between one sweep and the next
@@ -214,7 +214,9 @@ export default function ParticleName({ text, tone = 'default' }) {
       vy: 0,
       // A little variation so the swarm does not arrive as one block.
       ease: RETURN * (0.6 + Math.random() * 0.8),
-      size: Math.random() < 0.15 ? 1.7 : 1.15,
+      // Big enough that neighbours nearly touch on the grid, so a letter
+      // reads as a solid shape and not as a mesh over the sky.
+      size: Math.random() < 0.15 ? 2.1 : 1.7,
       // Each particle twinkles and drifts on its own clock.
       phase: Math.random() * TAU,
       speed: 1.5 + Math.random() * 3,
@@ -351,7 +353,9 @@ export default function ParticleName({ text, tone = 'default' }) {
         let highlight = 0
         let near = 0
         if (!still.matches) {
-          twinkle = 0.55 + 0.45 * Math.sin(t * p.speed + p.phase)
+          // Shallow, so the letters stay solid: the deep twinkling is left to
+          // the flaring stars and the loose ones around the word.
+          twinkle = 0.85 + 0.15 * Math.sin(t * p.speed + p.phase)
           x += Math.sin(t * 0.9 + p.phase) * 0.7
           y += Math.cos(t * 1.1 + p.phase) * 0.7
           const d = p.homeX + p.homeY * 0.45 - sweepX
@@ -381,7 +385,7 @@ export default function ParticleName({ text, tone = 'default' }) {
         }
 
         // The point itself.
-        context.globalAlpha = Math.min(1, alpha * (0.85 * twinkle + lit * 0.4))
+        context.globalAlpha = Math.min(1, alpha * (twinkle + lit * 0.4))
         context.fillStyle = lit > 0.35 ? (light ? shine : '#ffffff') : colour
         context.beginPath()
         context.arc(x, y, radius, 0, TAU)

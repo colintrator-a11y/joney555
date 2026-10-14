@@ -85,11 +85,10 @@
      a phone is the difference between fitting and not. */
   inset: 0;
   z-index: -1;
-  /* A little night behind the name, so it has something to be bright
-     against: over the galaxy's core alone it is light on light. */
-  background:
-    radial-gradient(62% 76% at 50% 50%, rgba(4, 8, 18, 0.5), transparent 72%),
-    radial-gradient(68% 82% at 50% 50%, rgba(var(--glow), 0.2), transparent 72%);
+  /* Only a faint blue light now, no darkness: a dark scrim here read as a
+     smudge under the letters. The dots carry their own weight instead —
+     solid, full-size and glowing (ParticleName.jsx). */
+  background: radial-gradient(68% 82% at 50% 50%, rgba(var(--glow), 0.14), transparent 72%);
 }
 
 /* Daylight has no galaxy behind the name — only petals on a pale sky — so the

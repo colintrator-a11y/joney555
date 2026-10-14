@@ -477,38 +477,44 @@ a {
 }
 
 /*
- * Every button, and every tag of the stack, flashes when the pointer reaches
- * it, as the dock's do: a flare of light that follows its own shape, settling
- * into a soft glow for as long as the pointer stays. Done with a filter on the button itself rather
- * than a pseudo-element, since several of these already use theirs (the
- * primary's sweep, the filters' counts).
+ * Every button, link and tag flashes when the pointer reaches it, as the
+ * dock's do: a flare of light that follows its own shape, settling into a soft
+ * glow for as long as the pointer stays. Done with a filter on the element
+ * itself rather than a pseudo-element, since several of these already use
+ * theirs (the primary's sweep, the filters' counts).
+ *
+ * --flash-colour is the colour of the glow: the page's blue unless the element
+ * has a colour of its own, as a project's links have their project's.
  */
-.btn,
-.tag-button,
-.filter,
-.filter-reset,
-.back-to-top,
-.lightbox-close,
-.lightbox-step,
-.chip,
-.timeline-skills li {
-  --flash-glow: var(--glow);
+:root {
+  --flash-colour: rgb(var(--glow));
+}
+
+.project-link {
+  --flash-colour: var(--card-accent, var(--accent));
 }
 
 .btn:hover,
-.btn:focus-visible,
 .tag-button:hover,
-.tag-button:focus-visible,
 .filter:hover,
-.filter:focus-visible,
 .filter-reset:hover,
-.filter-reset:focus-visible,
 .back-to-top:hover,
-.back-to-top:focus-visible,
 .lightbox-close:hover,
 .lightbox-step:hover,
 .chip:hover,
-.timeline-skills li:hover {
+.timeline-skills li:hover,
+.project-link:hover,
+.channel-value:hover,
+.footer-links a:hover,
+.btn:focus-visible,
+.tag-button:focus-visible,
+.filter:focus-visible,
+.filter-reset:focus-visible,
+.back-to-top:focus-visible,
+.project-link:focus-visible,
+.channel-value:focus-visible,
+.footer-links a:focus-visible,
+.about-best-card:hover .about-best-go {
   animation: ui-flash 0.55s ease-out forwards;
 }
 
@@ -516,30 +522,39 @@ a {
   0% { filter: brightness(1); }
   20% {
     filter: brightness(1.7) drop-shadow(0 0 5px rgba(255, 255, 255, 0.95))
-      drop-shadow(0 0 12px rgb(var(--flash-glow)));
+      drop-shadow(0 0 12px var(--flash-colour));
   }
+  /* The plain colour, held small: a color-mix() here is interpolated wrongly
+     by Chrome and comes out near black. */
   100% {
-    filter: brightness(1.12) drop-shadow(0 0 5px rgba(var(--flash-glow), 0.6));
+    filter: brightness(1.12) drop-shadow(0 0 3px var(--flash-colour));
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .btn:hover,
-  .btn:focus-visible,
   .tag-button:hover,
-  .tag-button:focus-visible,
   .filter:hover,
-  .filter:focus-visible,
   .filter-reset:hover,
-  .filter-reset:focus-visible,
   .back-to-top:hover,
-  .back-to-top:focus-visible,
   .lightbox-close:hover,
   .lightbox-step:hover,
   .chip:hover,
-  .timeline-skills li:hover {
+  .timeline-skills li:hover,
+  .project-link:hover,
+  .channel-value:hover,
+  .footer-links a:hover,
+  .btn:focus-visible,
+  .tag-button:focus-visible,
+  .filter:focus-visible,
+  .filter-reset:focus-visible,
+  .back-to-top:focus-visible,
+  .project-link:focus-visible,
+  .channel-value:focus-visible,
+  .footer-links a:focus-visible,
+  .about-best-card:hover .about-best-go {
     animation: none;
-    filter: brightness(1.12) drop-shadow(0 0 5px rgba(var(--flash-glow), 0.6));
+    filter: brightness(1.12) drop-shadow(0 0 3px var(--flash-colour));
   }
 }
 

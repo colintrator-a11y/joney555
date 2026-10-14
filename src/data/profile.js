@@ -88,6 +88,11 @@ export const experience = [
 // the frame has four sides to hang them from.
 export const orbitSkills = ['Flutter', 'React Native', 'Python', 'AI']
 
+// The ways to work together offered in the contact section, and the steps a
+// piece of work goes through. Ids only: the words are in the locale file.
+export const engagements = ['fulltime', 'contract', 'ai']
+export const workSteps = ['talk', 'plan', 'build', 'launch']
+
 export const navSections = ['about', 'services', 'skills', 'work', 'experience', 'contact']
 
 export const serviceIds = ['mobile', 'ai', 'fullstack']

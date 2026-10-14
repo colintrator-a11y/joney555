@@ -326,6 +326,41 @@ export default {
     copied: 'Address copied',
     heading: 'Get in touch',
     body: 'Questions about my work, a role or a project? Send a message and I will get back to you.',
+    work: {
+      eyebrow: 'Work with me',
+      heading: 'Let’s build something together',
+      body: 'Whether you are hiring for a team or have a product to ship, there are three ways we can work together.',
+      available: 'Open to new opportunities',
+      where: 'Based in Singapore · hybrid or remote',
+      cta: 'Start a conversation',
+      stepsTitle: 'How a project runs',
+      engagements: {
+        fulltime: {
+          title: 'Full-time role',
+          body: 'A senior mobile or AI engineering seat on a product team.',
+          points: ['Lead Flutter and React Native work', 'Ship AI features to production', 'Mentor developers, improve CI/CD'],
+          message: 'Hi Joney, I would like to talk to you about a full-time role: ',
+        },
+        contract: {
+          title: 'Contract & freelance',
+          body: 'A defined build with a clear scope and timeline.',
+          points: ['New apps and MVPs', 'Features on an existing codebase', 'Through to App Store and Play Store release'],
+          message: 'Hi Joney, I have a project I would like your help with: ',
+        },
+        ai: {
+          title: 'AI integration',
+          body: 'LLMs, chat and automation added to a product you already have.',
+          points: ['LLM APIs and chat assistants', 'Document processing', 'Workflow automation'],
+          message: 'Hi Joney, I would like to add AI to our product: ',
+        },
+      },
+      steps: {
+        talk: { title: 'Talk', body: 'You tell me what you need, and I ask what it is for.' },
+        plan: { title: 'Plan', body: 'Scope, stack and milestones, agreed before any code.' },
+        build: { title: 'Build', body: 'Working builds along the way, not one reveal at the end.' },
+        launch: { title: 'Launch', body: 'Release, handover and support after go-live.' },
+      },
+    },
     form: {
       name: 'Your name',
       email: 'Your email',

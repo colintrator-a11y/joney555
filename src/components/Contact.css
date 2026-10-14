@@ -128,3 +128,231 @@
     padding: 28px 24px;
   }
 }
+
+/* ------------------------------ work with me ----------------------------- */
+
+.work-with {
+  margin-bottom: 34px;
+}
+
+.work-with-head h2 {
+  margin-top: 14px;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(1.7rem, 3.6vw, 2.3rem);
+}
+
+.work-with-head p {
+  margin-top: 10px;
+  max-width: 56ch;
+  color: var(--ink-soft);
+}
+
+.work-with-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent-ink) !important;
+}
+
+.work-with-status .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #3ddc97;
+  box-shadow: 0 0 0 0 rgba(61, 220, 151, 0.6);
+  animation: work-available 2.4s ease-out infinite;
+}
+
+@keyframes work-available {
+  0% { box-shadow: 0 0 0 0 rgba(61, 220, 151, 0.6); }
+  100% { box-shadow: 0 0 0 9px rgba(61, 220, 151, 0); }
+}
+
+.work-with-where {
+  font-weight: 500;
+  color: var(--ink-faint);
+}
+
+.work-with-where::before {
+  content: '·';
+  margin-right: 10px;
+  color: var(--line-strong);
+}
+
+/* The three ways in. */
+.work-options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 24px;
+}
+
+.work-option {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 22px 22px;
+  overflow: hidden;
+}
+
+/* A line of light along the top edge, brightening under the pointer. */
+.work-option::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 18px;
+  right: 18px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--btn-from), var(--btn-to), transparent);
+  opacity: 0.45;
+  transition: opacity 0.25s ease;
+}
+
+.work-option:hover::before { opacity: 1; }
+
+.work-option-index {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  font-family: var(--display);
+  font-size: 1.3rem;
+  line-height: 1;
+  color: var(--line-strong);
+}
+
+.work-option h3 {
+  font-size: 1.08rem;
+  padding-right: 34px;
+}
+
+.work-option p {
+  margin-top: 6px;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+.work-option ul {
+  margin: 14px 0 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.work-option ul li {
+  position: relative;
+  padding-left: 20px;
+  font-size: 0.86rem;
+  color: var(--ink-soft);
+}
+
+/* A tick in place of a bullet: these are things on offer. */
+.work-option ul li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 0.42em;
+  width: 9px;
+  height: 5px;
+  border-left: 1.6px solid var(--accent);
+  border-bottom: 1.6px solid var(--accent);
+  transform: rotate(-45deg);
+}
+
+/* Pinned to the foot of the card, so the three buttons line up whatever the
+   length of the copy above them. */
+.work-option-cta {
+  margin-top: auto;
+  align-self: flex-start;
+  font-size: 0.85rem;
+  padding: 9px 16px;
+}
+
+.work-option-cta span { transition: transform 0.2s ease; }
+.work-option-cta:hover span { transform: translateX(3px); }
+
+/* How a project runs: four steps on one thread. */
+.work-steps-title {
+  margin-top: 30px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.work-steps {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 16px;
+}
+
+/* The thread the numbers sit on. */
+.work-steps::before {
+  content: '';
+  position: absolute;
+  top: 15px;
+  left: 16px;
+  right: 16px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--btn-from), var(--btn-to), transparent);
+  opacity: 0.5;
+}
+
+.work-steps li {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.work-step-number {
+  display: grid;
+  place-items: center;
+  width: 31px;
+  height: 31px;
+  margin-bottom: 8px;
+  border-radius: 50%;
+  font-family: var(--display);
+  font-size: 0.9rem;
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--btn-from), var(--btn-to));
+  box-shadow: 0 0 16px -4px rgba(var(--glow), 0.8);
+}
+
+.work-steps strong {
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+
+.work-steps li > span:last-child {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 900px) {
+  .work-options { grid-template-columns: minmax(0, 1fr); }
+  .work-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .work-steps::before { display: none; }
+}
+
+@media (max-width: 480px) {
+  .work-steps { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .work-with-status .dot { animation: none; }
+}
+
+/* The intro and the steps sit straight on the sky, not on a card: at night
+   they carry a shadow so the galaxy's core cannot wash them out. */
+:root:not([data-theme='light']) .work-with-head p,
+:root:not([data-theme='light']) .work-steps li,
+:root:not([data-theme='light']) .work-steps-title {
+  text-shadow: 0 1px 2px rgba(2, 5, 12, 0.9), 0 0 12px rgba(2, 5, 12, 0.75);
+}

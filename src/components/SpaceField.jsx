@@ -165,8 +165,8 @@ export default function SpaceField() {
       return {
         star: styles.getPropertyValue('--ink-soft').trim() || '#a6b4cd',
         glow: styles.getPropertyValue('--glow').trim() || '61, 169, 252',
-        silk: styles.getPropertyValue('--silk').trim() || '0, 140, 250',
-        silkGlow: styles.getPropertyValue('--silk-glow').trim() || '110, 230, 255',
+        silk: styles.getPropertyValue('--silk').trim() || '140, 200, 255',
+        silkGlow: styles.getPropertyValue('--silk-glow').trim() || '0, 140, 250',
         // Not a token: nothing else on the page is this colour, and a sky
         // with no warm light in it looks printed rather than seen.
         warm: '#ffd9a8',
@@ -478,12 +478,10 @@ export default function SpaceField() {
             length: WEB_RADIUS * spoke.reach * spread,
           }))
 
-          // Neon, as the threads in the logo are where they are lit: cyan
-          // thread in a blue glow. The other way round — the logo's deep blue
-          // as the thread — sank into the blue of the sky. A shadow blur is
-          // costly, but only for the second or so a web lives.
-          context.strokeStyle = `rgb(${colours.silkGlow})`
-          context.shadowColor = `rgba(${colours.silk}, 1)`
+          // Light blue thread in the logo's electric-blue glow. A shadow blur
+          // is costly, but only for the second or so a web lives.
+          context.strokeStyle = `rgb(${colours.silk})`
+          context.shadowColor = `rgba(${colours.silkGlow}, 0.9)`
           context.shadowBlur = 8
 
           // The spokes.
@@ -539,7 +537,7 @@ export default function SpaceField() {
           context.globalAlpha = fade * 0.8
           context.beginPath()
           context.arc(web.x, web.y, 1.6, 0, Math.PI * 2)
-          context.fillStyle = `rgb(${colours.silkGlow})`
+          context.fillStyle = `rgb(${colours.silk})`
           context.fill()
           context.shadowBlur = 0
         }

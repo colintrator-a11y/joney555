@@ -34,3 +34,18 @@
 @media (max-width: 720px) {
   .footer-links { margin: 0; }
 }
+
+/* The logo beside the name, glowing a little as it does on the loader. */
+.footer-mark {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.footer-mark img {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  filter: drop-shadow(0 0 10px rgba(var(--glow), 0.45));
+}

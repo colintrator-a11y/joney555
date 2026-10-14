@@ -2,10 +2,8 @@ import { useEffect, useState } from 'react'
 import { navSections, profile } from '../data/profile.js'
 import { useLocale } from '../i18n/LocaleContext.jsx'
 import ThemeToggle from './ThemeToggle.jsx'
-
-// The same "J" mark as the tab icon, from public/ so both can be replaced
-// without touching the build.
-const LOGO = `${import.meta.env.BASE_URL}icon.svg`
+// The spider in its ring: the same mark as the tab icon and the loader.
+import LOGO from '../assets/logo.webp'
 
 // How far below the top of the window a section counts as "the one being
 // read": the dock's own height plus a little, so a heading that has just
@@ -100,7 +98,7 @@ export default function Navbar() {
                    [&::-webkit-scrollbar]:hidden sm:gap-1 sm:px-2"
       >
         <a href="#top" aria-label={profile.name} className={DOCK_BUTTON}>
-          <img src={LOGO} alt="" width="22" height="22" className="h-[22px] w-[22px] rounded-[7px]" />
+          <img src={LOGO} alt="" width="24" height="24" className="h-[24px] w-[24px] rounded-full" />
           <Tip>{profile.name}</Tip>
         </a>
 

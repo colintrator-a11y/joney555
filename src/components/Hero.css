@@ -217,6 +217,21 @@
 
 /* ----------------------------- social rail ----------------------------- */
 
+/* The rail's own light: ice-blue and bright at night, so the icons and their
+   alarm read as lit against the sky rather than as more of the dark. By day
+   it keeps the page's accent, since ice on a pale page disappears. */
+.social-rail {
+  --rail-ink: #cfeeff;
+  --rail-lit: #ffffff;
+  --rail-glow: 170, 225, 255;
+}
+
+[data-theme='light'] .social-rail {
+  --rail-ink: var(--ink-faint);
+  --rail-lit: var(--accent-ink);
+  --rail-glow: var(--glow);
+}
+
 .social-rail {
   position: fixed;
   left: 22px;
@@ -227,7 +242,7 @@
   align-items: center;
   gap: 14px;
   padding-bottom: 110px;
-  color: var(--ink-faint);
+  color: var(--rail-ink);
 }
 
 /* The line below the icons, as in the reference: the rail is anchored to the
@@ -260,10 +275,10 @@
 
 .social-rail a:hover,
 .social-rail a:focus-visible {
-  color: var(--accent-ink);
-  background: color-mix(in srgb, var(--accent-soft) 80%, transparent);
-  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
-  box-shadow: 0 0 18px -4px rgba(var(--glow), 0.8);
+  color: var(--rail-lit);
+  background: rgba(var(--rail-glow), 0.16);
+  border-color: rgba(var(--rail-glow), 0.6);
+  box-shadow: 0 0 18px -4px rgba(var(--rail-glow), 0.8);
   transform: translateX(3px) scale(1.08);
 }
 
@@ -279,7 +294,7 @@
   position: absolute;
   inset: -1px;
   border-radius: 50%;
-  border: 1px solid rgba(var(--glow), 0.7);
+  border: 1px solid rgba(var(--rail-glow), 0.7);
   opacity: 0;
   pointer-events: none;
 }
@@ -321,7 +336,7 @@
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--accent-ink);
+  color: var(--rail-lit);
 }
 
 .social-rail-label span {
@@ -374,7 +389,7 @@
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  border: 1.5px solid rgba(var(--glow), 0.85);
+  border: 1.5px solid rgba(var(--rail-glow), 0.85);
   opacity: 0;
   pointer-events: none;
   animation: rail-alarm-ripple 6s ease-out infinite;
@@ -396,11 +411,11 @@
 @keyframes rail-alarm-glow {
   0%, 18%, 100% {
     color: inherit;
-    box-shadow: 0 0 0 0 rgba(var(--glow), 0);
+    box-shadow: 0 0 0 0 rgba(var(--rail-glow), 0);
   }
   4%, 12% {
-    color: var(--accent-ink);
-    box-shadow: 0 0 16px -2px rgba(var(--glow), 0.75);
+    color: var(--rail-lit);
+    box-shadow: 0 0 16px -2px rgba(var(--rail-glow), 0.75);
   }
 }
 

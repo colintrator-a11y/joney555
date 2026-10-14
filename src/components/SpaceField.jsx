@@ -165,7 +165,7 @@ export default function SpaceField() {
       return {
         star: styles.getPropertyValue('--ink-soft').trim() || '#a6b4cd',
         glow: styles.getPropertyValue('--glow').trim() || '61, 169, 252',
-        silk: styles.getPropertyValue('--silk').trim() || '214, 224, 240',
+        silk: styles.getPropertyValue('--silk').trim() || '186, 228, 255',
         // Not a token: nothing else on the page is this colour, and a sky
         // with no warm light in it looks printed rather than seen.
         warm: '#ffd9a8',
@@ -480,8 +480,8 @@ export default function SpaceField() {
           context.strokeStyle = `rgb(${colours.silk})`
 
           // The spokes.
-          context.globalAlpha = fade * 0.55
-          context.lineWidth = 0.9
+          context.globalAlpha = fade * 0.85
+          context.lineWidth = 1.1
           context.beginPath()
           for (const point of points) {
             context.moveTo(web.x, web.y)
@@ -494,8 +494,8 @@ export default function SpaceField() {
 
           // The spiral threads, strung between neighbouring spokes and pulled
           // in towards the middle so each one hangs rather than cuts straight.
-          context.globalAlpha = fade * 0.42
-          context.lineWidth = 0.7
+          context.globalAlpha = fade * 0.7
+          context.lineWidth = 0.9
           context.beginPath()
           for (let ring = 1; ring <= WEB_RINGS; ring += 1) {
             const step = ring / WEB_RINGS

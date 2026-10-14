@@ -136,13 +136,18 @@
         filter: drop-shadow(0 0 3px rgba(90, 160, 255, 0.9));
       }
 
-      /* A glint on every crossing, lit once its ring has been spun, then
-         twinkling until the web lets go. */
-      /* Each glint is a star drawn about 0,0 inside a group moved onto its
-         crossing, so it grows and shrinks on the crossing itself. (Scaled as
-         a placed <use>, it scaled about the corner of the web instead, and the
-         glints were thrown off the threads.) It is a path like the threads, so
-         it is kept off their dash animation. */
+      /*
+       * A glint on every crossing, flashing at the moment the spiral thread
+       * being spun reaches the spoke it crosses. --at on each one is that
+       * moment, worked out from where the crossing sits along its ring and
+       * the ease-out the thread is drawn with; the ring's own start (its .ring
+       * delay, below) is added here. After the flash it twinkles while the web
+       * holds.
+       *
+       * Each star is drawn about 0,0 inside a group moved onto its crossing,
+       * so it grows from the crossing itself. It is a path like the threads,
+       * so it is kept off their dash animation.
+       */
       .boot-web .glint {
         fill: #ffffff;
         stroke: none;
@@ -151,24 +156,35 @@
         opacity: 0;
         transform-box: view-box;
         transform-origin: 0 0;
-        animation: boot-glint 2.6s ease-in-out infinite;
-        /* On its ring's beat (the .ring delay below), so a crossing lights
-           only once the thread through it has been spun. */
-        animation-delay: calc(0.5s + var(--ring) * 0.22s + var(--k) * 0.04s);
+        animation: boot-glint 2.6s linear infinite;
+        animation-delay: calc(0.5s + var(--ring) * 0.22s + var(--at));
       }
 
-      /* The same 2.6s as the threads: dark while they are spun (to 38%),
-         twinkling while the web holds, gone as it lets go (from 86%). */
+      /* The flash, then the twinkle, then out before the next pass. */
       @keyframes boot-glint {
-        0%, 36% { opacity: 0; transform: scale(0.3); }
-        42% { opacity: 1; transform: scale(1.35); }
-        50% { opacity: 0.35; transform: scale(0.7); }
-        58% { opacity: 1; transform: scale(1.15); }
-        66% { opacity: 0.4; transform: scale(0.75); }
-        74% { opacity: 1; transform: scale(1.25); }
-        82% { opacity: 0.5; transform: scale(0.85); }
-        88% { opacity: 0.9; transform: scale(1); }
-        96%, 100% { opacity: 0; transform: scale(0.4); }
+        0% { opacity: 0; transform: scale(0.2); }
+        1.5% { opacity: 1; transform: scale(2.1); }
+        7% { opacity: 0.95; transform: scale(1); }
+        15% { opacity: 0.45; transform: scale(0.75); }
+        23% { opacity: 1; transform: scale(1.2); }
+        31% { opacity: 0.5; transform: scale(0.8); }
+        39% { opacity: 0.95; transform: scale(1.1); }
+        47% { opacity: 0.5; transform: scale(0.8); }
+        55% { opacity: 0.9; transform: scale(1); }
+        62%, 100% { opacity: 0; transform: scale(0.4); }
+      }
+
+      /* And the group follows the web: gone as the threads let go, so no
+         glint outlives the thread it sits on. */
+      .boot-web .glint-at {
+        animation: boot-glint-hold 2.6s linear infinite;
+        animation-delay: calc(0.5s + var(--ring) * 0.22s);
+      }
+
+      @keyframes boot-glint-hold {
+        0% { opacity: 0; }
+        1%, 86% { opacity: 1; }
+        96%, 100% { opacity: 0; }
       }
 
       html[data-theme='light'] .boot-web { stroke: #a855f7; filter: none; }
@@ -261,7 +277,7 @@
       /* Movement off: the web is shown spun rather than spinning. */
       @media (prefers-reduced-motion: reduce) {
         .boot-web path { animation: none; stroke-dashoffset: 0; }
-        .boot-web .glint { animation: none; opacity: 0.8; }
+        .boot-web .glint, .boot-web .glint-at { animation: none; opacity: 0.8; }
         .boot-mark { animation: none; }
         .boot-track i { animation: boot-fade 1.6s ease-in-out infinite; width: 100%; }
         @keyframes boot-fade { 0%, 100% { opacity: 0.25; } 50% { opacity: 1; } }
@@ -298,54 +314,54 @@
           <path class="ring" style="--ring: 2" d="M161.5 116.5Q148.5 128.0 145.0 145.0Q128.0 148.5 116.5 161.5Q100.0 156.0 83.5 161.5Q72.0 148.5 55.0 145.0Q51.5 128.0 38.5 116.5Q44.0 100.0 38.5 83.5Q51.5 72.0 55.0 55.0Q72.0 51.5 83.5 38.5Q100.0 44.0 116.5 38.5Q128.0 51.5 145.0 55.0Q148.5 72.0 161.5 83.5Q156.0 100.0 161.5 116.5" />
           <path class="ring" style="--ring: 3" d="M179.7 121.4Q162.9 136.3 158.4 158.4Q136.3 162.9 121.4 179.7Q100.0 172.7 78.6 179.7Q63.7 162.9 41.6 158.4Q37.1 136.3 20.3 121.4Q27.3 100.0 20.3 78.6Q37.1 63.7 41.6 41.6Q63.7 37.1 78.6 20.3Q100.0 27.3 121.4 20.3Q136.3 37.1 158.4 41.6Q162.9 63.7 179.7 78.6Q172.7 100.0 179.7 121.4" />
           <g class="boot-glints">
-            <g transform="translate(124.9 106.7)"><path class="glint" style="--ring: 0; --k: 0" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(118.2 118.2)"><path class="glint" style="--ring: 0; --k: 1" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(106.7 124.9)"><path class="glint" style="--ring: 0; --k: 2" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(93.3 124.9)"><path class="glint" style="--ring: 0; --k: 3" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(81.8 118.2)"><path class="glint" style="--ring: 0; --k: 4" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(75.1 106.7)"><path class="glint" style="--ring: 0; --k: 5" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(75.1 93.3)"><path class="glint" style="--ring: 0; --k: 6" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(81.8 81.8)"><path class="glint" style="--ring: 0; --k: 7" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(93.3 75.1)"><path class="glint" style="--ring: 0; --k: 8" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(106.7 75.1)"><path class="glint" style="--ring: 0; --k: 9" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(118.2 81.8)"><path class="glint" style="--ring: 0; --k: 10" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(124.9 93.3)"><path class="glint" style="--ring: 0; --k: 11" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(143.2 111.6)"><path class="glint" style="--ring: 1; --k: 0" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(131.6 131.6)"><path class="glint" style="--ring: 1; --k: 1" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(111.6 143.2)"><path class="glint" style="--ring: 1; --k: 2" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(88.4 143.2)"><path class="glint" style="--ring: 1; --k: 3" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(68.4 131.6)"><path class="glint" style="--ring: 1; --k: 4" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(56.8 111.6)"><path class="glint" style="--ring: 1; --k: 5" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(56.8 88.4)"><path class="glint" style="--ring: 1; --k: 6" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(68.4 68.4)"><path class="glint" style="--ring: 1; --k: 7" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(88.4 56.8)"><path class="glint" style="--ring: 1; --k: 8" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(111.6 56.8)"><path class="glint" style="--ring: 1; --k: 9" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(131.6 68.4)"><path class="glint" style="--ring: 1; --k: 10" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(143.2 88.4)"><path class="glint" style="--ring: 1; --k: 11" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(161.5 116.5)"><path class="glint" style="--ring: 2; --k: 0" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(145.0 145.0)"><path class="glint" style="--ring: 2; --k: 1" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(116.5 161.5)"><path class="glint" style="--ring: 2; --k: 2" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(83.5 161.5)"><path class="glint" style="--ring: 2; --k: 3" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(55.0 145.0)"><path class="glint" style="--ring: 2; --k: 4" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(38.5 116.5)"><path class="glint" style="--ring: 2; --k: 5" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(38.5 83.5)"><path class="glint" style="--ring: 2; --k: 6" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(55.0 55.0)"><path class="glint" style="--ring: 2; --k: 7" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(83.5 38.5)"><path class="glint" style="--ring: 2; --k: 8" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(116.5 38.5)"><path class="glint" style="--ring: 2; --k: 9" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(145.0 55.0)"><path class="glint" style="--ring: 2; --k: 10" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(161.5 83.5)"><path class="glint" style="--ring: 2; --k: 11" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(179.7 121.4)"><path class="glint" style="--ring: 3; --k: 0" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(158.4 158.4)"><path class="glint" style="--ring: 3; --k: 1" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(121.4 179.7)"><path class="glint" style="--ring: 3; --k: 2" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(78.6 179.7)"><path class="glint" style="--ring: 3; --k: 3" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(41.6 158.4)"><path class="glint" style="--ring: 3; --k: 4" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(20.3 121.4)"><path class="glint" style="--ring: 3; --k: 5" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(20.3 78.6)"><path class="glint" style="--ring: 3; --k: 6" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(41.6 41.6)"><path class="glint" style="--ring: 3; --k: 7" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(78.6 20.3)"><path class="glint" style="--ring: 3; --k: 8" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(121.4 20.3)"><path class="glint" style="--ring: 3; --k: 9" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(158.4 41.6)"><path class="glint" style="--ring: 3; --k: 10" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
-            <g transform="translate(179.7 78.6)"><path class="glint" style="--ring: 3; --k: 11" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(124.9 106.7)" style="--ring: 0"><path class="glint" style="--at: 0.000s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(118.2 118.2)" style="--ring: 0"><path class="glint" style="--at: 0.013s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(106.7 124.9)" style="--ring: 0"><path class="glint" style="--at: 0.027s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(93.3 124.9)" style="--ring: 0"><path class="glint" style="--at: 0.041s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(81.8 118.2)" style="--ring: 0"><path class="glint" style="--at: 0.054s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(75.1 106.7)" style="--ring: 0"><path class="glint" style="--at: 0.069s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(75.1 93.3)" style="--ring: 0"><path class="glint" style="--at: 0.083s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(81.8 81.8)" style="--ring: 0"><path class="glint" style="--at: 0.097s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(93.3 75.1)" style="--ring: 0"><path class="glint" style="--at: 0.112s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(106.7 75.1)" style="--ring: 0"><path class="glint" style="--at: 0.127s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(118.2 81.8)" style="--ring: 0"><path class="glint" style="--at: 0.142s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(124.9 93.3)" style="--ring: 0"><path class="glint" style="--at: 0.157s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(143.2 111.6)" style="--ring: 1"><path class="glint" style="--at: 0.000s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(131.6 131.6)" style="--ring: 1"><path class="glint" style="--at: 0.023s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(111.6 143.2)" style="--ring: 1"><path class="glint" style="--at: 0.047s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(88.4 143.2)" style="--ring: 1"><path class="glint" style="--at: 0.072s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(68.4 131.6)" style="--ring: 1"><path class="glint" style="--at: 0.097s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(56.8 111.6)" style="--ring: 1"><path class="glint" style="--at: 0.122s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(56.8 88.4)" style="--ring: 1"><path class="glint" style="--at: 0.148s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(68.4 68.4)" style="--ring: 1"><path class="glint" style="--at: 0.174s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(88.4 56.8)" style="--ring: 1"><path class="glint" style="--at: 0.202s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(111.6 56.8)" style="--ring: 1"><path class="glint" style="--at: 0.229s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(131.6 68.4)" style="--ring: 1"><path class="glint" style="--at: 0.257s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(143.2 88.4)" style="--ring: 1"><path class="glint" style="--at: 0.286s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(161.5 116.5)" style="--ring: 2"><path class="glint" style="--at: 0.000s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(145.0 145.0)" style="--ring: 2"><path class="glint" style="--at: 0.033s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(116.5 161.5)" style="--ring: 2"><path class="glint" style="--at: 0.068s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(83.5 161.5)" style="--ring: 2"><path class="glint" style="--at: 0.103s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(55.0 145.0)" style="--ring: 2"><path class="glint" style="--at: 0.140s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(38.5 116.5)" style="--ring: 2"><path class="glint" style="--at: 0.178s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(38.5 83.5)" style="--ring: 2"><path class="glint" style="--at: 0.217s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(55.0 55.0)" style="--ring: 2"><path class="glint" style="--at: 0.257s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(83.5 38.5)" style="--ring: 2"><path class="glint" style="--at: 0.298s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(116.5 38.5)" style="--ring: 2"><path class="glint" style="--at: 0.341s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(145.0 55.0)" style="--ring: 2"><path class="glint" style="--at: 0.386s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(161.5 83.5)" style="--ring: 2"><path class="glint" style="--at: 0.432s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(179.7 121.4)" style="--ring: 3"><path class="glint" style="--at: 0.000s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(158.4 158.4)" style="--ring: 3"><path class="glint" style="--at: 0.043s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(121.4 179.7)" style="--ring: 3"><path class="glint" style="--at: 0.089s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(78.6 179.7)" style="--ring: 3"><path class="glint" style="--at: 0.136s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(41.6 158.4)" style="--ring: 3"><path class="glint" style="--at: 0.185s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(20.3 121.4)" style="--ring: 3"><path class="glint" style="--at: 0.236s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(20.3 78.6)" style="--ring: 3"><path class="glint" style="--at: 0.289s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(41.6 41.6)" style="--ring: 3"><path class="glint" style="--at: 0.344s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(78.6 20.3)" style="--ring: 3"><path class="glint" style="--at: 0.403s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(121.4 20.3)" style="--ring: 3"><path class="glint" style="--at: 0.465s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(158.4 41.6)" style="--ring: 3"><path class="glint" style="--at: 0.532s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
+            <g class="glint-at" transform="translate(179.7 78.6)" style="--ring: 3"><path class="glint" style="--at: 0.606s" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" /></g>
           </g>
         </svg>
         <!--

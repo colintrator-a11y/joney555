@@ -476,6 +476,67 @@ a {
   .btn.btn-primary::after { animation: none; opacity: 0; }
 }
 
+/*
+ * Every button flashes when the pointer reaches it, as the dock's do: a flare
+ * of light that follows the button's own shape, settling into a soft glow for
+ * as long as the pointer stays. Done with a filter on the button itself rather
+ * than a pseudo-element, since several of these already use theirs (the
+ * primary's sweep, the filters' counts).
+ */
+.btn,
+.tag-button,
+.filter,
+.filter-reset,
+.back-to-top,
+.lightbox-close,
+.lightbox-step {
+  --flash-glow: var(--glow);
+}
+
+.btn:hover,
+.btn:focus-visible,
+.tag-button:hover,
+.tag-button:focus-visible,
+.filter:hover,
+.filter:focus-visible,
+.filter-reset:hover,
+.filter-reset:focus-visible,
+.back-to-top:hover,
+.back-to-top:focus-visible,
+.lightbox-close:hover,
+.lightbox-step:hover {
+  animation: ui-flash 0.55s ease-out forwards;
+}
+
+@keyframes ui-flash {
+  0% { filter: brightness(1); }
+  20% {
+    filter: brightness(1.7) drop-shadow(0 0 5px rgba(255, 255, 255, 0.95))
+      drop-shadow(0 0 12px rgb(var(--flash-glow)));
+  }
+  100% {
+    filter: brightness(1.12) drop-shadow(0 0 5px rgba(var(--flash-glow), 0.6));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn:hover,
+  .btn:focus-visible,
+  .tag-button:hover,
+  .tag-button:focus-visible,
+  .filter:hover,
+  .filter:focus-visible,
+  .filter-reset:hover,
+  .filter-reset:focus-visible,
+  .back-to-top:hover,
+  .back-to-top:focus-visible,
+  .lightbox-close:hover,
+  .lightbox-step:hover {
+    animation: none;
+    filter: brightness(1.12) drop-shadow(0 0 5px rgba(var(--flash-glow), 0.6));
+  }
+}
+
 .sr-only {
   position: absolute;
   width: 1px;

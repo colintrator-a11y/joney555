@@ -477,9 +477,9 @@ a {
 }
 
 /*
- * Every button flashes when the pointer reaches it, as the dock's do: a flare
- * of light that follows the button's own shape, settling into a soft glow for
- * as long as the pointer stays. Done with a filter on the button itself rather
+ * Every button, and every tag of the stack, flashes when the pointer reaches
+ * it, as the dock's do: a flare of light that follows its own shape, settling
+ * into a soft glow for as long as the pointer stays. Done with a filter on the button itself rather
  * than a pseudo-element, since several of these already use theirs (the
  * primary's sweep, the filters' counts).
  */
@@ -489,7 +489,9 @@ a {
 .filter-reset,
 .back-to-top,
 .lightbox-close,
-.lightbox-step {
+.lightbox-step,
+.chip,
+.timeline-skills li {
   --flash-glow: var(--glow);
 }
 
@@ -504,7 +506,9 @@ a {
 .back-to-top:hover,
 .back-to-top:focus-visible,
 .lightbox-close:hover,
-.lightbox-step:hover {
+.lightbox-step:hover,
+.chip:hover,
+.timeline-skills li:hover {
   animation: ui-flash 0.55s ease-out forwards;
 }
 
@@ -531,7 +535,9 @@ a {
   .back-to-top:hover,
   .back-to-top:focus-visible,
   .lightbox-close:hover,
-  .lightbox-step:hover {
+  .lightbox-step:hover,
+  .chip:hover,
+  .timeline-skills li:hover {
     animation: none;
     filter: brightness(1.12) drop-shadow(0 0 5px rgba(var(--flash-glow), 0.6));
   }

@@ -55,26 +55,26 @@
   min-height: 100%;
 }
 
-/* The thread itself. It runs past the bottom of its own row so the segments
-   meet across the gap and read as one line. */
+/* The thread itself, in the webs' silvery blue with a glow of its own so it
+   holds against the galaxy. It runs past the bottom of its own row so the
+   segments meet across the gap and read as one line. */
 .timeline-rail::before {
   content: '';
   position: absolute;
   top: 26px;
   bottom: -20px;
   left: 50%;
-  width: 1px;
+  width: 2px;
   transform: translateX(-50%);
-  background: linear-gradient(
-    var(--line-strong),
-    color-mix(in srgb, var(--accent) 35%, transparent)
-  );
+  border-radius: 2px;
+  background: linear-gradient(rgba(var(--silk), 0.9), rgba(var(--glow), 0.65));
+  box-shadow: 0 0 8px rgba(var(--silk-glow), 0.65), 0 0 2px rgba(255, 255, 255, 0.4);
 }
 
 /* The last role ends the thread rather than leaving it cut off. */
 .timeline-item:last-child .timeline-rail::before {
   bottom: 24px;
-  background: linear-gradient(var(--line-strong), transparent);
+  background: linear-gradient(rgba(var(--silk), 0.9), transparent);
 }
 
 /* A light travelling down the thread, each segment a beat after the one above
@@ -89,61 +89,101 @@
   top: 26px;
   bottom: -20px;
   left: 50%;
-  width: 1px;
+  width: 3px;
   transform: translateX(-50%);
-  background-image: linear-gradient(transparent, rgb(var(--glow)), transparent);
-  background-size: 100% 54px;
+  background-image: linear-gradient(transparent, #ffffff, transparent);
+  background-size: 100% 64px;
   background-repeat: no-repeat;
+  filter: drop-shadow(0 0 4px rgb(var(--glow)));
   animation: timeline-pulse 4.6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
   animation-delay: calc(var(--step, 0) * 0.42s);
 }
 
 @keyframes timeline-pulse {
-  0% { background-position: 0 -54px; opacity: 0; }
-  10% { opacity: 0.9; }
-  45% { opacity: 0.9; }
-  55%, 100% { background-position: 0 calc(100% + 54px); opacity: 0; }
+  0% { background-position: 0 -64px; opacity: 0; }
+  10% { opacity: 1; }
+  45% { opacity: 1; }
+  55%, 100% { background-position: 0 calc(100% + 64px); opacity: 0; }
 }
+
+/*
+ * Each role is a planet on the thread: a lit sphere with cloud bands turning
+ * slowly across it, a colour of its own, and a glow in that colour. The role
+ * being worked now is the ringed one, in the logo's blue.
+ *
+ * Two background layers: the bands on top (the one that moves, to turn the
+ * planet), the shaded sphere under them. The inset shadow is the night side.
+ */
+.timeline-item { --p-hi: #e6f4ff; --p-mid: #3d8bff; --p-lo: #0a1f6b; --p-glow: 61, 169, 252; }
+.timeline-item:nth-child(5n + 2) { --p-hi: #ffe9c4; --p-mid: #e8a54a; --p-lo: #5a2e0c; --p-glow: 232, 180, 90; }
+.timeline-item:nth-child(5n + 3) { --p-hi: #d4fff8; --p-mid: #3cc7bd; --p-lo: #0b3d44; --p-glow: 73, 208, 196; }
+.timeline-item:nth-child(5n + 4) { --p-hi: #ffd9e2; --p-mid: #e46b7f; --p-lo: #4a1020; --p-glow: 240, 143, 176; }
+.timeline-item:nth-child(5n + 5) { --p-hi: #eadfff; --p-mid: #9a7cf0; --p-lo: #2a1660; --p-glow: 157, 143, 240; }
 
 .timeline-node {
   position: absolute;
   top: 26px;
   left: 50%;
-  width: 11px;
-  height: 11px;
-  margin: -5px 0 0 -5px;
+  width: 22px;
+  height: 22px;
+  margin: -11px 0 0 -11px;
   border-radius: 50%;
-  background: var(--bg);
-  border: 1px solid color-mix(in srgb, var(--accent) 60%, transparent);
+  background:
+    repeating-linear-gradient(
+      172deg,
+      rgba(255, 255, 255, 0.16) 0 2px,
+      transparent 2px 5px,
+      rgba(0, 0, 0, 0.2) 5px 7px,
+      transparent 7px 10px
+    ) 0 0 / 44px 100%,
+    radial-gradient(circle at 34% 30%, var(--p-hi) 0 8%, var(--p-mid) 42%, var(--p-lo) 82%, #01030a 100%);
+  box-shadow:
+    inset -4px -3px 7px rgba(0, 0, 0, 0.55),
+    inset 1px 1px 3px rgba(255, 255, 255, 0.35),
+    0 0 14px 2px rgba(var(--p-glow), 0.55);
+  transition: transform 0.3s var(--tilt-ease, ease), box-shadow 0.3s ease;
+  animation: planet-turn 10s linear infinite;
+  animation-delay: calc(var(--step, 0) * -2.3s);
 }
 
-.timeline-node::before {
-  content: '';
-  position: absolute;
-  inset: 2px;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 12px 1px rgba(var(--glow), 0.8);
+@keyframes planet-turn {
+  to { background-position: 44px 0, 0 0; }
 }
 
-/* The role being worked now: a ring leaving the node, as on the loader. */
+/* The current role's ring: the far side behind the planet, the near side in
+   front of it, tilted, so the planet sits inside the ring rather than under a
+   hoop laid over it. */
+.is-current .timeline-node::before,
 .is-current .timeline-node::after {
   content: '';
   position: absolute;
-  inset: -5px;
+  top: 50%;
+  left: 50%;
+  width: 42px;
+  height: 13px;
+  margin: -6.5px 0 0 -21px;
   border-radius: 50%;
-  border: 1px solid rgba(var(--glow), 0.6);
-  animation: timeline-ring 2.8s ease-out infinite;
+  border: 2px solid rgba(var(--silk), 0.9);
+  transform: rotate(-18deg);
+  box-shadow: 0 0 8px rgba(var(--p-glow), 0.6);
 }
 
-@keyframes timeline-ring {
-  0% { transform: scale(0.6); opacity: 0.9; }
-  100% { transform: scale(2.3); opacity: 0; }
+.is-current .timeline-node::before { z-index: -1; }
+
+/* Only the lower half of the ellipse, cut before it is tilted: the near
+   side, which passes in front of the planet. */
+.is-current .timeline-node::after {
+  clip-path: inset(50% -4px -4px -4px);
+  box-shadow: none;
 }
 
-/* Hovering the card lights its node, so the two read as one row. */
-.timeline-item:hover .timeline-node::before {
-  box-shadow: 0 0 20px 3px rgba(var(--glow), 0.95);
+/* Hovering the card brings its planet forward, so the two read as one row. */
+.timeline-item:hover .timeline-node {
+  transform: scale(1.2);
+  box-shadow:
+    inset -4px -3px 7px rgba(0, 0, 0, 0.55),
+    inset 1px 1px 3px rgba(255, 255, 255, 0.35),
+    0 0 22px 4px rgba(var(--p-glow), 0.8);
 }
 
 /* --------------------------------- card --------------------------------- */
@@ -325,7 +365,7 @@
 
   .timeline-rail::before,
   .timeline-rail::after,
-  .timeline-node { top: 7px; }
+  .timeline-node { top: 11px; }
 
   .timeline-card::before { display: none; }
 
@@ -340,6 +380,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .timeline-rail::after,
-  .is-current .timeline-node::after { animation: none; }
+  .timeline-node { animation: none; }
   .timeline-rail::after { opacity: 0; }
 }

@@ -20,9 +20,11 @@
   /* The glow, as raw channels: used wherever something should look lit
      rather than merely coloured — the dock, the rings, the web. */
   --glow: 61, 169, 252;
-  /* The cobwebs' thread, as raw channels like the glow: a light ice-blue, so
-     the silk catches the light and stands off the deep blue of the sky. */
-  --silk: 186, 228, 255;
+  /* The cobwebs' thread, as raw channels like the glow: the logo's own web
+     blue, sampled from the artwork, so every web on the page is the one in
+     the mark. --silk-glow is the cyan its threads burn to where they glow. */
+  --silk: 0, 140, 250;
+  --silk-glow: 110, 230, 255;
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
   --shadow-md: 0 18px 44px -26px rgba(0, 0, 0, 0.9);
 
@@ -75,6 +77,7 @@
   --glow: 168, 85, 247;
   /* A pale thread vanishes on a pale page: by day the silk keeps the accent. */
   --silk: 168, 85, 247;
+  --silk-glow: 168, 85, 247;
   --shadow-sm: 0 1px 2px rgba(60, 30, 90, 0.06);
   --shadow-md: 0 16px 40px -24px rgba(60, 30, 90, 0.45);
 

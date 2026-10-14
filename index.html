@@ -129,12 +129,14 @@
         width: 100%;
         height: 100%;
         fill: none;
-        stroke: #bae4ff;
-        stroke-width: 1;
+        stroke: #008cfa;
+        stroke-width: 1.2;
         stroke-linecap: round;
+        /* The logo's neon: blue thread, cyan glow. */
+        filter: drop-shadow(0 0 3px rgba(110, 230, 255, 0.85));
       }
 
-      html[data-theme='light'] .boot-web { stroke: #a855f7; }
+      html[data-theme='light'] .boot-web { stroke: #a855f7; filter: none; }
 
       /*
        * The web spins itself: every thread is a dashed line whose single dash

@@ -3,10 +3,11 @@
  * icons slipping out of line); the light happens on layers behind and around
  * the icon instead.
  *
- * Hover: a burst of light blooms behind the icon and fades, and the icon
- * flares bright for a moment. Click: the same, stronger, and a ring of light
- * leaves the button — set by script (.is-flashing), since :active is over
- * before an animation could finish.
+ * Hover: a burst of light blooms behind the icon, then settles into a held
+ * glow — a lit ring round the button, a soft light behind it and a brighter
+ * icon — for as long as the pointer stays. Click: a stronger flash and a ring
+ * of light leaving the button, set by script (.is-flashing), since :active is
+ * over before an animation could finish.
  */
 .dock-btn {
   isolation: isolate;
@@ -23,6 +24,7 @@
   z-index: -1;
 }
 
+/* The light behind the icon. */
 .dock-btn::before {
   background: radial-gradient(
     circle,
@@ -33,43 +35,63 @@
   );
 }
 
+/* The ring round the button. */
+.dock-btn::after {
+  border: 1.5px solid rgba(var(--silk), 0.9);
+  box-shadow: 0 0 10px rgba(var(--glow), 0.75), inset 0 0 8px rgba(var(--glow), 0.55);
+  z-index: 1;
+}
+
+/* Hover: flash, then hold. `forwards` keeps each layer at its last frame, so
+   the end of the flash is the held glow. */
 .dock-btn:hover::before,
 .dock-btn:focus-visible::before {
-  animation: dock-flash 0.55s ease-out;
+  animation: dock-flash 0.55s ease-out forwards;
+}
+
+.dock-btn:hover::after,
+.dock-btn:focus-visible::after {
+  animation: dock-ring-in 0.55s ease-out forwards;
 }
 
 .dock-btn:hover > svg,
 .dock-btn:hover > img,
 .dock-btn:focus-visible > svg,
 .dock-btn:focus-visible > img {
-  animation: dock-icon-flash 0.55s ease-out;
+  animation: dock-icon-flash 0.55s ease-out forwards;
 }
 
-/* Clicked: the stronger flash, and the ring. Kept inside the pill's padding,
-   which clips anything that spills further. */
+/* Clicked: the stronger flash, and the ring bursting outwards. After it the
+   class comes off and, with the pointer still there, the held glow returns. */
 .dock-btn.is-flashing::before {
   animation: dock-flash-strong 0.6s ease-out;
-}
-
-.dock-btn.is-flashing > svg,
-.dock-btn.is-flashing > img {
-  animation: dock-icon-flash 0.6s ease-out;
-}
-
-.dock-btn::after {
-  border: 2px solid rgba(255, 255, 255, 0.95);
-  box-shadow: 0 0 10px rgba(var(--glow), 0.9), inset 0 0 8px rgba(var(--glow), 0.7);
-  z-index: 1;
 }
 
 .dock-btn.is-flashing::after {
   animation: dock-burst 0.6s ease-out;
 }
 
+.dock-btn.is-flashing > svg,
+.dock-btn.is-flashing > img {
+  animation: dock-icon-flash 0.6s ease-out forwards;
+}
+
 @keyframes dock-flash {
   0% { opacity: 0; transform: scale(0.35); }
   22% { opacity: 1; transform: scale(1.12); }
-  100% { opacity: 0; transform: scale(1.2); }
+  100% { opacity: 0.28; transform: scale(1); }
+}
+
+@keyframes dock-ring-in {
+  0% { opacity: 0; transform: scale(0.6); }
+  22% { opacity: 1; transform: scale(1.06); }
+  100% { opacity: 0.85; transform: scale(1); }
+}
+
+@keyframes dock-icon-flash {
+  0% { filter: brightness(1); }
+  22% { filter: brightness(2.4) drop-shadow(0 0 6px #ffffff) drop-shadow(0 0 10px rgb(var(--glow))); }
+  100% { filter: brightness(1.35) drop-shadow(0 0 4px rgba(var(--glow), 0.9)); }
 }
 
 @keyframes dock-flash-strong {
@@ -83,17 +105,25 @@
   100% { opacity: 0; transform: scale(1.25); }
 }
 
-@keyframes dock-icon-flash {
-  0% { filter: brightness(1); }
-  22% { filter: brightness(2.4) drop-shadow(0 0 6px #ffffff) drop-shadow(0 0 10px rgb(var(--glow))); }
-  100% { filter: brightness(1); }
-}
-
+/* Movement off: no flash, but the held glow still marks the button. */
 @media (prefers-reduced-motion: reduce) {
   .dock-btn::before,
   .dock-btn::after,
   .dock-btn > svg,
   .dock-btn > img {
     animation: none !important;
+  }
+
+  .dock-btn:hover::before,
+  .dock-btn:focus-visible::before { opacity: 0.28; }
+
+  .dock-btn:hover::after,
+  .dock-btn:focus-visible::after { opacity: 0.85; }
+
+  .dock-btn:hover > svg,
+  .dock-btn:hover > img,
+  .dock-btn:focus-visible > svg,
+  .dock-btn:focus-visible > img {
+    filter: brightness(1.35) drop-shadow(0 0 4px rgba(var(--glow), 0.9));
   }
 }

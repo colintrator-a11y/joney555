@@ -113,11 +113,11 @@ export default function Experience() {
                     ))}
                   </ul>
 
-                  {/* The same chips as the skills section: the technologies are
+                  {/* Tagged like the projects: the technologies are
                       proper nouns and read as names, not sentences. */}
                   <ul className="timeline-skills">
                     {job.skills.map((skill) => (
-                      <li key={skill} className="chip">{skill}</li>
+                      <li key={skill}>{skill}</li>
                     ))}
                   </ul>
                 </div>

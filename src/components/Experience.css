@@ -259,7 +259,7 @@
   background: color-mix(in srgb, var(--accent) 55%, var(--line-strong));
 }
 
-/* The technologies, as chips rather than bullets: they are names, and a row
+/* The technologies, as tags rather than bullets: they are names, and a row
    of them reads faster than another list.
 
    Qualified by .timeline-card because the responsibilities rule above it is
@@ -274,7 +274,29 @@
   border-top: 1px solid var(--line);
 }
 
-.timeline-card ul.timeline-skills li { padding-left: 0; }
+/* The same look as the project tags (.tag-button in Projects.css), so a
+   technology reads the same wherever it appears. Restated in full because
+   the responsibilities rule above outranks .chip and .tag-button alike. */
+.timeline-card ul.timeline-skills li {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 9px;
+  font-size: 0.745rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--ink-faint);
+  background: var(--bg-sunken);
+  border: 1px solid transparent;
+  border-radius: 6px;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.timeline-card ul.timeline-skills li:hover {
+  color: var(--accent-ink);
+  border-color: var(--accent);
+}
+
 .timeline-card ul.timeline-skills li::before { display: none; }
 
 /* ------------------------------- responsive ------------------------------ */

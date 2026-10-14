@@ -88,8 +88,9 @@ export default function Hero() {
       {/* The rail from the reference: one column of ways to reach me, held at
           the left edge, with a line running down to the page below. */}
       <ul className="social-rail" aria-label={t.contact.form.directTitle}>
-        {contactChannels.map((channel) => (
-          <li key={channel.id}>
+        {contactChannels.map((channel, index) => (
+          // `--n` puts each icon a beat after the one above it in the alarm.
+          <li key={channel.id} style={{ '--n': index }}>
             <a
               href={channel.href}
               className={copied === channel.id ? 'is-copied' : undefined}

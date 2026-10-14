@@ -165,6 +165,7 @@ export default function SpaceField() {
       return {
         star: styles.getPropertyValue('--ink-soft').trim() || '#a6b4cd',
         glow: styles.getPropertyValue('--glow').trim() || '61, 169, 252',
+        silk: styles.getPropertyValue('--silk').trim() || '214, 224, 240',
         // Not a token: nothing else on the page is this colour, and a sky
         // with no warm light in it looks printed rather than seen.
         warm: '#ffd9a8',
@@ -476,7 +477,7 @@ export default function SpaceField() {
             length: WEB_RADIUS * spoke.reach * spread,
           }))
 
-          context.strokeStyle = `rgb(${colours.glow})`
+          context.strokeStyle = `rgb(${colours.silk})`
 
           // The spokes.
           context.globalAlpha = fade * 0.55
@@ -531,7 +532,7 @@ export default function SpaceField() {
           context.globalAlpha = fade * 0.8
           context.beginPath()
           context.arc(web.x, web.y, 1.6, 0, Math.PI * 2)
-          context.fillStyle = `rgb(${colours.glow})`
+          context.fillStyle = `rgb(${colours.silk})`
           context.fill()
         }
       }

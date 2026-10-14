@@ -76,21 +76,21 @@
 }
 
 .web-emblem-spokes path {
-  stroke: color-mix(in srgb, var(--accent) 46%, transparent);
+  stroke: rgba(var(--silk), 0.5);
   stroke-width: 0.9;
 }
 
 /* The outer threads are the ones a web carries its weight on, so they are the
    ones that read; the inner ones are finer. */
 .web-emblem-threads path {
-  stroke: color-mix(in srgb, var(--accent) 60%, transparent);
+  stroke: rgba(var(--silk), 0.68);
   stroke-width: 1.1;
   opacity: calc(0.45 + var(--ring) * 0.14);
 }
 
 .web-emblem-dew circle {
-  fill: rgb(var(--glow));
-  filter: drop-shadow(0 0 4px rgba(var(--glow), 0.9));
+  fill: rgb(var(--silk));
+  filter: drop-shadow(0 0 4px rgba(var(--silk), 0.9));
   animation: web-dew 4.2s ease-in-out infinite;
   animation-delay: calc(var(--dew) * -1.4s);
 }

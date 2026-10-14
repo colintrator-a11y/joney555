@@ -20,6 +20,9 @@
   /* The glow, as raw channels: used wherever something should look lit
      rather than merely coloured — the dock, the rings, the web. */
   --glow: 61, 169, 252;
+  /* The cobwebs' thread, as raw channels like the glow: silver, so the silk
+     catches the light and stands off the blue sky and the blue spider. */
+  --silk: 214, 224, 240;
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
   --shadow-md: 0 18px 44px -26px rgba(0, 0, 0, 0.9);
 
@@ -70,6 +73,8 @@
   --accent-soft: #f6e9ff;
   --accent-ink: #7c2fcb;
   --glow: 168, 85, 247;
+  /* A pale thread vanishes on a pale page: by day the silk keeps the accent. */
+  --silk: 168, 85, 247;
   --shadow-sm: 0 1px 2px rgba(60, 30, 90, 0.06);
   --shadow-md: 0 16px 40px -24px rgba(60, 30, 90, 0.45);
 
@@ -182,7 +187,7 @@ a {
   left: -30px;
   width: 54px;
   height: 54px;
-  background: var(--accent);
+  background: rgb(var(--silk));
   /*
    * Two masks, intersected: the web itself, and a circle of light centred on
    * the corner it hangs from. The second one is what lets the threads fade

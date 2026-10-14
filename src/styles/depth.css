@@ -95,12 +95,6 @@
    element in script. */
 .depth-ready [data-reveal] { transition-delay: var(--reveal-delay, 0ms); }
 
-/* ------------------------------ the dock ------------------------------ */
-
-/* The pill is the one surface that is always on screen, so it keeps a fixed
-   vanishing point of its own and its circles tip inside it. */
-header nav { perspective: 600px; transform-style: preserve-3d; }
-
 /* --------------------------- reduced motion --------------------------- */
 
 /*

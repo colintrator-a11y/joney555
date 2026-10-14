@@ -20,11 +20,11 @@
   /* The glow, as raw channels: used wherever something should look lit
      rather than merely coloured — the dock, the rings, the web. */
   --glow: 61, 169, 252;
-  /* The cobwebs' thread, as raw channels like the glow: a light blue in the
-     logo's family, pale enough to read on the deep blue sky. --silk-glow is
-     the logo's own electric blue, for the light around the threads. */
-  --silk: 140, 200, 255;
-  --silk-glow: 0, 140, 250;
+  /* The cobwebs' thread, as raw channels like the glow: a silvery blue, the
+     colour of the logo's highlights, which the webs shimmer over in white.
+     --silk-glow is the logo's own blue, for the light around the threads. */
+  --silk: 200, 222, 248;
+  --silk-glow: 90, 160, 255;
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
   --shadow-md: 0 18px 44px -26px rgba(0, 0, 0, 0.9);
 
@@ -190,7 +190,9 @@ a {
   left: -30px;
   width: 54px;
   height: 54px;
-  background: rgb(var(--silk));
+  background:
+    linear-gradient(135deg, rgb(var(--silk)) 40%, #ffffff 50%, rgb(var(--silk)) 60%) 0 0 / 300% 300%;
+  animation: web-sheen 4.2s ease-in-out infinite;
   /*
    * Two masks, intersected: the web itself, and a circle of light centred on
    * the corner it hangs from. The second one is what lets the threads fade
@@ -205,8 +207,76 @@ a {
   mask-repeat: no-repeat, no-repeat;
   -webkit-mask-composite: source-in;
   mask-composite: intersect;
-  opacity: 0.2;
+  opacity: 0.45;
   pointer-events: none;
+}
+
+/* Glints on every crossing of the corner web's threads (the anchor points of
+   its spiral, read from --web-corner), lit in turn by a diagonal band of light
+   travelling out from the corner: the web shimmers rather than sitting still. */
+.section-head::after {
+  content: '';
+  position: absolute;
+  top: -26px;
+  left: -30px;
+  width: 54px;
+  height: 54px;
+  background:
+    radial-gradient(circle at 25.9% 2.7%, #ffffff 0 0.7px, rgba(var(--silk), 0.7) 1.1px, transparent 2.4px),
+    radial-gradient(circle at 24.6% 8.5%, #ffffff 0 0.7px, rgba(var(--silk), 0.7) 1.1px, transparent 2.4px),
+    radial-gradient(circle at 22.0% 13.8%, #ffffff 0 0.7px, rgba(var(--silk), 0.7) 1.1px, transparent 2.4px),
+    radial-gradient(circle at 18.4% 18.4%, #ffffff 0 0.7px, rgba(var(--silk), 0.7) 1.1px, transparent 2.4px),
+    radial-gradient(circle at 13.8% 22.0%, #ffffff 0 0.7px, rgba(var(--silk), 0.7) 1.1px, transparent 2.4px),
+    radial-gradient(circle at 8.5% 24.6%, #ffffff 0 0.7px, rgba(var(--silk), 0.7) 1.1px, transparent 2.4px),
+    radial-gradient(circle at 2.7% 25.9%, #ffffff 0 0.7px, rgba(var(--silk), 0.7) 1.1px, transparent 2.4px),
+    radial-gradient(circle at 49.7% 5.2%, #ffffff 0 0.7px, rgba(var(--silk), 0.7) 1.1px, transparent 2.4px),
+    radial-gradient(circle at 47.3% 16.3%, #ffffff 0 0.7px, rgba(var(--silk), 0.7) 1.1px, transparent 2.4px),
+    radial-gradient(circle at 42.4% 26.5%, #ffffff 0 0.7px, rgba(var(--silk), 0.7) 1.1px, transparent 2.4px),
+    radial-gradient(circle at 35.4% 35.4%, #ffffff 0 0.7px, rgba(var(--silk), 0.7) 1.1px, transparent 2.4px),
+    radial-gradient(circle at 26.5% 42.4%, #ffffff 0 0.7px, rgba(var(--silk), 0.7) 1.1px, transparent 2.4px),
+    radial-gradient(circle at 16.3% 47.3%, #ffffff 0 0.7px, rgba(var(--silk), 0.7) 1.1px, transparent 2.4px),
+    radial-gradient(circle at 5.2% 49.7%, #ffffff 0 0.7px, rgba(var(--silk), 0.7) 1.1px, transparent 2.4px),
+    radial-gradient(circle at 73.6% 7.7%, #ffffff 0 0.7px, rgba(var(--silk), 0.7) 1.1px, transparent 2.4px),
+    radial-gradient(circle at 70.0% 24.1%, #ffffff 0 0.7px, rgba(var(--silk), 0.7) 1.1px, transparent 2.4px),
+    radial-gradient(circle at 62.8% 39.2%, #ffffff 0 0.7px, rgba(var(--silk), 0.7) 1.1px, transparent 2.4px),
+    radial-gradient(circle at 52.3% 52.3%, #ffffff 0 0.7px, rgba(var(--silk), 0.7) 1.1px, transparent 2.4px),
+    radial-gradient(circle at 39.2% 62.8%, #ffffff 0 0.7px, rgba(var(--silk), 0.7) 1.1px, transparent 2.4px),
+    radial-gradient(circle at 24.1% 70.0%, #ffffff 0 0.7px, rgba(var(--silk), 0.7) 1.1px, transparent 2.4px),
+    radial-gradient(circle at 7.7% 73.6%, #ffffff 0 0.7px, rgba(var(--silk), 0.7) 1.1px, transparent 2.4px),
+    radial-gradient(circle at 97.5% 10.2%, #ffffff 0 0.7px, rgba(var(--silk), 0.7) 1.1px, transparent 2.4px),
+    radial-gradient(circle at 92.7% 31.9%, #ffffff 0 0.7px, rgba(var(--silk), 0.7) 1.1px, transparent 2.4px),
+    radial-gradient(circle at 83.1% 51.9%, #ffffff 0 0.7px, rgba(var(--silk), 0.7) 1.1px, transparent 2.4px),
+    radial-gradient(circle at 69.3% 69.3%, #ffffff 0 0.7px, rgba(var(--silk), 0.7) 1.1px, transparent 2.4px),
+    radial-gradient(circle at 51.9% 83.1%, #ffffff 0 0.7px, rgba(var(--silk), 0.7) 1.1px, transparent 2.4px),
+    radial-gradient(circle at 31.9% 92.7%, #ffffff 0 0.7px, rgba(var(--silk), 0.7) 1.1px, transparent 2.4px),
+    radial-gradient(circle at 10.2% 97.5%, #ffffff 0 0.7px, rgba(var(--silk), 0.7) 1.1px, transparent 2.4px);
+  -webkit-mask-image: linear-gradient(135deg, transparent 35%, #000 50%, transparent 65%);
+  mask-image: linear-gradient(135deg, transparent 35%, #000 50%, transparent 65%);
+  -webkit-mask-size: 300% 300%;
+  mask-size: 300% 300%;
+  animation: web-glint 4.2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes web-sheen {
+  0% { background-position: 100% 100%; }
+  70%, 100% { background-position: 0% 0%; }
+}
+
+@keyframes web-glint {
+  0% { -webkit-mask-position: 100% 100%; mask-position: 100% 100%; }
+  70%, 100% { -webkit-mask-position: 0% 0%; mask-position: 0% 0%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section-head::before { animation: none; }
+
+  .section-head::after {
+    animation: none;
+    -webkit-mask-image: none;
+    mask-image: none;
+    opacity: 0.6;
+  }
 }
 
 @media (max-width: 760px) {

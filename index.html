@@ -129,14 +129,43 @@
         width: 100%;
         height: 100%;
         fill: none;
-        stroke: #8cc8ff;
+        stroke: url(#boot-silk);
         stroke-width: 1.2;
         stroke-linecap: round;
-        /* Light blue thread in the logo's electric-blue glow. */
-        filter: drop-shadow(0 0 3px rgba(0, 140, 250, 0.9));
+        /* Silvery-blue thread, shimmering, in the logo's blue glow. */
+        filter: drop-shadow(0 0 3px rgba(90, 160, 255, 0.9));
+      }
+
+      /* A glint on every crossing, lit once its ring has been spun, then
+         twinkling until the web lets go. */
+      /* The glint is defined once in <defs>, outside the group of glints, and
+         is a path like the threads: it is kept off their dash animation. */
+      .boot-web .glint {
+        fill: #ffffff;
+        stroke: none;
+        stroke-dasharray: none;
+        animation: none;
+        filter: drop-shadow(0 0 2px #ffffff);
+      }
+
+      .boot-glints use {
+        opacity: 0;
+        transform-box: fill-box;
+        transform-origin: center;
+        animation: boot-glint 2.6s ease-in-out infinite;
+        animation-delay: calc(0.62s + var(--ring) * 0.22s + var(--k) * 0.035s);
+      }
+
+      @keyframes boot-glint {
+        0% { opacity: 0; transform: scale(0.3); }
+        14% { opacity: 1; transform: scale(1.25); }
+        28% { opacity: 0.35; transform: scale(0.75); }
+        42% { opacity: 1; transform: scale(1.1); }
+        60%, 100% { opacity: 0; transform: scale(0.4); }
       }
 
       html[data-theme='light'] .boot-web { stroke: #a855f7; filter: none; }
+      html[data-theme='light'] .boot-web .glint { fill: #d9b8ff; filter: none; }
 
       /*
        * The web spins itself: every thread is a dashed line whose single dash
@@ -225,6 +254,7 @@
       /* Movement off: the web is shown spun rather than spinning. */
       @media (prefers-reduced-motion: reduce) {
         .boot-web path { animation: none; stroke-dashoffset: 0; }
+        .boot-glints use { animation: none; opacity: 0.8; }
         .boot-mark { animation: none; }
         .boot-track i { animation: boot-fade 1.6s ease-in-out infinite; width: 100%; }
         @keyframes boot-fade { 0%, 100% { opacity: 0.25; } 50% { opacity: 1; } }
@@ -235,6 +265,19 @@
     <div id="boot" role="status" aria-live="polite" aria-label="Loading the portfolio">
       <div class="boot-stage">
         <svg class="boot-web" viewBox="0 0 200 200" aria-hidden="true">
+          <defs>
+            <!-- The shimmer: a band of white crossing the silver thread. -->
+            <linearGradient id="boot-silk" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="200" y2="200">
+              <stop offset="0.38" stop-color="#c8def8" />
+              <stop offset="0.5" stop-color="#ffffff" />
+              <stop offset="0.62" stop-color="#c8def8" />
+              <animateTransform attributeName="gradientTransform" type="translate" from="-200 -200" to="200 200" dur="2.6s" repeatCount="indefinite" />
+            </linearGradient>
+            <!-- A four-pointed glint, centred on 0,0, placed on each crossing. -->
+            <symbol id="boot-glint" overflow="visible">
+              <path class="glint" d="M0 -4.5L0.7 -0.7L4.5 0L0.7 0.7L0 4.5L-0.7 0.7L-4.5 0L-0.7 -0.7Z" />
+            </symbol>
+          </defs>
           <path class="spoke" d="M100 100L183.1 122.3" />
           <path class="spoke" d="M100 100L160.8 160.8" />
           <path class="spoke" d="M100 100L122.3 183.1" />
@@ -251,6 +294,56 @@
           <path class="ring" style="--ring: 1" d="M143.2 111.6Q134.1 119.7 131.6 131.6Q119.7 134.1 111.6 143.2Q100.0 139.4 88.4 143.2Q80.3 134.1 68.4 131.6Q65.9 119.7 56.8 111.6Q60.6 100.0 56.8 88.4Q65.9 80.3 68.4 68.4Q80.3 65.9 88.4 56.8Q100.0 60.6 111.6 56.8Q119.7 65.9 131.6 68.4Q134.1 80.3 143.2 88.4Q139.4 100.0 143.2 111.6" />
           <path class="ring" style="--ring: 2" d="M161.5 116.5Q148.5 128.0 145.0 145.0Q128.0 148.5 116.5 161.5Q100.0 156.0 83.5 161.5Q72.0 148.5 55.0 145.0Q51.5 128.0 38.5 116.5Q44.0 100.0 38.5 83.5Q51.5 72.0 55.0 55.0Q72.0 51.5 83.5 38.5Q100.0 44.0 116.5 38.5Q128.0 51.5 145.0 55.0Q148.5 72.0 161.5 83.5Q156.0 100.0 161.5 116.5" />
           <path class="ring" style="--ring: 3" d="M179.7 121.4Q162.9 136.3 158.4 158.4Q136.3 162.9 121.4 179.7Q100.0 172.7 78.6 179.7Q63.7 162.9 41.6 158.4Q37.1 136.3 20.3 121.4Q27.3 100.0 20.3 78.6Q37.1 63.7 41.6 41.6Q63.7 37.1 78.6 20.3Q100.0 27.3 121.4 20.3Q136.3 37.1 158.4 41.6Q162.9 63.7 179.7 78.6Q172.7 100.0 179.7 121.4" />
+          <g class="boot-glints">
+            <use href="#boot-glint" x="124.9" y="106.7" style="--ring: 0; --k: 0" />
+            <use href="#boot-glint" x="118.2" y="118.2" style="--ring: 0; --k: 1" />
+            <use href="#boot-glint" x="106.7" y="124.9" style="--ring: 0; --k: 2" />
+            <use href="#boot-glint" x="93.3" y="124.9" style="--ring: 0; --k: 3" />
+            <use href="#boot-glint" x="81.8" y="118.2" style="--ring: 0; --k: 4" />
+            <use href="#boot-glint" x="75.1" y="106.7" style="--ring: 0; --k: 5" />
+            <use href="#boot-glint" x="75.1" y="93.3" style="--ring: 0; --k: 6" />
+            <use href="#boot-glint" x="81.8" y="81.8" style="--ring: 0; --k: 7" />
+            <use href="#boot-glint" x="93.3" y="75.1" style="--ring: 0; --k: 8" />
+            <use href="#boot-glint" x="106.7" y="75.1" style="--ring: 0; --k: 9" />
+            <use href="#boot-glint" x="118.2" y="81.8" style="--ring: 0; --k: 10" />
+            <use href="#boot-glint" x="124.9" y="93.3" style="--ring: 0; --k: 11" />
+            <use href="#boot-glint" x="143.2" y="111.6" style="--ring: 1; --k: 0" />
+            <use href="#boot-glint" x="131.6" y="131.6" style="--ring: 1; --k: 1" />
+            <use href="#boot-glint" x="111.6" y="143.2" style="--ring: 1; --k: 2" />
+            <use href="#boot-glint" x="88.4" y="143.2" style="--ring: 1; --k: 3" />
+            <use href="#boot-glint" x="68.4" y="131.6" style="--ring: 1; --k: 4" />
+            <use href="#boot-glint" x="56.8" y="111.6" style="--ring: 1; --k: 5" />
+            <use href="#boot-glint" x="56.8" y="88.4" style="--ring: 1; --k: 6" />
+            <use href="#boot-glint" x="68.4" y="68.4" style="--ring: 1; --k: 7" />
+            <use href="#boot-glint" x="88.4" y="56.8" style="--ring: 1; --k: 8" />
+            <use href="#boot-glint" x="111.6" y="56.8" style="--ring: 1; --k: 9" />
+            <use href="#boot-glint" x="131.6" y="68.4" style="--ring: 1; --k: 10" />
+            <use href="#boot-glint" x="143.2" y="88.4" style="--ring: 1; --k: 11" />
+            <use href="#boot-glint" x="161.5" y="116.5" style="--ring: 2; --k: 0" />
+            <use href="#boot-glint" x="145.0" y="145.0" style="--ring: 2; --k: 1" />
+            <use href="#boot-glint" x="116.5" y="161.5" style="--ring: 2; --k: 2" />
+            <use href="#boot-glint" x="83.5" y="161.5" style="--ring: 2; --k: 3" />
+            <use href="#boot-glint" x="55.0" y="145.0" style="--ring: 2; --k: 4" />
+            <use href="#boot-glint" x="38.5" y="116.5" style="--ring: 2; --k: 5" />
+            <use href="#boot-glint" x="38.5" y="83.5" style="--ring: 2; --k: 6" />
+            <use href="#boot-glint" x="55.0" y="55.0" style="--ring: 2; --k: 7" />
+            <use href="#boot-glint" x="83.5" y="38.5" style="--ring: 2; --k: 8" />
+            <use href="#boot-glint" x="116.5" y="38.5" style="--ring: 2; --k: 9" />
+            <use href="#boot-glint" x="145.0" y="55.0" style="--ring: 2; --k: 10" />
+            <use href="#boot-glint" x="161.5" y="83.5" style="--ring: 2; --k: 11" />
+            <use href="#boot-glint" x="179.7" y="121.4" style="--ring: 3; --k: 0" />
+            <use href="#boot-glint" x="158.4" y="158.4" style="--ring: 3; --k: 1" />
+            <use href="#boot-glint" x="121.4" y="179.7" style="--ring: 3; --k: 2" />
+            <use href="#boot-glint" x="78.6" y="179.7" style="--ring: 3; --k: 3" />
+            <use href="#boot-glint" x="41.6" y="158.4" style="--ring: 3; --k: 4" />
+            <use href="#boot-glint" x="20.3" y="121.4" style="--ring: 3; --k: 5" />
+            <use href="#boot-glint" x="20.3" y="78.6" style="--ring: 3; --k: 6" />
+            <use href="#boot-glint" x="41.6" y="41.6" style="--ring: 3; --k: 7" />
+            <use href="#boot-glint" x="78.6" y="20.3" style="--ring: 3; --k: 8" />
+            <use href="#boot-glint" x="121.4" y="20.3" style="--ring: 3; --k: 9" />
+            <use href="#boot-glint" x="158.4" y="41.6" style="--ring: 3; --k: 10" />
+            <use href="#boot-glint" x="179.7" y="78.6" style="--ring: 3; --k: 11" />
+          </g>
         </svg>
         <!--
           The logo, inline rather than fetched. As a file it is a second

@@ -190,6 +190,30 @@ export default function SpaceField() {
     }
     let petalFill = makePetalFill()
 
+    // A four-pointed glint, drawn once per palette: the sparkle that sits on
+    // every crossing of a web's threads.
+    const makeSparkle = () => {
+      const sprite = document.createElement('canvas')
+      sprite.width = sprite.height = 32
+      const g = sprite.getContext('2d')
+      const core = g.createRadialGradient(16, 16, 0, 16, 16, 9)
+      core.addColorStop(0, 'rgba(255, 255, 255, 1)')
+      core.addColorStop(0.4, `rgba(${colours.silk}, 0.75)`)
+      core.addColorStop(1, `rgba(${colours.silkGlow}, 0)`)
+      g.fillStyle = core
+      g.fillRect(0, 0, 32, 32)
+      for (const [w, h] of [[32, 1.6], [1.6, 32]]) {
+        const ray = w > h ? g.createLinearGradient(0, 0, 32, 0) : g.createLinearGradient(0, 0, 0, 32)
+        ray.addColorStop(0, `rgba(${colours.silk}, 0)`)
+        ray.addColorStop(0.5, 'rgba(255, 255, 255, 1)')
+        ray.addColorStop(1, `rgba(${colours.silk}, 0)`)
+        g.fillStyle = ray
+        g.fillRect(16 - w / 2, 16 - h / 2, w, h)
+      }
+      return sprite
+    }
+    let sparkle = makeSparkle()
+
     const resize = () => {
       width = window.innerWidth
       height = window.innerHeight
@@ -480,7 +504,17 @@ export default function SpaceField() {
 
           // Light blue thread in the logo's electric-blue glow. A shadow blur
           // is costly, but only for the second or so a web lives.
-          context.strokeStyle = `rgb(${colours.silk})`
+          // Shimmer: a band of white light crossing the silver threads, from
+          // one side of the web to the other, while the web lives.
+          const reach = WEB_RADIUS * spread
+          const sheen = context.createLinearGradient(web.x - reach, web.y - reach, web.x + reach, web.y + reach)
+          const band = Math.min(Math.max(t * 1.8 - 0.3, 0.12), 0.88)
+          sheen.addColorStop(0, `rgb(${colours.silk})`)
+          sheen.addColorStop(band - 0.12, `rgb(${colours.silk})`)
+          sheen.addColorStop(band, '#ffffff')
+          sheen.addColorStop(band + 0.12, `rgb(${colours.silk})`)
+          sheen.addColorStop(1, `rgb(${colours.silk})`)
+          context.strokeStyle = sheen
           context.shadowColor = `rgba(${colours.silkGlow}, 0.9)`
           context.shadowBlur = 8
 
@@ -540,6 +574,26 @@ export default function SpaceField() {
           context.fillStyle = `rgb(${colours.silk})`
           context.fill()
           context.shadowBlur = 0
+
+          // A sparkle on every crossing of a spiral thread and a spoke, each
+          // twinkling on its own beat, so the web glitters as it opens.
+          context.globalCompositeOperation = 'lighter'
+          points.forEach((point, i) => {
+            for (let ring = 1; ring <= WEB_RINGS; ring += 1) {
+              const step = ring / WEB_RINGS
+              const twinkle = 0.5 + 0.5 * Math.sin(time * 0.012 + i * 1.7 + ring * 2.3)
+              const size = (8 + 10 * twinkle) * (0.7 + 0.3 * step)
+              context.globalAlpha = fade * (0.35 + 0.65 * twinkle)
+              context.drawImage(
+                sparkle,
+                web.x + Math.cos(point.angle) * point.length * step - size / 2,
+                web.y + Math.sin(point.angle) * point.length * step - size / 2,
+                size,
+                size,
+              )
+            }
+          })
+          context.globalCompositeOperation = 'source-over'
         }
       }
 
@@ -578,6 +632,7 @@ export default function SpaceField() {
       colours = palette()
       night = isNight()
       petalFill = makePetalFill()
+      sparkle = makeSparkle()
     }
 
     resize()

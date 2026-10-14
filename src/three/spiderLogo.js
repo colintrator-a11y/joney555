@@ -17,7 +17,7 @@ import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment
 // The logo's colours, sampled from the artwork.
 const SHELL = '#0b48f0' // the spider's glass-blue body
 const RING = '#2f8bff' // the ring's neon
-const THREAD = '#8cc8ff' // the web: the light blue used for every web on the page
+const THREAD = '#c8def8' // the web: the silvery blue used for every web on the page
 const EYE = '#bff4ff'
 
 // Each right-side leg, as points from the shoulder out to the foot. The left
@@ -63,8 +63,35 @@ function glow(texture, colour, size, opacity = 1) {
 }
 
 /** The web behind the spider: spokes, sagging spiral threads, and the cross of light. */
+/** A four-pointed glint, for the crossings of the web's threads. */
+function glintTexture() {
+  const canvas = document.createElement('canvas')
+  canvas.width = canvas.height = 64
+  const g = canvas.getContext('2d')
+  const core = g.createRadialGradient(32, 32, 0, 32, 32, 14)
+  core.addColorStop(0, 'rgba(255,255,255,1)')
+  core.addColorStop(0.4, 'rgba(200,222,248,0.7)')
+  core.addColorStop(1, 'rgba(90,160,255,0)')
+  g.fillStyle = core
+  g.fillRect(0, 0, 64, 64)
+  for (const horizontal of [true, false]) {
+    const ray = horizontal ? g.createLinearGradient(0, 0, 64, 0) : g.createLinearGradient(0, 0, 0, 64)
+    ray.addColorStop(0, 'rgba(200,222,248,0)')
+    ray.addColorStop(0.5, 'rgba(255,255,255,1)')
+    ray.addColorStop(1, 'rgba(200,222,248,0)')
+    g.fillStyle = ray
+    if (horizontal) g.fillRect(0, 31, 64, 2.4)
+    else g.fillRect(31, 0, 2.4, 64)
+  }
+  const texture = new THREE.CanvasTexture(canvas)
+  texture.colorSpace = THREE.SRGBColorSpace
+  return texture
+}
+
 function buildWeb() {
   const points = []
+  // Every crossing of a spiral thread and a spoke, for the glints.
+  const junctions = []
   const SPOKES = 8
   const RINGS = 4
   const RADIUS = 2.45
@@ -77,6 +104,7 @@ function buildWeb() {
     const radius = (r / RINGS) * RADIUS * 0.96
     for (let i = 0; i < SPOKES; i += 1) {
       const a0 = (i / SPOKES) * Math.PI * 2 + Math.PI / 8
+      junctions.push(new THREE.Vector3(Math.cos(a0) * radius, Math.sin(a0) * radius, 0))
       const a1 = ((i + 1) / SPOKES) * Math.PI * 2 + Math.PI / 8
       const curve = new THREE.QuadraticBezierCurve3(
         new THREE.Vector3(Math.cos(a0) * radius, Math.sin(a0) * radius, 0),
@@ -102,7 +130,7 @@ function buildWeb() {
     }),
   )
   web.position.z = -0.55
-  return web
+  return { web, junctions }
 }
 
 /** The ring the mark sits in: a neon band, a thinner one inside it, and their glow. */
@@ -283,7 +311,16 @@ export function mountSpiderLogo(canvas, { still = false } = {}) {
 
   const texture = glowTexture()
   const world = new THREE.Group()
-  const web = buildWeb()
+  const { web, junctions } = buildWeb()
+  // A glint on each crossing, each with its own twinkle.
+  const glintMap = glintTexture()
+  const glints = junctions.map((at, i) => {
+    const sprite = glow(glintMap, '#ffffff', 0.5)
+    sprite.position.copy(at)
+    sprite.userData.phase = i * 1.37
+    web.add(sprite)
+    return sprite
+  })
   const { group: ring, orbs } = buildRing(texture)
   const { spider, legs } = buildSpider(texture)
   spider.position.z = 0.4
@@ -332,6 +369,16 @@ export function mountSpiderLogo(canvas, { still = false } = {}) {
     } else {
       world.rotation.x = -0.12
     }
+    // The glints twinkle, and a slow wave of brightness runs round the web,
+    // so the threads shimmer rather than sit still.
+    glints.forEach((sprite, i) => {
+      const twinkle = still ? 0.7 : 0.5 + 0.5 * Math.sin(t * 3.1 + sprite.userData.phase)
+      const angle = Math.atan2(sprite.position.y, sprite.position.x)
+      const wave = still ? 0 : Math.max(0, Math.cos(angle - t * 1.2)) ** 6
+      sprite.material.opacity = 0.25 + 0.75 * Math.max(twinkle, wave)
+      sprite.scale.setScalar(0.32 + 0.38 * twinkle + 0.3 * wave)
+    })
+    web.material.opacity = still ? 0.6 : 0.5 + 0.15 * Math.sin(t * 1.6)
     orbs.forEach((orb, i) => {
       const a = Math.PI / 4 + (i * Math.PI) / 2 + (still ? 0 : t * 0.35)
       orb.position.set(Math.cos(a) * 2.72, Math.sin(a) * 2.72, 0.1)
@@ -375,6 +422,7 @@ export function mountSpiderLogo(canvas, { still = false } = {}) {
       materials.forEach((m) => m?.dispose())
     })
     texture.dispose()
+    glintMap.dispose()
     environment.dispose()
     pmrem.dispose()
     renderer.dispose()

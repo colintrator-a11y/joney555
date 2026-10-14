@@ -64,6 +64,14 @@ const POINTER_DISTANCE = 210
 // and spiral threads strung between them, sagging inwards the way a real orb
 // web does. It draws itself outwards and fades as it goes.
 const WEB_MS = 900
+// What a press does not spin a web on: anything clickable, anything typed
+// into, and the cards and panels the page's content sits on.
+const NO_WEB = [
+  'a', 'button', 'input', 'textarea', 'select', 'label', 'summary',
+  '[role="button"]', '[data-press]', '[data-tilt]', '.card', 'form',
+  'header', '.social-rail', '.lightbox', '.chip', '.tag-button', '.filter',
+].join(', ')
+
 const WEB_RADIUS = 124
 const WEB_SPOKES = 13
 const WEB_RINGS = 3
@@ -622,6 +630,10 @@ export default function SpaceField() {
     const onPress = (event) => {
       if (still.matches) return
       if (event.button !== undefined && event.button !== 0) return
+      // Only the open sky is cut. A press on something that does its own
+      // thing — a link, a button, a field, a card — is left to that thing,
+      // without a web (or a bloom) spinning out from under it.
+      if (event.target instanceof Element && event.target.closest(NO_WEB)) return
       cutWeb(event.clientX, event.clientY)
       start() // a click on a hidden tab's page should not go unanswered
     }

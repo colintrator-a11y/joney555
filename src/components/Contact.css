@@ -3,9 +3,11 @@
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
   gap: 40px;
   padding: 38px 40px;
+  /* The same see-through card as the rest of the page (.card), with the
+     accent's light in one corner. */
   background:
-    radial-gradient(120% 140% at 100% 0%, var(--accent-soft) 0%, transparent 62%),
-    var(--bg-raised);
+    radial-gradient(120% 140% at 100% 0%, color-mix(in srgb, var(--accent-soft) 70%, transparent) 0%, transparent 62%),
+    color-mix(in srgb, var(--bg-raised) 72%, transparent);
 }
 
 .contact-copy {
@@ -91,7 +93,9 @@
   font: inherit;
   font-size: 0.93rem;
   color: var(--ink);
-  background: var(--bg);
+  /* Darker than the card, so the boxes still read as places to type, but not
+     solid: a black slab in a see-through card looked cut out of it. */
+  background: color-mix(in srgb, var(--bg) 62%, transparent);
   border: 1px solid var(--line-strong);
   border-radius: var(--radius-sm);
   padding: 10px 12px;

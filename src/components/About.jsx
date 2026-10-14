@@ -1,6 +1,6 @@
 import { certifications, orbitSkills, profile, stats } from '../data/profile.js'
 import { useLocale } from '../i18n/LocaleContext.jsx'
-import SpiderMark from './SpiderMark.jsx'
+import SpiderLogo3D from './SpiderLogo3D.jsx'
 import './About.css'
 
 export default function About({ onFocus }) {
@@ -28,10 +28,10 @@ export default function About({ onFocus }) {
         {/* The opening claim and the figure behind it, side by side: the lead
             reads as the statement, the note as its evidence. */}
         <div className="about-intro" data-reveal>
-          {/* The spider alone — the web it belongs to is spun on the loading
-              screen, in the hero's corners and wherever the page is clicked. */}
+          {/* The logo in three dimensions: the spider on its web inside the
+              ring, built in code and leaning towards the pointer. */}
           <figure className="about-portrait" data-tilt="soft">
-            <SpiderMark label={`${profile.name}'s mark`} />
+            <SpiderLogo3D label={`${profile.name}'s mark`} />
 
             {/* The stack, hung off the corners of the frame. Decorative: the
                 same names are in the Skills section as text. */}

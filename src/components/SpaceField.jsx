@@ -84,23 +84,19 @@ const DAY_SPEED = 0.3
 const TILT_MAX = 0.42
 const TILT_EASE = 0.06
 
-// Air. A glint by day does not travel in a line: it rides a slow swell,
-// rocks as it goes, and comes back to rest where it was.
+// Air. A glint by day does not travel in a line: it rides a slow swell and
+// comes back to rest where it was.
 const BOB_AMP = 7          // px of sway at the near plane
 const BOB_RATE = 0.00026   // radians per millisecond
 
-// The ring a click sends out: a wave train, not a shove. A glint does
-// not get pushed aside by a passing wave — it rides up the face of it, leans
-// with the slope, slides back as the crest goes by and ends up where it
-// started. So the ripple contributes an *offset* that oscillates, never a
-// velocity that accumulates.
-const RIPPLE_MS = 2900     // the train crosses the page slowly
-const RIPPLE_REACH = 680     // px the front of the train travels
-const RIPPLE_BAND = 170      // how far behind the front the swell still carries
-const RIPPLE_WAVE = 230      // crest to crest: long swells, not chop
-const RIPPLE_SWAY = 15       // px a glint rides, at the strongest
-const RIPPLE_ROCK = 0.46     // radians it leans on the steepest face
-const RIPPLE_LIFT = 0.16     // how much bigger it looks lifted on a crest
+// The pulse a click sends out by day: a faint ring of light spreading from the
+// web, and each glint it reaches flaring as it passes. Light, not a wave —
+// nothing is moved, only lit, so when the ring has gone every glint is just
+// as it was.
+const PULSE_MS = 1700      // how long the ring takes to cross its reach
+const PULSE_REACH = 720    // px the ring travels
+const PULSE_BAND = 46      // how wide the lit edge is, either side of the ring
+const PULSE_FLARE = 0.9    // how much bigger a glint grows as the ring passes
 
 export default function SpaceField() {
   const canvasRef = useRef(null)
@@ -118,7 +114,7 @@ export default function SpaceField() {
     let frame = 0
     const pointer = { x: 0, y: 0, on: false }
     let webs = []
-    let ripples = []
+    let pulses = []
     // Something crossing the sky, now and then. One at a time: two at once
     // reads as a effect rather than an event.
     let shoot = null
@@ -134,10 +130,11 @@ export default function SpaceField() {
       const born = performance.now()
       webs.push({ x, y, born, spokes })
       if (webs.length > WEB_MAX) webs = webs.slice(-WEB_MAX)
-      // Day only: at night the stars are not floating on anything.
+      // Day only: at night the stars are Galaxy.jsx's, so there are no
+      // glints here for a pulse to light.
       if (!night) {
-        ripples.push({ x, y, born })
-        if (ripples.length > WEB_MAX) ripples = ripples.slice(-WEB_MAX)
+        pulses.push({ x, y, born })
+        if (pulses.length > WEB_MAX) pulses = pulses.slice(-WEB_MAX)
       }
     }
 
@@ -261,7 +258,27 @@ export default function SpaceField() {
       const cx = width / 2
       const cy = height / 2
 
-      if (!night) ripples = ripples.filter((r) => time - r.born < RIPPLE_MS)
+      if (!night) {
+        pulses = pulses.filter((p) => time - p.born < PULSE_MS)
+        // The rings themselves: thin, faint, fading as they widen. Drawn
+        // under the glints so the flare on each one sits on top.
+        if (!still.matches) {
+          for (const p of pulses) {
+            const age = (time - p.born) / PULSE_MS
+            const front = PULSE_REACH * (1 - Math.pow(1 - age, 2))
+            const fade = 1 - age
+            context.globalAlpha = 1
+            context.lineWidth = 10
+            context.strokeStyle = `rgba(${colours.silkGlow}, ${0.08 * fade})`
+            context.beginPath()
+            context.arc(p.x, p.y, front, 0, Math.PI * 2)
+            context.stroke()
+            context.lineWidth = 1.4
+            context.strokeStyle = `rgba(${colours.silkGlow}, ${0.35 * fade})`
+            context.stroke()
+          }
+        }
+      }
 
       // Night draws no stars of its own. The photograph behind the page is
       // already a sky, and a second one drifting over it read as two skies at
@@ -293,8 +310,8 @@ export default function SpaceField() {
         }
 
         const scale = FOCAL / star.z
-        // Not const: by day the swell and any passing ripple are added to
-        // these before anything is drawn or measured.
+        // Not const: by day the swell is added to these before anything is
+        // drawn or measured.
         let sx = cx + star.x * scale
         let sy = cy + star.y * scale
         // Depth as a 0–1 reading, used for size, brightness and the web.
@@ -313,52 +330,21 @@ export default function SpaceField() {
           const bobX = Math.sin(swell) * BOB_AMP * star.waveA * (0.35 + near * 0.65)
           const bobY = Math.cos(swell * 0.82) * BOB_AMP * 0.62 * star.waveA * (0.35 + near * 0.65)
 
-          // Any passing wave train. Each one adds a ride along the line back
-          // to where it was cut, a lean with the slope of the water, and a
-          // little lift on the crest. All three are read from the wave at this
-          // instant, so when it has gone the glint is exactly where it was.
-          let ride = 0
-          let rock = 0
-          let lift = 0
-          let rideX = 0
-          let rideY = 0
-
-          if (!still.matches) {
-            for (const ripple of ripples) {
-              const age = (time - ripple.born) / RIPPLE_MS
-              const front = RIPPLE_REACH * (1 - Math.pow(1 - age, 2.2))
-              const dx = sx - ripple.x
-              const dy = sy - ripple.y
-              const distance = Math.hypot(dx, dy) || 0.001
-              const behind = distance - front
-              // The train only carries behind its own front, and fades out
-              // over a few wavelengths rather than stopping at an edge.
-              const envelope =
-                Math.exp(-((behind / RIPPLE_BAND) ** 2)) *
-                (1 - age) *
-                (1 - Math.min(distance / RIPPLE_REACH, 1) * 0.55)
-              if (envelope < 0.01) continue
-
-              const phase = (behind / RIPPLE_WAVE) * Math.PI * 2
-              // Displacement follows the wave; the slope it is lying on is
-              // that wave's derivative, a quarter turn out of step — which is
-              // what makes a float rock as the crest goes under it.
-              ride += Math.cos(phase) * envelope
-              rock += Math.sin(phase) * envelope
-              lift += Math.max(0, Math.cos(phase)) * envelope
-              rideX += (dx / distance) * envelope
-              rideY += (dy / distance) * envelope
-            }
-
-            if (ride || rock) {
-              const spread = Math.hypot(rideX, rideY) || 1
-              sx += (rideX / spread) * ride * RIPPLE_SWAY
-              sy += (rideY / spread) * ride * RIPPLE_SWAY
-            }
-          }
-
           sx += bobX
           sy += bobY
+
+          // Any passing pulse: how near this glint is to the ring's edge now,
+          // 0 to 1, fading as the ring widens. Read fresh each frame, so the
+          // flare rises and falls as the ring goes by.
+          let flare = 0
+          if (!still.matches) {
+            for (const p of pulses) {
+              const age = (time - p.born) / PULSE_MS
+              const front = PULSE_REACH * (1 - Math.pow(1 - age, 2))
+              const off = Math.hypot(sx - p.x, sy - p.y) - front
+              flare = Math.max(flare, Math.exp(-((off / PULSE_BAND) ** 2)) * (1 - age))
+            }
+          }
 
           const lean = pointer.on
             ? Math.max(0, 1 - Math.hypot(sx - pointer.x, sy - pointer.y) / POINTER_DISTANCE)
@@ -369,13 +355,13 @@ export default function SpaceField() {
           star.glint += (lean - star.glint) * TILT_EASE
 
           // A glint: the four-pointed sparkle the webs wear, small and blue,
-          // twinkling on its own beat and brightening as the pointer passes.
-          // Lifted on a crest it is nearer the eye, so a touch larger.
-          context.globalAlpha = Math.min(1, (0.25 + near * 0.55) * pulse + star.glint * 0.35 + lift * 0.12)
-          const reach = size * 4.2 * (1 + lift * RIPPLE_LIFT + star.glint * 0.35)
+          // twinkling on its own beat, brightening as the pointer passes and
+          // flaring as a pulse goes by.
+          context.globalAlpha = Math.min(1, (0.25 + near * 0.55) * pulse + star.glint * 0.35 + flare * 0.85)
+          const reach = size * 4.2 * (1 + star.glint * 0.35 + flare * PULSE_FLARE)
           context.save()
           context.translate(sx, sy)
-          context.rotate(star.tilt + rock * RIPPLE_ROCK)
+          context.rotate(star.tilt)
           context.drawImage(sparkle, -reach / 2, -reach / 2, reach, reach)
           context.restore()
         }

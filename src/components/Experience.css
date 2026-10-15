@@ -99,6 +99,13 @@
   animation-delay: calc(var(--step, 0) * 0.42s);
 }
 
+/* By day the travelling light is the theme's violet: white on the pale page
+   would be invisible. */
+[data-theme='light'] .timeline-rail::after {
+  background-image: linear-gradient(transparent, rgb(var(--glow)), transparent);
+  filter: drop-shadow(0 0 3px rgba(236, 72, 153, 0.7));
+}
+
 @keyframes timeline-pulse {
   0% { background-position: 0 -64px; opacity: 0; }
   10% { opacity: 1; }

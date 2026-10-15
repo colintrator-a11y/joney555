@@ -258,6 +258,12 @@ a {
   pointer-events: none;
 }
 
+/* By day the glints are white with a violet halo, so they show on the pale
+   page instead of vanishing into it. */
+[data-theme='light'] .section-head::after {
+  filter: drop-shadow(0 0 1.5px rgb(var(--glow))) drop-shadow(0 0 1.5px rgb(var(--glow)));
+}
+
 @keyframes web-sheen {
   0% { background-position: 100% 100%; }
   70%, 100% { background-position: 0% 0%; }
@@ -488,6 +494,13 @@ a {
  */
 :root {
   --flash-colour: rgb(var(--glow));
+  --flash: ui-flash;
+}
+
+/* By day the flash is colour, not light: brightening a pale button only
+   washes it out, and a white glow on a pale page cannot be seen. */
+[data-theme='light'] {
+  --flash: ui-flash-day;
 }
 
 .project-link {
@@ -515,7 +528,7 @@ a {
 .channel-value:focus-visible,
 .footer-links a:focus-visible,
 .about-best-card:hover .about-best-go {
-  animation: ui-flash 0.55s ease-out forwards;
+  animation: var(--flash) 0.55s ease-out forwards;
 }
 
 @keyframes ui-flash {
@@ -528,6 +541,17 @@ a {
      by Chrome and comes out near black. */
   100% {
     filter: brightness(1.12) drop-shadow(0 0 3px var(--flash-colour));
+  }
+}
+
+@keyframes ui-flash-day {
+  0% { filter: saturate(1); }
+  20% {
+    filter: saturate(1.5) drop-shadow(0 0 6px var(--flash-colour))
+      drop-shadow(0 0 14px rgba(236, 72, 153, 0.6));
+  }
+  100% {
+    filter: saturate(1.2) drop-shadow(0 0 4px var(--flash-colour));
   }
 }
 

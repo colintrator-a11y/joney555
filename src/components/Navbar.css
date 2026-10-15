@@ -35,6 +35,16 @@
   );
 }
 
+/* By day the burst is colour: white light on the white pill is invisible. */
+[data-theme='light'] .dock-btn::before {
+  background: radial-gradient(
+    circle,
+    rgba(236, 72, 153, 0.55) 0%,
+    rgba(var(--glow), 0.4) 40%,
+    transparent 72%
+  );
+}
+
 /* The ring round the button. */
 .dock-btn::after {
   border: 1.5px solid rgba(var(--silk), 0.9);
@@ -92,6 +102,23 @@
   0% { filter: brightness(1); }
   22% { filter: brightness(2.4) drop-shadow(0 0 6px #ffffff) drop-shadow(0 0 10px rgb(var(--glow))); }
   100% { filter: brightness(1.35) drop-shadow(0 0 4px rgba(var(--glow), 0.9)); }
+}
+
+/* By day the icon flares in colour rather than towards white, which on the
+   pale pill would only fade it. */
+@keyframes dock-icon-flash-day {
+  0% { filter: none; }
+  22% { filter: drop-shadow(0 0 5px rgb(var(--glow))) drop-shadow(0 0 10px rgba(236, 72, 153, 0.7)); }
+  100% { filter: drop-shadow(0 0 3px rgb(var(--glow))); }
+}
+
+[data-theme='light'] .dock-btn:hover > svg,
+[data-theme='light'] .dock-btn:hover > img,
+[data-theme='light'] .dock-btn:focus-visible > svg,
+[data-theme='light'] .dock-btn:focus-visible > img,
+[data-theme='light'] .dock-btn.is-flashing > svg,
+[data-theme='light'] .dock-btn.is-flashing > img {
+  animation-name: dock-icon-flash-day;
 }
 
 @keyframes dock-flash-strong {

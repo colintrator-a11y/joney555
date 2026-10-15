@@ -47,16 +47,30 @@ function glowTexture() {
   return texture
 }
 
-function glow(texture, colour, size, opacity = 1) {
+/**
+ * The colour a glowing material takes on the light page. By night these add
+ * light to the dark sky; by day there is no dark to add to, and white light on
+ * a pale page vanishes, so the same parts are painted in the day theme's
+ * violet and rose instead (see applyTheme in mountSpiderLogo).
+ */
+function byDay(material, colour) {
+  material.userData.day = colour
+  return material
+}
+
+function glow(texture, colour, size, opacity = 1, day = '#a855f7') {
   const sprite = new THREE.Sprite(
-    new THREE.SpriteMaterial({
-      map: texture,
-      color: colour,
-      transparent: true,
-      opacity,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false,
-    }),
+    byDay(
+      new THREE.SpriteMaterial({
+        map: texture,
+        color: colour,
+        transparent: true,
+        opacity,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+      }),
+      day,
+    ),
   )
   sprite.scale.setScalar(size)
   return sprite
@@ -121,13 +135,16 @@ function buildWeb() {
   geometry.setAttribute('position', new THREE.Float32BufferAttribute(points, 3))
   const web = new THREE.LineSegments(
     geometry,
-    new THREE.LineBasicMaterial({
-      color: THREAD,
-      transparent: true,
-      opacity: 0.55,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false,
-    }),
+    byDay(
+      new THREE.LineBasicMaterial({
+        color: THREAD,
+        transparent: true,
+        opacity: 0.55,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+      }),
+      '#9333ea',
+    ),
   )
   web.position.z = -0.55
   return { web, junctions }
@@ -136,22 +153,25 @@ function buildWeb() {
 /** The ring the mark sits in: a neon band, a thinner one inside it, and their glow. */
 function buildRing(texture) {
   const group = new THREE.Group()
-  const neon = new THREE.MeshBasicMaterial({ color: RING })
+  const neon = byDay(new THREE.MeshBasicMaterial({ color: RING }), '#a855f7')
   const band = new THREE.Mesh(new THREE.TorusGeometry(2.72, 0.075, 16, 160), neon)
   const inner = new THREE.Mesh(
     new THREE.TorusGeometry(2.5, 0.03, 12, 160),
-    new THREE.MeshBasicMaterial({ color: RING, transparent: true, opacity: 0.55 }),
+    byDay(new THREE.MeshBasicMaterial({ color: RING, transparent: true, opacity: 0.55 }), '#c084fc'),
   )
   // The haze around the band: a wide, faint torus added on top of the sky.
   const haze = new THREE.Mesh(
     new THREE.TorusGeometry(2.72, 0.32, 16, 160),
-    new THREE.MeshBasicMaterial({
-      color: RING,
-      transparent: true,
-      opacity: 0.14,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false,
-    }),
+    byDay(
+      new THREE.MeshBasicMaterial({
+        color: RING,
+        transparent: true,
+        opacity: 0.14,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+      }),
+      '#e9d5ff',
+    ),
   )
   group.add(haze, band, inner)
 
@@ -159,7 +179,7 @@ function buildRing(texture) {
   const orbs = []
   for (let i = 0; i < 4; i += 1) {
     const orb = new THREE.Group()
-    orb.add(glow(texture, '#ffffff', 0.95), glow(texture, '#4aa8ff', 2.1, 0.55))
+    orb.add(glow(texture, '#ffffff', 0.95, 1, '#ec4899'), glow(texture, '#4aa8ff', 2.1, 0.55, '#d946ef'))
     group.add(orb)
     orbs.push(orb)
   }
@@ -171,20 +191,26 @@ function buildRing(texture) {
     const geometry = new THREE.PlaneGeometry(long ? 7.4 : 5.6, long ? 0.035 : 0.022)
     const colours = []
     const position = geometry.attributes.position
+    // The fade is in the alpha, not the colour. Faded by darkening, the ends
+    // still covered the page behind the canvas: dark lines over the night sky,
+    // black ones on the pale day page.
     for (let i = 0; i < position.count; i += 1) {
-      const fade = 1 - Math.abs(position.getX(i)) / (long ? 3.7 : 2.8)
-      colours.push(0.55 * fade, 0.8 * fade, 1 * fade)
+      const fade = Math.max(0, 1 - Math.abs(position.getX(i)) / (long ? 3.7 : 2.8))
+      colours.push(0.55, 0.8, 1, fade)
     }
-    geometry.setAttribute('color', new THREE.Float32BufferAttribute(colours, 3))
+    geometry.setAttribute('color', new THREE.Float32BufferAttribute(colours, 4))
     const line = new THREE.Mesh(
       geometry,
-      new THREE.MeshBasicMaterial({
-        vertexColors: true,
-        transparent: true,
-        opacity: long ? 0.8 : 0.45,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false,
-      }),
+      byDay(
+        new THREE.MeshBasicMaterial({
+          vertexColors: true,
+          transparent: true,
+          opacity: long ? 0.8 : 0.45,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false,
+        }),
+        '#c084fc',
+      ),
     )
     line.rotation.z = angle
     flare.add(line)
@@ -232,7 +258,7 @@ function buildSpider(texture) {
       new THREE.MeshBasicMaterial({ color: EYE }),
     )
     eye.position.set(side * 0.18, -0.72, 0.62)
-    const halo = glow(texture, '#7fdcff', 0.55)
+    const halo = glow(texture, '#7fdcff', 0.55, 1, '#38bdf8')
     halo.position.copy(eye.position).add(new THREE.Vector3(0, 0, 0.05))
     spider.add(eye, halo)
   }
@@ -270,7 +296,7 @@ function buildSpider(texture) {
   })
 
   // A blue light under the body, so the spider seems lit from within the web.
-  const under = glow(texture, '#2a7bff', 3.4, 0.35)
+  const under = glow(texture, '#2a7bff', 3.4, 0.35, '#e9d5ff')
   under.position.set(0, -0.1, -0.4)
   spider.add(under)
 
@@ -315,7 +341,7 @@ export function mountSpiderLogo(canvas, { still = false } = {}) {
   // A glint on each crossing, each with its own twinkle.
   const glintMap = glintTexture()
   const glints = junctions.map((at, i) => {
-    const sprite = glow(glintMap, '#ffffff', 0.5)
+    const sprite = glow(glintMap, '#ffffff', 0.5, 1, '#d946ef')
     sprite.position.copy(at)
     sprite.userData.phase = i * 1.37
     web.add(sprite)
@@ -409,11 +435,44 @@ export function mountSpiderLogo(canvas, { still = false } = {}) {
     if (!running) render(performance.now())
   }
   window.addEventListener('resize', onResize)
+
+  // Night and day. Each marked material keeps its night colour and blending
+  // here, and by day takes its day colour with ordinary blending: added light
+  // shows on the dark sky but not on the pale page.
+  const themed = []
+  scene.traverse((node) => {
+    const materials = Array.isArray(node.material) ? node.material : [node.material]
+    for (const material of materials) {
+      if (!material?.userData.day || themed.some((t) => t.material === material)) continue
+      themed.push({
+        material,
+        night: { colour: material.color.clone(), blending: material.blending },
+        day: { colour: new THREE.Color(material.userData.day), blending: THREE.NormalBlending },
+      })
+    }
+  })
+  const applyTheme = () => {
+    const light = document.documentElement.dataset.theme === 'light'
+    for (const { material, night, day } of themed) {
+      const look = light ? day : night
+      material.color.copy(look.colour)
+      material.blending = look.blending
+      material.needsUpdate = true
+    }
+    // A little less exposure by day, so the glass blue is not lifted to pastel.
+    renderer.toneMappingExposure = light ? 0.85 : 0.95
+    if (!running) render(performance.now())
+  }
+  const themeWatch = new MutationObserver(applyTheme)
+  themeWatch.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
+  applyTheme()
+
   render(performance.now())
 
   return () => {
     pause()
     watcher.disconnect()
+    themeWatch.disconnect()
     window.removeEventListener('resize', onResize)
     window.removeEventListener('pointermove', onPointer)
     scene.traverse((node) => {

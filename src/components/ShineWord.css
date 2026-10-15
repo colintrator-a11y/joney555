@@ -1,0 +1,127 @@
+/* The phone's word: glowing type with a sweep of light (ShineWord.jsx). */
+
+.shine-word {
+  --word: #ffffff;
+  --word-soft: #d9ecff;
+  --shine: #5cc2ff;
+  --halo: rgba(var(--glow), 0.6);
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  /* A steady box, so the line below does not jump as the words change. */
+  height: clamp(96px, 30vw, 128px);
+  overflow: hidden;
+}
+
+/* The secret word keeps its own colour, as it does in the swarm. */
+.shine-word--wendy {
+  --word: #fff4ff;
+  --word-soft: #f0d4ff;
+  --shine: #ff8ae2;
+  --halo: rgba(255, 138, 226, 0.55);
+}
+
+/* By day: deep blue type on the pale sky, a cyan sweep, no glow to wash it
+   out. */
+[data-theme='light'] .shine-word {
+  --word: var(--accent-ink);
+  --word-soft: var(--accent);
+  --shine: #22b8f0;
+  --halo: transparent;
+}
+
+.shine-word__text {
+  grid-area: 1 / 1;
+  font-family: var(--display);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  /* The letters are cut out of a gradient: the word's own light, with a band
+     of brighter light that travels across it and then rests. */
+  background: linear-gradient(
+    110deg,
+    var(--word) 0%,
+    var(--word-soft) 30%,
+    var(--word) 42%,
+    var(--shine) 50%,
+    var(--word) 58%,
+    var(--word-soft) 70%,
+    var(--word) 100%
+  );
+  background-size: 260% 100%;
+  background-position: 120% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 14px var(--halo)) drop-shadow(0 0 2px var(--halo));
+  animation: shine-word-sweep 4.2s ease-in-out infinite;
+}
+
+.shine-word__text--in {
+  animation:
+    shine-word-focus 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both,
+    shine-word-sweep 4.2s ease-in-out 0.6s infinite;
+}
+
+.shine-word__text--out {
+  animation: shine-word-leave 0.55s ease-in both;
+}
+
+@keyframes shine-word-sweep {
+  0% { background-position: 120% 0; }
+  55%, 100% { background-position: -20% 0; }
+}
+
+/* A new word comes into focus: out of a blur, its letters drawing together. */
+@keyframes shine-word-focus {
+  from {
+    opacity: 0;
+    letter-spacing: 0.35em;
+    filter: blur(10px) drop-shadow(0 0 14px var(--halo));
+  }
+  to {
+    opacity: 1;
+    letter-spacing: -0.01em;
+    filter: blur(0) drop-shadow(0 0 14px var(--halo)) drop-shadow(0 0 2px var(--halo));
+  }
+}
+
+/* The old one rises and dissolves. */
+@keyframes shine-word-leave {
+  to {
+    opacity: 0;
+    transform: translateY(-28%);
+    filter: blur(8px);
+  }
+}
+
+.shine-word__star {
+  position: absolute;
+  fill: #ffffff;
+  filter: drop-shadow(0 0 4px var(--shine));
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.3);
+  animation: shine-word-twinkle 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+[data-theme='light'] .shine-word__star {
+  fill: var(--shine);
+  filter: none;
+}
+
+@keyframes shine-word-twinkle {
+  0%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(0.3) rotate(0deg); }
+  45% { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(20deg); }
+  60% { opacity: 0.7; transform: translate(-50%, -50%) scale(0.8) rotate(28deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shine-word__text,
+  .shine-word__text--in,
+  .shine-word__text--out { animation: none; }
+  .shine-word__text--out { display: none; }
+  .shine-word__star { animation: none; opacity: 0.6; transform: translate(-50%, -50%); }
+}

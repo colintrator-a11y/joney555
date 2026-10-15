@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { contactChannels, profile, stats } from '../data/profile.js'
 import { useLocale } from '../i18n/LocaleContext.jsx'
 import ParticleName from './ParticleName.jsx'
+import ShineWord from './ShineWord.jsx'
 import './Hero.css'
 
 // One line icon per channel, matching the rail in the reference: the mark,
@@ -22,6 +23,22 @@ const CHANNEL_ICONS = {
   ),
 }
 
+// A phone: too narrow for the particle swarm to draw a letter cleanly, so
+// the word is set as glowing type instead (ShineWord.jsx). The same width
+// the rest of the hero switches its phone layout at (Hero.css).
+const PHONE = '(max-width: 560px)'
+
+function usePhone() {
+  const [phone, setPhone] = useState(() => window.matchMedia(PHONE).matches)
+  useEffect(() => {
+    const query = window.matchMedia(PHONE)
+    const onChange = (event) => setPhone(event.matches)
+    query.addEventListener('change', onChange)
+    return () => query.removeEventListener('change', onChange)
+  }, [])
+  return phone
+}
+
 // How long each word holds, and how long the secret one does.
 const HOLD_MS = 10000
 // Clicks further apart than this start the count again: four deliberate
@@ -30,6 +47,7 @@ const CLICK_GAP_MS = 1500
 
 export default function Hero() {
   const t = useLocale()
+  const phone = usePhone()
 
   // The name, then the headline's stack, one after another.
   const words = [profile.name, ...t.hero.cycle]
@@ -128,10 +146,17 @@ export default function Hero() {
               is the picture of it, and the words it cycles through are the
               headline's, which is printed in full just below. */}
           <h1 className="particle-name-text">{profile.name}</h1>
-          <ParticleName
-            text={secret ? t.hero.secret : words[index]}
-            tone={secret ? 'wendy' : 'default'}
-          />
+          {phone ? (
+            <ShineWord
+              text={secret ? t.hero.secret : words[index]}
+              tone={secret ? 'wendy' : 'default'}
+            />
+          ) : (
+            <ParticleName
+              text={secret ? t.hero.secret : words[index]}
+              tone={secret ? 'wendy' : 'default'}
+            />
+          )}
         </div>
 
         <p className="hero-headline">{t.hero.headline}</p>

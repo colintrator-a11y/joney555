@@ -51,14 +51,14 @@ function glowTexture() {
  * The colour a glowing material takes on the light page. By night these add
  * light to the dark sky; by day there is no dark to add to, and white light on
  * a pale page vanishes, so the same parts are painted in the day theme's
- * violet and rose instead (see applyTheme in mountSpiderLogo).
+ * blues instead (see applyTheme in mountSpiderLogo).
  */
 function byDay(material, colour) {
   material.userData.day = colour
   return material
 }
 
-function glow(texture, colour, size, opacity = 1, day = '#a855f7') {
+function glow(texture, colour, size, opacity = 1, day = '#0b6cf0') {
   const sprite = new THREE.Sprite(
     byDay(
       new THREE.SpriteMaterial({
@@ -143,7 +143,7 @@ function buildWeb() {
         blending: THREE.AdditiveBlending,
         depthWrite: false,
       }),
-      '#9333ea',
+      '#3d7fd9',
     ),
   )
   web.position.z = -0.55
@@ -153,11 +153,11 @@ function buildWeb() {
 /** The ring the mark sits in: a neon band, a thinner one inside it, and their glow. */
 function buildRing(texture) {
   const group = new THREE.Group()
-  const neon = byDay(new THREE.MeshBasicMaterial({ color: RING }), '#a855f7')
+  const neon = byDay(new THREE.MeshBasicMaterial({ color: RING }), '#0b6cf0')
   const band = new THREE.Mesh(new THREE.TorusGeometry(2.72, 0.075, 16, 160), neon)
   const inner = new THREE.Mesh(
     new THREE.TorusGeometry(2.5, 0.03, 12, 160),
-    byDay(new THREE.MeshBasicMaterial({ color: RING, transparent: true, opacity: 0.55 }), '#c084fc'),
+    byDay(new THREE.MeshBasicMaterial({ color: RING, transparent: true, opacity: 0.55 }), '#5aa2f5'),
   )
   // The haze around the band: a wide, faint torus added on top of the sky.
   const haze = new THREE.Mesh(
@@ -170,7 +170,7 @@ function buildRing(texture) {
         blending: THREE.AdditiveBlending,
         depthWrite: false,
       }),
-      '#e9d5ff',
+      '#cfe3ff',
     ),
   )
   group.add(haze, band, inner)
@@ -179,7 +179,7 @@ function buildRing(texture) {
   const orbs = []
   for (let i = 0; i < 4; i += 1) {
     const orb = new THREE.Group()
-    orb.add(glow(texture, '#ffffff', 0.95, 1, '#ec4899'), glow(texture, '#4aa8ff', 2.1, 0.55, '#d946ef'))
+    orb.add(glow(texture, '#ffffff', 0.95, 1, '#22b8f0'), glow(texture, '#4aa8ff', 2.1, 0.55, '#0b6cf0'))
     group.add(orb)
     orbs.push(orb)
   }
@@ -209,7 +209,7 @@ function buildRing(texture) {
           blending: THREE.AdditiveBlending,
           depthWrite: false,
         }),
-        '#c084fc',
+        '#7fb2ee',
       ),
     )
     line.rotation.z = angle
@@ -296,7 +296,7 @@ function buildSpider(texture) {
   })
 
   // A blue light under the body, so the spider seems lit from within the web.
-  const under = glow(texture, '#2a7bff', 3.4, 0.35, '#e9d5ff')
+  const under = glow(texture, '#2a7bff', 3.4, 0.35, '#cfe3ff')
   under.position.set(0, -0.1, -0.4)
   spider.add(under)
 
@@ -341,7 +341,7 @@ export function mountSpiderLogo(canvas, { still = false } = {}) {
   // A glint on each crossing, each with its own twinkle.
   const glintMap = glintTexture()
   const glints = junctions.map((at, i) => {
-    const sprite = glow(glintMap, '#ffffff', 0.5, 1, '#d946ef')
+    const sprite = glow(glintMap, '#ffffff', 0.5, 1, '#0b6cf0')
     sprite.position.copy(at)
     sprite.userData.phase = i * 1.37
     web.add(sprite)

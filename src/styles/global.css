@@ -58,35 +58,36 @@
   --web-corner: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none' stroke='%23000' stroke-width='0.7' stroke-linecap='round'><path d='M0 0L99.5 10.5 M0 0L94.6 32.6 M0 0L84.8 53.0 M0 0L70.7 70.7 M0 0L53.0 84.8 M0 0L32.6 94.6 M0 0L10.5 99.5'/><path d='M25.9 2.7Q22.3 5.0 24.6 8.5Q20.7 9.9 22.0 13.8Q17.9 14.2 18.4 18.4Q14.2 17.9 13.8 22.0Q9.9 20.7 8.5 24.6Q5.0 22.3 2.7 25.9'/><path d='M49.7 5.2Q43.0 9.5 47.3 16.3Q39.7 18.9 42.4 26.5Q34.4 27.4 35.4 35.4Q27.4 34.4 26.5 42.4Q18.9 39.7 16.3 47.3Q9.5 43.0 5.2 49.7'/><path d='M73.6 7.7Q63.6 14.1 70.0 24.1Q58.8 28.0 62.8 39.2Q51.0 40.5 52.3 52.3Q40.5 51.0 39.2 62.8Q28.0 58.8 24.1 70.0Q14.1 63.6 7.7 73.6'/><path d='M97.5 10.2Q84.2 18.7 92.7 31.9Q77.8 37.1 83.1 51.9Q67.5 53.7 69.3 69.3Q53.7 67.5 51.9 83.1Q37.1 77.8 31.9 92.7Q18.7 84.2 10.2 97.5'/></svg>");
 }
 
-/* Daylight is Wendy's: the same structure in lilac and rose, with petals in
-   the sky instead of stars and a butterfly for a pointer. The canvas reads
-   these tokens too, so the sky changes with the page. Not a dimmer switch on
-   the night theme — a different hand. */
+/* Daylight: the same blue spider in the day. The logo's blue on a pale sky,
+   navy for the text, silver-blue silk for the webs — one identity at two times
+   of day rather than a second theme. The canvas reads these tokens too, so the
+   sky changes with the page. */
 [data-theme='light'] {
-  --bg: #fbf7fe;
+  --bg: #f5f9ff;
   --bg-raised: #ffffff;
-  --bg-sunken: #f4ecfb;
-  --ink: #241a33;
-  --ink-soft: #574566;
-  --ink-faint: #8a7a9d;
-  --line: #eee3f8;
-  --line-strong: #dcc9ee;
-  --accent: #a855f7;
-  --accent-soft: #f6e9ff;
-  --accent-ink: #7c2fcb;
-  --glow: 168, 85, 247;
-  /* A pale thread vanishes on a pale page: by day the silk keeps the accent. */
-  --silk: 168, 85, 247;
-  --silk-glow: 168, 85, 247;
-  --shadow-sm: 0 1px 2px rgba(60, 30, 90, 0.06);
-  --shadow-md: 0 16px 40px -24px rgba(60, 30, 90, 0.45);
+  --bg-sunken: #eaf2fd;
+  --ink: #0b1a33;
+  --ink-soft: #33496b;
+  --ink-faint: #5f7596;
+  --line: #dde8f6;
+  --line-strong: #c3d4ec;
+  --accent: #0b6cf0;
+  --accent-soft: #e3efff;
+  --accent-ink: #0a55c2;
+  --glow: 11, 108, 240;
+  /* Silver-blue thread, dark enough to read on the pale sky, in a glow of the
+     logo's blue. */
+  --silk: 96, 140, 205;
+  --silk-glow: 11, 108, 240;
+  --shadow-sm: 0 1px 2px rgba(15, 40, 90, 0.07);
+  --shadow-md: 0 16px 40px -24px rgba(15, 40, 90, 0.4);
 
-  --p-violet: #8b5cf6;
+  --p-violet: #6d5ae6;
   --p-teal: #0f766e;
   --p-emerald: #2f8f5b;
   --p-amber: #b57614;
   --p-rose: #d4467f;
-  --p-slate: #5b5570;
+  --p-slate: #4f6382;
 }
 
 *,
@@ -390,8 +391,8 @@ a {
 }
 
 [data-theme='light'] {
-  --btn-from: #a855f7;
-  --btn-to: #ec4899;
+  --btn-from: #0b6cf0;
+  --btn-to: #22b8f0;
 }
 
 .btn.btn-primary,
@@ -548,7 +549,7 @@ a {
   0% { filter: saturate(1); }
   20% {
     filter: saturate(1.5) drop-shadow(0 0 6px var(--flash-colour))
-      drop-shadow(0 0 14px rgba(236, 72, 153, 0.6));
+      drop-shadow(0 0 14px rgba(34, 184, 240, 0.6));
   }
   100% {
     filter: saturate(1.2) drop-shadow(0 0 4px var(--flash-colour));

@@ -99,11 +99,11 @@
   animation-delay: calc(var(--step, 0) * 0.42s);
 }
 
-/* By day the travelling light is the theme's violet: white on the pale page
+/* By day the travelling light is the logo's blue: white on the pale page
    would be invisible. */
 [data-theme='light'] .timeline-rail::after {
   background-image: linear-gradient(transparent, rgb(var(--glow)), transparent);
-  filter: drop-shadow(0 0 3px rgba(236, 72, 153, 0.7));
+  filter: drop-shadow(0 0 3px rgba(34, 184, 240, 0.7));
 }
 
 @keyframes timeline-pulse {
@@ -265,7 +265,7 @@
 }
 
 [data-theme='light'] .timeline-logo {
-  box-shadow: 0 0 0 1px var(--line-strong), 0 6px 16px -12px rgba(60, 30, 90, 0.5);
+  box-shadow: 0 0 0 1px var(--line-strong), 0 6px 16px -12px rgba(15, 40, 90, 0.45);
 }
 
 .timeline-company {

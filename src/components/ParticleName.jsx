@@ -30,9 +30,9 @@ const PUSH_FORCE = 38
 const TONES = { default: '#ffffff', wendy: '#f0d4ff' }
 // The colour of the light that sweeps across the word, per tone.
 const SHINE = { default: '#5cc2ff', wendy: '#ff8ae2' }
-// By day the sweep is rose: the night's cyan reads as a stray colour among
-// the violet points on the pale page.
-const DAY_SHINE = '#ec4899'
+// By day the sweep is a bright cyan over the blue points: light on the day
+// sky, as the night's sweep is on the dark one.
+const DAY_SHINE = '#22b8f0'
 const SWEEP_PERIOD = 4.2 // seconds between one sweep and the next
 const SWEEP_WIDTH = 70 // half-width of the band of light, in CSS pixels
 const TAU = Math.PI * 2
@@ -125,7 +125,7 @@ export default function ParticleName({ text, tone = 'default' }) {
 
     const ink = () =>
       document.documentElement.dataset.theme === 'light'
-        ? getComputedStyle(document.documentElement).getPropertyValue('--accent-ink').trim() || '#7c2fcb'
+        ? getComputedStyle(document.documentElement).getPropertyValue('--accent-ink').trim() || '#0a55c2'
         : TONES[wordTone] ?? TONES.default
     const isLight = () => document.documentElement.dataset.theme === 'light'
     let colour = ink()

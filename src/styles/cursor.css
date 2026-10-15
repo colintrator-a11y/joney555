@@ -47,12 +47,12 @@
 }
 
 /*
- * Daylight is Wendy's: a butterfly arriving at the point being clicked, where
- * the night theme hangs a spider from it. Same hotspot, same fallbacks.
+ * Daylight: the same spider, in navy and the logo's blue, since the silver
+ * night one vanishes on the pale page. Same hotspot, same fallbacks.
  */
 @media (hover: hover) and (pointer: fine) {
   [data-theme='light'] body {
-    cursor: url('../assets/cursor-butterfly.png') 4 4, auto;
+    cursor: url('../assets/cursor-spider-day.png') 12 9, auto;
   }
 
   [data-theme='light'] a,
@@ -63,7 +63,7 @@
   [data-theme='light'] .filter,
   [data-theme='light'] .tag-button,
   [data-theme='light'] .btn {
-    cursor: url('../assets/cursor-butterfly-link.png') 4 4, pointer;
+    cursor: url('../assets/cursor-spider-day-link.png') 12 9, pointer;
   }
 
   /* The caret and the preview's own cursors still win, in either theme. */

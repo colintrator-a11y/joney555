@@ -9,7 +9,7 @@
   pointer-events: none;
 }
 
-/* Night only. By day the sky is Wendy's — petals, not deep space. */
+/* Night only. By day the sky is SpaceField's blue glints on the pale page. */
 [data-theme='light'] .galaxy { display: none; }
 
 .galaxy-plate,

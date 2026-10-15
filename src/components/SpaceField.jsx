@@ -2,15 +2,15 @@ import { useEffect, useRef } from 'react'
 import './SpaceField.css'
 
 /**
- * The sky the whole page sits on, and it has two of them.
+ * The sky the whole page sits on, at night and by day.
  *
- * At night it draws almost nothing: the galaxy photograph is the sky, and the
- * stars twinkling in its arms are Galaxy.jsx's. What is left here is the web a
- * click cuts, and the meteor that crosses now and then.
+ * At night it draws almost nothing: the stars twinkling on the sky are
+ * Galaxy.jsx's. What is left here is the web a click cuts, and the meteor that
+ * crosses now and then.
  *
- * By day it is Wendy's: the same points of light, drawn as petals turning as
- * they drift, with no threads between them. A click opens a bloom instead of a
- * web. One canvas, one set of particles, two hands.
+ * By day the galaxy is not drawn, and this is the sky: the same field of
+ * points, as small blue glints drifting and twinkling on the pale page. A
+ * click cuts the same web as at night, in the day's silver-blue.
  *
  * One fixed canvas behind everything rather than a background per section, so
  * scrolling moves the page over a still sky instead of dragging a gradient
@@ -55,7 +55,7 @@ const SHOOT_LIFE_MS = 1100
 // become the sky the galaxy is turning in.
 const DRIFT_XY = 0.012     // world px per frame, sideways
 const DRIFT_Z = 0.05       // world px per frame, towards or away
-// How near the pointer has to be for a petal to notice it. Daylight only —
+// How near the pointer has to be for a glint to notice it. Daylight only —
 // at night the stars take no notice of the pointer at all, since threads
 // reaching for the cursor made an already busy sky unreadable.
 const POINTER_DISTANCE = 210
@@ -76,24 +76,20 @@ const WEB_RADIUS = 124
 const WEB_SPOKES = 13
 const WEB_RINGS = 3
 const WEB_MAX = 3          // at once: a drummed mouse should not stack up
-// The daylight bloom is thrown a shorter way than the web is cut: petals that
-// travel as far as a web's spokes read as an explosion rather than a flower.
-const BLOOM_RADIUS = 86
-
-// Daylight drifts. The night sky is a field seen from a ship; this is petals
-// falling in still air, and it should look like it.
+// Daylight drifts. The night sky is a field seen from a ship; by day the
+// glints hang in still air, and move like it.
 const DAY_SPEED = 0.3
-// How far a petal turns towards a passing pointer, and how quickly it gets
+// How far a glint turns towards a passing pointer, and how quickly it gets
 // there. Small and slow: a nudge, not a flinch.
 const TILT_MAX = 0.42
 const TILT_EASE = 0.06
 
-// Water. A petal on a surface does not travel in a line: it rides a swell,
+// Air. A glint by day does not travel in a line: it rides a slow swell,
 // rocks as it goes, and comes back to rest where it was.
 const BOB_AMP = 7          // px of sway at the near plane
 const BOB_RATE = 0.00026   // radians per millisecond
 
-// The ring a click sends out: a wave train, not a shove. A petal on water does
+// The ring a click sends out: a wave train, not a shove. A glint does
 // not get pushed aside by a passing wave — it rides up the face of it, leans
 // with the slope, slides back as the crest goes by and ends up where it
 // started. So the ripple contributes an *offset* that oscillates, never a
@@ -102,30 +98,9 @@ const RIPPLE_MS = 2900     // the train crosses the page slowly
 const RIPPLE_REACH = 680     // px the front of the train travels
 const RIPPLE_BAND = 170      // how far behind the front the swell still carries
 const RIPPLE_WAVE = 230      // crest to crest: long swells, not chop
-const RIPPLE_SWAY = 15       // px a petal rides, at the strongest
+const RIPPLE_SWAY = 15       // px a glint rides, at the strongest
 const RIPPLE_ROCK = 0.46     // radians it leans on the steepest face
 const RIPPLE_LIFT = 0.16     // how much bigger it looks lifted on a crest
-
-/**
- * One petal, drawn around the origin at unit size: a pointed tip at the top, a
- * fuller, rounder base at the bottom, and the two sides cut differently so it
- * curls rather than sitting flat — a petal off a flower, not a leaf shape.
- *
- * Unit coordinates on purpose. The caller scales the context instead of the
- * path, which means one cached gradient in the same coordinates paints every
- * petal on the page whatever its size.
- */
-function petalPath(context) {
-  context.beginPath()
-  context.moveTo(0, -1)
-  // The full side: wide, and widest below the middle, where a petal carries
-  // its weight.
-  context.bezierCurveTo(0.52, -0.46, 0.62, 0.34, 0.06, 1)
-  // The curled side: narrower, and pulled back across the axis near the base,
-  // which is what gives the petal its turn.
-  context.bezierCurveTo(-0.5, 0.42, -0.42, -0.4, 0, -1)
-  context.closePath()
-}
 
 export default function SpaceField() {
   const canvasRef = useRef(null)
@@ -186,18 +161,6 @@ export default function SpaceField() {
     const isNight = () => document.documentElement.dataset.theme !== 'light'
     let night = isNight()
 
-    // Pale at the tip, deep at the base, like the petal it is drawn from.
-    // Built once per palette rather than per petal per frame: there are four
-    // hundred of them and sixty frames a second.
-    const makePetalFill = () => {
-      const fill = context.createLinearGradient(0, -1, 0, 1)
-      fill.addColorStop(0, `rgba(${colours.glow}, 0.15)`)
-      fill.addColorStop(0.38, `rgba(${colours.glow}, 0.62)`)
-      fill.addColorStop(1, `rgba(${colours.glow}, 1)`)
-      return fill
-    }
-    let petalFill = makePetalFill()
-
     // A four-pointed glint, drawn once per palette: the sparkle that sits on
     // every crossing of a web's threads.
     const makeSparkle = () => {
@@ -205,7 +168,10 @@ export default function SpaceField() {
       sprite.width = sprite.height = 32
       const g = sprite.getContext('2d')
       const core = g.createRadialGradient(16, 16, 0, 16, 16, 9)
-      core.addColorStop(0, 'rgba(255, 255, 255, 1)')
+      // White at night; by day white vanishes on the pale page, so the core
+      // is the logo's blue.
+      const centre = night ? '255, 255, 255' : colours.silkGlow
+      core.addColorStop(0, `rgba(${centre}, 1)`)
       core.addColorStop(0.4, `rgba(${colours.silk}, 0.75)`)
       core.addColorStop(1, `rgba(${colours.silkGlow}, 0)`)
       g.fillStyle = core
@@ -213,7 +179,7 @@ export default function SpaceField() {
       for (const [w, h] of [[32, 1.6], [1.6, 32]]) {
         const ray = w > h ? g.createLinearGradient(0, 0, 32, 0) : g.createLinearGradient(0, 0, 0, 32)
         ray.addColorStop(0, `rgba(${colours.silk}, 0)`)
-        ray.addColorStop(0.5, 'rgba(255, 255, 255, 1)')
+        ray.addColorStop(0.5, `rgba(${centre}, 1)`)
         ray.addColorStop(1, `rgba(${colours.silk}, 0)`)
         g.fillStyle = ray
         g.fillRect(16 - w / 2, 16 - h / 2, w, h)
@@ -272,7 +238,7 @@ export default function SpaceField() {
         // Signed: a star is as likely to be falling away as approaching.
         vz: (Math.random() - 0.5) * 2 * DRIFT_Z,
         twinkle: Math.random() * Math.PI * 2,
-        // Day only: the angle a petal is lying at, and how fast it turns.
+        // Day only: the angle a glint is turned to, and how fast it turns.
         spin: Math.random() * Math.PI * 2,
         spinV: (Math.random() - 0.5) * 0.012,
         tilt: 0,
@@ -283,7 +249,7 @@ export default function SpaceField() {
         // Band stars are the far ones seen edge-on: smaller and dimmer, so
         // the band reads as a haze rather than a second field of points.
         inBand,
-        // Water: each petal rides its own swell.
+        // Each glint rides its own swell.
         waveF: 0.7 + Math.random() * 0.8,
         waveA: 0.55 + Math.random() * 0.9,
       }
@@ -300,10 +266,10 @@ export default function SpaceField() {
       // Night draws no stars of its own. The photograph behind the page is
       // already a sky, and a second one drifting over it read as two skies at
       // once; its twinkle is drawn by Galaxy.jsx, on the arms where it
-      // belongs. The loop is still the daylight petals' though.
+      // belongs. The loop is still the daylight glints' though.
       if (!night) for (const star of stars) {
         if (!still.matches) {
-          // Petals fall slower than stars sweep past.
+          // Glints drift slower than stars sweep past.
           const pace = night ? 1 : DAY_SPEED
           star.x += star.vx * pace
           star.y += star.vy * pace
@@ -339,12 +305,10 @@ export default function SpaceField() {
         const size = 0.9 + near * 2.6
 
         {
-          // A petal lying at its own angle, so the sky is full of things
-          // falling rather than things shining. One colour throughout —
-          // depth and the pointer change how present a petal is, never what
-          // colour it is, or the sky looks like two sets of confetti.
-          // The swell: an offset rather than a change of course, so a petal
-          // rides up and down without wandering off across the page.
+          // One colour throughout — depth and the pointer change how present
+          // a glint is, never what colour it is, or the sky looks like two
+          // sets of confetti. The swell: an offset rather than a change of
+          // course, so a glint rides up and down without wandering off.
           const swell = time * BOB_RATE * star.waveF + star.twinkle
           const bobX = Math.sin(swell) * BOB_AMP * star.waveA * (0.35 + near * 0.65)
           const bobY = Math.cos(swell * 0.82) * BOB_AMP * 0.62 * star.waveA * (0.35 + near * 0.65)
@@ -352,7 +316,7 @@ export default function SpaceField() {
           // Any passing wave train. Each one adds a ride along the line back
           // to where it was cut, a lean with the slope of the water, and a
           // little lift on the crest. All three are read from the wave at this
-          // instant, so when it has gone the petal is exactly where it was.
+          // instant, so when it has gone the glint is exactly where it was.
           let ride = 0
           let rock = 0
           let lift = 0
@@ -399,23 +363,20 @@ export default function SpaceField() {
           const lean = pointer.on
             ? Math.max(0, 1 - Math.hypot(sx - pointer.x, sy - pointer.y) / POINTER_DISTANCE)
             : 0
-          // Eased towards the target rather than set to it: a petal should
+          // Eased towards the target rather than set to it: a glint should
           // turn as the pointer passes, not flick to a new angle every frame.
           star.tilt += (lean * TILT_MAX - star.tilt) * TILT_EASE
           star.glint += (lean - star.glint) * TILT_EASE
 
-          context.globalAlpha = (0.18 + near * 0.5) * pulse + star.glint * 0.26 + lift * 0.12
+          // A glint: the four-pointed sparkle the webs wear, small and blue,
+          // twinkling on its own beat and brightening as the pointer passes.
+          // Lifted on a crest it is nearer the eye, so a touch larger.
+          context.globalAlpha = Math.min(1, (0.25 + near * 0.55) * pulse + star.glint * 0.35 + lift * 0.12)
+          const reach = size * 4.2 * (1 + lift * RIPPLE_LIFT + star.glint * 0.35)
           context.save()
           context.translate(sx, sy)
-          context.rotate(star.spin + star.tilt + Math.sin(swell * 1.1) * 0.22 + rock * RIPPLE_ROCK)
-          // The gradient is written in the same unit space as the path, so
-          // scaling the context carries both.
-          // Lifted on a crest it is nearer the eye, so a touch larger.
-          const riding = size * 3.1 * (1 + lift * RIPPLE_LIFT)
-          context.scale(riding, riding)
-          context.fillStyle = petalFill
-          petalPath(context)
-          context.fill()
+          context.rotate(star.tilt + rock * RIPPLE_ROCK)
+          context.drawImage(sparkle, -reach / 2, -reach / 2, reach, reach)
           context.restore()
         }
       }
@@ -475,32 +436,6 @@ export default function SpaceField() {
         for (const web of webs) {
           const t = (time - web.born) / WEB_MS
 
-          if (!night) {
-            // A bloom: petals thrown outwards from the point, turning as they
-            // go. The petals are the whole of it — a ring drawn around them
-            // read as a diagram of the effect rather than part of it.
-            const spread = 1 - Math.pow(1 - t, 2.4)
-            const fade = Math.pow(1 - t, 1.3)
-
-            for (const spoke of web.spokes) {
-              const distance = BLOOM_RADIUS * spoke.reach * spread
-              const px = web.x + Math.cos(spoke.angle) * distance
-              const py = web.y + Math.sin(spoke.angle) * distance
-              context.globalAlpha = fade * 0.85
-              context.save()
-              context.translate(px, py)
-              // Turned by how far it has flown, so the petals tumble outwards.
-              // Pointing the way it flew, and turning a little as it goes.
-              context.rotate(spoke.angle + Math.PI / 2 + spread * 1.6)
-              context.scale(11 * (1 - t * 0.35), 11 * (1 - t * 0.35))
-              context.fillStyle = petalFill
-              petalPath(context)
-              context.fill()
-              context.restore()
-            }
-            continue
-          }
-
           // Fast out, slow to settle: the snap of a thread being pulled taut.
           const spread = 1 - Math.pow(1 - t, 3)
           // Held, then let go: at 1.6 the web was gone before the eye found it.
@@ -519,7 +454,7 @@ export default function SpaceField() {
           const band = Math.min(Math.max(t * 1.8 - 0.3, 0.12), 0.88)
           sheen.addColorStop(0, `rgb(${colours.silk})`)
           sheen.addColorStop(band - 0.12, `rgb(${colours.silk})`)
-          sheen.addColorStop(band, '#ffffff')
+          sheen.addColorStop(band, night ? '#ffffff' : `rgb(${colours.silkGlow})`)
           sheen.addColorStop(band + 0.12, `rgb(${colours.silk})`)
           sheen.addColorStop(1, `rgb(${colours.silk})`)
           context.strokeStyle = sheen
@@ -585,7 +520,9 @@ export default function SpaceField() {
 
           // A sparkle on every crossing of a spiral thread and a spoke, each
           // twinkling on its own beat, so the web glitters as it opens.
-          context.globalCompositeOperation = 'lighter'
+          // Added light at night; by day added light on the pale page is
+          // nothing, so the glints are simply painted on.
+          context.globalCompositeOperation = night ? 'lighter' : 'source-over'
           points.forEach((point, i) => {
             for (let ring = 1; ring <= WEB_RINGS; ring += 1) {
               const step = ring / WEB_RINGS
@@ -643,7 +580,6 @@ export default function SpaceField() {
     const onTheme = () => {
       colours = palette()
       night = isNight()
-      petalFill = makePetalFill()
       sparkle = makeSparkle()
     }
 

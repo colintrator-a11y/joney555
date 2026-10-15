@@ -93,9 +93,9 @@ const BOB_RATE = 0.00026   // radians per millisecond
 // web, and each glint it reaches flaring as it passes. Light, not a wave —
 // nothing is moved, only lit, so when the ring has gone every glint is just
 // as it was.
-const PULSE_MS = 1700      // how long the ring takes to cross its reach
+const PULSE_MS = 2200      // how long the ring takes to cross its reach
 const PULSE_REACH = 720    // px the ring travels
-const PULSE_BAND = 46      // how wide the lit edge is, either side of the ring
+const PULSE_BAND = 60      // how wide the lit edge is, either side of the ring
 const PULSE_FLARE = 0.9    // how much bigger a glint grows as the ring passes
 
 export default function SpaceField() {
@@ -264,17 +264,21 @@ export default function SpaceField() {
         // under the glints so the flare on each one sits on top.
         if (!still.matches) {
           for (const p of pulses) {
-            const age = (time - p.born) / PULSE_MS
-            const front = PULSE_REACH * (1 - Math.pow(1 - age, 2))
+            // Clamped: a click is stamped with performance.now(), which can be
+            // a moment later than the frame's own timestamp, and a negative age
+            // gives the ring a negative radius — which arc() throws on, and the
+            // throw stopped the whole sky.
+            const age = Math.max(0, (time - p.born) / PULSE_MS)
+            const front = PULSE_REACH * (1 - Math.pow(1 - age, 1.6))
             const fade = 1 - age
             context.globalAlpha = 1
             context.lineWidth = 10
-            context.strokeStyle = `rgba(${colours.silkGlow}, ${0.08 * fade})`
+            context.strokeStyle = `rgba(${colours.silkGlow}, ${0.14 * fade})`
             context.beginPath()
             context.arc(p.x, p.y, front, 0, Math.PI * 2)
             context.stroke()
-            context.lineWidth = 1.4
-            context.strokeStyle = `rgba(${colours.silkGlow}, ${0.35 * fade})`
+            context.lineWidth = 1.6
+            context.strokeStyle = `rgba(${colours.silkGlow}, ${0.55 * fade})`
             context.stroke()
           }
         }
@@ -339,8 +343,8 @@ export default function SpaceField() {
           let flare = 0
           if (!still.matches) {
             for (const p of pulses) {
-              const age = (time - p.born) / PULSE_MS
-              const front = PULSE_REACH * (1 - Math.pow(1 - age, 2))
+              const age = Math.max(0, (time - p.born) / PULSE_MS)
+              const front = PULSE_REACH * (1 - Math.pow(1 - age, 1.6))
               const off = Math.hypot(sx - p.x, sy - p.y) - front
               flare = Math.max(flare, Math.exp(-((off / PULSE_BAND) ** 2)) * (1 - age))
             }
@@ -420,7 +424,8 @@ export default function SpaceField() {
       if (webs.length) {
         webs = webs.filter((web) => time - web.born < WEB_MS)
         for (const web of webs) {
-          const t = (time - web.born) / WEB_MS
+          // Clamped for the same reason as the pulse's age: never before its click.
+          const t = Math.max(0, (time - web.born) / WEB_MS)
 
           // Fast out, slow to settle: the snap of a thread being pulled taut.
           const spread = 1 - Math.pow(1 - t, 3)

@@ -89,14 +89,6 @@ const TILT_EASE = 0.06
 const BOB_AMP = 7          // px of sway at the near plane
 const BOB_RATE = 0.00026   // radians per millisecond
 
-// The pulse a click sends out by day: a faint ring of light spreading from the
-// web, and each glint it reaches flaring as it passes. Light, not a wave —
-// nothing is moved, only lit, so when the ring has gone every glint is just
-// as it was.
-const PULSE_MS = 2200      // how long the ring takes to cross its reach
-const PULSE_REACH = 720    // px the ring travels
-const PULSE_BAND = 60      // how wide the lit edge is, either side of the ring
-const PULSE_FLARE = 0.9    // how much bigger a glint grows as the ring passes
 
 export default function SpaceField() {
   const canvasRef = useRef(null)
@@ -114,7 +106,6 @@ export default function SpaceField() {
     let frame = 0
     const pointer = { x: 0, y: 0, on: false }
     let webs = []
-    let pulses = []
     // Something crossing the sky, now and then. One at a time: two at once
     // reads as a effect rather than an event.
     let shoot = null
@@ -130,12 +121,6 @@ export default function SpaceField() {
       const born = performance.now()
       webs.push({ x, y, born, spokes })
       if (webs.length > WEB_MAX) webs = webs.slice(-WEB_MAX)
-      // Day only: at night the stars are Galaxy.jsx's, so there are no
-      // glints here for a pulse to light.
-      if (!night) {
-        pulses.push({ x, y, born })
-        if (pulses.length > WEB_MAX) pulses = pulses.slice(-WEB_MAX)
-      }
     }
 
     // The canvas is painted in the page's own colours, so the sky follows the
@@ -258,31 +243,6 @@ export default function SpaceField() {
       const cx = width / 2
       const cy = height / 2
 
-      if (!night) {
-        pulses = pulses.filter((p) => time - p.born < PULSE_MS)
-        // The rings themselves: thin, faint, fading as they widen. Drawn
-        // under the glints so the flare on each one sits on top.
-        if (!still.matches) {
-          for (const p of pulses) {
-            // Clamped: a click is stamped with performance.now(), which can be
-            // a moment later than the frame's own timestamp, and a negative age
-            // gives the ring a negative radius — which arc() throws on, and the
-            // throw stopped the whole sky.
-            const age = Math.max(0, (time - p.born) / PULSE_MS)
-            const front = PULSE_REACH * (1 - Math.pow(1 - age, 1.6))
-            const fade = 1 - age
-            context.globalAlpha = 1
-            context.lineWidth = 10
-            context.strokeStyle = `rgba(${colours.silkGlow}, ${0.14 * fade})`
-            context.beginPath()
-            context.arc(p.x, p.y, front, 0, Math.PI * 2)
-            context.stroke()
-            context.lineWidth = 1.6
-            context.strokeStyle = `rgba(${colours.silkGlow}, ${0.55 * fade})`
-            context.stroke()
-          }
-        }
-      }
 
       // Night draws no stars of its own. The photograph behind the page is
       // already a sky, and a second one drifting over it read as two skies at
@@ -337,18 +297,6 @@ export default function SpaceField() {
           sx += bobX
           sy += bobY
 
-          // Any passing pulse: how near this glint is to the ring's edge now,
-          // 0 to 1, fading as the ring widens. Read fresh each frame, so the
-          // flare rises and falls as the ring goes by.
-          let flare = 0
-          if (!still.matches) {
-            for (const p of pulses) {
-              const age = Math.max(0, (time - p.born) / PULSE_MS)
-              const front = PULSE_REACH * (1 - Math.pow(1 - age, 1.6))
-              const off = Math.hypot(sx - p.x, sy - p.y) - front
-              flare = Math.max(flare, Math.exp(-((off / PULSE_BAND) ** 2)) * (1 - age))
-            }
-          }
 
           const lean = pointer.on
             ? Math.max(0, 1 - Math.hypot(sx - pointer.x, sy - pointer.y) / POINTER_DISTANCE)
@@ -359,10 +307,9 @@ export default function SpaceField() {
           star.glint += (lean - star.glint) * TILT_EASE
 
           // A glint: the four-pointed sparkle the webs wear, small and blue,
-          // twinkling on its own beat, brightening as the pointer passes and
-          // flaring as a pulse goes by.
-          context.globalAlpha = Math.min(1, (0.25 + near * 0.55) * pulse + star.glint * 0.35 + flare * 0.85)
-          const reach = size * 4.2 * (1 + star.glint * 0.35 + flare * PULSE_FLARE)
+          // twinkling on its own beat and brightening as the pointer passes.
+          context.globalAlpha = Math.min(1, (0.25 + near * 0.55) * pulse + star.glint * 0.35)
+          const reach = size * 4.2 * (1 + star.glint * 0.35)
           context.save()
           context.translate(sx, sy)
           context.rotate(star.tilt)
@@ -424,7 +371,9 @@ export default function SpaceField() {
       if (webs.length) {
         webs = webs.filter((web) => time - web.born < WEB_MS)
         for (const web of webs) {
-          // Clamped for the same reason as the pulse's age: never before its click.
+          // Clamped: a click is stamped with performance.now(), which can be a
+          // moment later than the frame's own timestamp, and a web drawn from a
+          // negative age would be spun backwards.
           const t = Math.max(0, (time - web.born) / WEB_MS)
 
           // Fast out, slow to settle: the snap of a thread being pulled taut.

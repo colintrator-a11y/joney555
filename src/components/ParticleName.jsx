@@ -20,6 +20,13 @@ import './ParticleName.css'
  */
 
 const GAP = 5 // sampling grid: smaller is denser, and costs more particles
+// On a phone the word is set small, and on the full grid a letter's stroke
+// is only a dot or two wide: it reads as a dotted outline, not a letter. The
+// grid shrinks with the type instead, so a stroke always carries a few dots
+// across; on a wide screen the type is large and the full grid is used.
+const MIN_GAP = 1.8
+const DOTS_PER_EM = 26
+const gapFor = (fontSize) => Math.min(GAP, Math.max(MIN_GAP, fontSize / DOTS_PER_EM))
 const RETURN = 0.052 // how hard a particle is pulled home
 const FRICTION = 0.86
 const PUSH_RADIUS = 92
@@ -166,7 +173,7 @@ export default function ParticleName({ text, tone = 'default' }) {
       const parent = canvas.parentElement
       width = parent.clientWidth
       // Tall enough for the type, short enough that the line below stays close.
-      height = Math.min(Math.max(width * 0.3, 120), 330)
+      height = Math.min(Math.max(width * 0.3, 96), 330)
       ratio = Math.min(window.devicePixelRatio || 1, 2)
       canvas.width = Math.floor(width * ratio)
       canvas.height = Math.floor(height * ratio)
@@ -180,15 +187,18 @@ export default function ParticleName({ text, tone = 'default' }) {
       // Drawn, read back as pixels, then cleared: what stays on screen is only
       // ever the particles. Longer words are set smaller so every one fits.
       const fontSize = Math.min(width / (value.length * 0.62), height * 0.92)
+      const gap = gapFor(fontSize)
+      // Small type is set a weight heavier, so a thin stroke still has body.
+      const weight = fontSize < 110 ? 700 : 600
       context.clearRect(0, 0, width, height)
       context.fillStyle = '#fff'
       context.textAlign = 'center'
       context.textBaseline = 'middle'
-      context.font = `600 ${fontSize}px 'Space Grotesk', 'Segoe UI', system-ui, sans-serif`
+      context.font = `${weight} ${fontSize}px 'Space Grotesk', 'Segoe UI', system-ui, sans-serif`
       context.fillText(value, width / 2, height / 2)
 
       const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data
-      const step = GAP * ratio
+      const step = gap * ratio
       const points = []
       for (let y = 0; y < canvas.height; y += step) {
         for (let x = 0; x < canvas.width; x += step) {
@@ -205,10 +215,19 @@ export default function ParticleName({ text, tone = 'default' }) {
         const j = Math.floor(Math.random() * (i + 1))
         ;[points[i], points[j]] = [points[j], points[i]]
       }
+      points.gap = gap
       return points
     }
 
-    const spawn = (home, from) => ({
+    // A particle's size follows the grid it sits on: neighbours nearly touch
+    // whatever the grid, and a fine grid does not melt into one blob.
+    const fit = (p, gap) => {
+      p.size = p.grain * gap
+      p.scale = gap / GAP
+      return p
+    }
+
+    const spawn = (home, from, gap) => fit({
       x: from ? from.x : home.x + (Math.random() - 0.5) * width * 1.6,
       y: from ? from.y : home.y + (Math.random() - 0.5) * height * 6,
       homeX: home.x,
@@ -218,19 +237,21 @@ export default function ParticleName({ text, tone = 'default' }) {
       // A little variation so the swarm does not arrive as one block.
       ease: RETURN * (0.6 + Math.random() * 0.8),
       // Big enough that neighbours nearly touch on the grid, so a letter
-      // reads as a solid shape and not as a mesh over the sky.
-      size: Math.random() < 0.15 ? 2.1 : 1.7,
+      // reads as a solid shape and not as a mesh over the sky (1.7 or 2.1
+      // pixels on the full grid).
+      grain: Math.random() < 0.15 ? 0.42 : 0.34,
       // Each particle twinkles and drifts on its own clock.
       phase: Math.random() * TAU,
       speed: 1.5 + Math.random() * 3,
       star: Math.random() < STAR_SHARE ? 0.35 + Math.random() * 0.6 : 0,
       fading: false,
-    })
+    }, gap)
 
     /** First arrival: every particle comes in from far off. */
     const build = () => {
       size()
-      particles = sample(word).map((home) => spawn(home))
+      const homes = sample(word)
+      particles = homes.map((home) => spawn(home, null, homes.gap))
       scatterDust()
       intro = 0
     }
@@ -261,9 +282,10 @@ export default function ParticleName({ text, tone = 'default' }) {
         if (p) {
           p.homeX = homes[i].x
           p.homeY = homes[i].y
+          fit(p, homes.gap)
           next.push(p)
         } else {
-          next.push(spawn(homes[i], live[i % Math.max(live.length, 1)]))
+          next.push(spawn(homes[i], live[i % Math.max(live.length, 1)], homes.gap))
         }
       }
       for (let i = homes.length; i < live.length; i += 1) {
@@ -271,6 +293,7 @@ export default function ParticleName({ text, tone = 'default' }) {
         const home = homes[i % homes.length]
         p.homeX = home.x
         p.homeY = home.y
+        fit(p, homes.gap)
         p.fading = true
         p.fade = 1
         next.push(p)
@@ -398,7 +421,9 @@ export default function ParticleName({ text, tone = 'default' }) {
         if (p.star && !still.matches) {
           const f = flareAt(t, p.star, p.phase)
           if (f > 0.02) {
-            const r = 9 + 12 * f
+            // Scaled with the type: a full-size star over small letters
+            // would hide the very letters it sits on.
+            const r = (9 + 12 * f) * Math.max(p.scale, 0.45)
             if (!light) context.globalCompositeOperation = 'lighter'
             context.globalAlpha = alpha * f
             context.drawImage(sparkle, x - r, y - r, r * 2, r * 2)

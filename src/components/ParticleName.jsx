@@ -6,7 +6,8 @@ import './ParticleName.css'
  *
  * The word is drawn once into the canvas, that bitmap is sampled on a grid,
  * and every solid pixel becomes a home for a particle. The particles fly in
- * when the page opens, scatter away from the pointer, and are always pulled
+ * when the page opens, scatter away from the pointer — which, over the word,
+ * also draws threads of light to the points around it — and are always pulled
  * back to the letter they belong to.
  *
  * When the word changes, the particles are not thrown away: each is given a
@@ -29,8 +30,13 @@ const DOTS_PER_EM = 26
 const gapFor = (fontSize) => Math.min(GAP, Math.max(MIN_GAP, fontSize / DOTS_PER_EM))
 const RETURN = 0.052 // how hard a particle is pulled home
 const FRICTION = 0.86
-const PUSH_RADIUS = 92
-const PUSH_FORCE = 38
+const PUSH_RADIUS = 118
+const PUSH_FORCE = 52
+// Hovering the word: threads of light from the pointer to the points around
+// it, a spotlight under it, and a burst of sparkle the moment it arrives.
+const THREAD_REACH = 104 // how far a thread reaches from the pointer
+const THREAD_MAX = 28 // threads at once, so a dense letter is not a solid fan
+const BURST_REACH = 150 // how far the arrival burst is felt
 
 // Dark-mode ink, per tone. Near-white by default: the word is drawn over the
 // galaxy's brightest part, and in accent blue it disappears into it.
@@ -129,6 +135,23 @@ export default function ParticleName({ text, tone = 'default' }) {
     let frame = 0
     let intro = 0
     const pointer = { x: -9999, y: -9999 }
+    // The word's own box (set wherever its points are laid out), whether the
+    // pointer is over it, and an eased 0–1 of that for the effects to fade by.
+    const bounds = { x0: 0, y0: 0, x1: 0, y1: 0 }
+    let over = false
+    let hover = 0
+    const measure = (homes) => {
+      bounds.x0 = Infinity
+      bounds.y0 = Infinity
+      bounds.x1 = -Infinity
+      bounds.y1 = -Infinity
+      for (const h of homes) {
+        bounds.x0 = Math.min(bounds.x0, h.x)
+        bounds.y0 = Math.min(bounds.y0, h.y)
+        bounds.x1 = Math.max(bounds.x1, h.x)
+        bounds.y1 = Math.max(bounds.y1, h.y)
+      }
+    }
 
     const ink = () =>
       document.documentElement.dataset.theme === 'light'
@@ -251,6 +274,7 @@ export default function ParticleName({ text, tone = 'default' }) {
     const build = () => {
       size()
       const homes = sample(word)
+      measure(homes)
       particles = homes.map((home) => spawn(home, null, homes.gap))
       scatterDust()
       intro = 0
@@ -265,6 +289,7 @@ export default function ParticleName({ text, tone = 'default' }) {
     const flowTo = (value) => {
       const homes = sample(value)
       if (!homes.length) return
+      measure(homes)
       const live = particles.filter((p) => !p.fading)
       // The old word bursts before it reforms, so the change reads as an
       // event rather than a slide.
@@ -314,6 +339,42 @@ export default function ParticleName({ text, tone = 'default' }) {
 
       const t = now / 1000
       const light = isLight()
+
+      // Over the word, with a margin, so the effect starts as the pointer
+      // reaches the letters rather than only once it is on a point.
+      const inside =
+        pointer.x > bounds.x0 - 24 && pointer.x < bounds.x1 + 24 &&
+        pointer.y > bounds.y0 - 24 && pointer.y < bounds.y1 + 24
+      if (inside && !over && !still.matches) {
+        // Arrival: the points nearest the pointer are thrown out a little and
+        // flash, so moving onto the word is felt at once.
+        for (const p of particles) {
+          const dx = p.x - pointer.x
+          const dy = p.y - pointer.y
+          const d = Math.hypot(dx, dy)
+          if (d > BURST_REACH || d < 0.01) continue
+          const kick = (1 - d / BURST_REACH) * (5 + Math.random() * 5)
+          p.vx += (dx / d) * kick
+          p.vy += (dy / d) * kick
+          p.flash = Math.max(p.flash || 0, 1 - d / BURST_REACH)
+        }
+      }
+      over = inside
+      hover += ((over ? 1 : 0) - hover) * Math.min(1, 0.12 * step)
+      const threads = []
+
+      // The spotlight: a soft light under the pointer while it is on the word.
+      if (hover > 0.02 && !still.matches) {
+        const r = THREAD_REACH * 1.6
+        const spot = context.createRadialGradient(pointer.x, pointer.y, 0, pointer.x, pointer.y, r)
+        spot.addColorStop(0, light ? `${shine}40` : `${shine}55`)
+        spot.addColorStop(1, `${shine}00`)
+        if (!light) context.globalCompositeOperation = 'lighter'
+        context.globalAlpha = hover
+        context.fillStyle = spot
+        context.fillRect(pointer.x - r, pointer.y - r, r * 2, r * 2)
+        context.globalCompositeOperation = 'source-over'
+      }
       // The sweep runs along a slight diagonal, from off the left edge to off
       // the right, then rests before the next one.
       const sweepX = ((t % SWEEP_PERIOD) / SWEEP_PERIOD) * (width + SWEEP_WIDTH * 8) - SWEEP_WIDTH * 4
@@ -368,6 +429,7 @@ export default function ParticleName({ text, tone = 'default' }) {
 
         // Spare particles fade as they arrive, rather than vanishing mid-air.
         if (p.fading) p.fade = Math.max(0, p.fade - 0.025 * step)
+        if (p.flash) p.flash = Math.max(0, p.flash - 0.03 * step)
 
         const base = still.matches ? 1 : 0.5 + intro * 0.5
         const fade = p.fading ? p.fade : 1
@@ -389,8 +451,12 @@ export default function ParticleName({ text, tone = 'default' }) {
           const reach = PUSH_RADIUS * 1.8
           const pd = Math.hypot(p.x - pointer.x, p.y - pointer.y)
           if (pd < reach) near = 1 - pd / reach
+          // A thread to this point, if it is close and there is room for one.
+          if (hover > 0.02 && pd < THREAD_REACH && threads.length < THREAD_MAX && !p.fading) {
+            threads.push({ x, y, strength: 1 - pd / THREAD_REACH })
+          }
         }
-        const lit = Math.min(1, highlight + near * 0.8)
+        const lit = Math.min(1, highlight + near * 0.8 * (0.6 + hover * 0.4) + (p.flash || 0))
         const alpha = base * fade
         const radius = p.size * (1 + lit * 0.7)
 
@@ -417,6 +483,15 @@ export default function ParticleName({ text, tone = 'default' }) {
         context.arc(x, y, radius, 0, TAU)
         context.fill()
 
+        // The arrival burst: each point it reached flashes into a star.
+        if (p.flash > 0.05) {
+          const r = (6 + 14 * p.flash) * Math.max(p.scale, 0.45)
+          if (!light) context.globalCompositeOperation = 'lighter'
+          context.globalAlpha = alpha * p.flash
+          context.drawImage(sparkle, x - r, y - r, r * 2, r * 2)
+          context.globalCompositeOperation = 'source-over'
+        }
+
         // Now and then one of the word's own points flares into a star.
         if (p.star && !still.matches) {
           const f = flareAt(t, p.star, p.phase)
@@ -430,6 +505,26 @@ export default function ParticleName({ text, tone = 'default' }) {
             context.globalCompositeOperation = 'source-over'
           }
         }
+      }
+
+      // The threads, over the points: fine lines of light from the pointer to
+      // each point it is near, brighter the closer the point, with a bright
+      // bead where the pointer is.
+      if (threads.length && hover > 0.02) {
+        if (!light) context.globalCompositeOperation = 'lighter'
+        context.strokeStyle = light ? shine : '#ffffff'
+        context.lineWidth = 0.8
+        for (const th of threads) {
+          context.globalAlpha = hover * th.strength * (light ? 0.55 : 0.5)
+          context.beginPath()
+          context.moveTo(pointer.x, pointer.y)
+          context.lineTo(th.x, th.y)
+          context.stroke()
+        }
+        const bead = 14 + 4 * Math.sin(t * 6)
+        context.globalAlpha = hover * 0.9
+        context.drawImage(sparkle, pointer.x - bead / 2, pointer.y - bead / 2, bead, bead)
+        context.globalCompositeOperation = 'source-over'
       }
 
       // The faded-out spares have no further part to play.

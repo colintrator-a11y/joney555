@@ -35,7 +35,7 @@ const PUSH_FORCE = 52
 // Hovering the word: threads of light from the pointer to the points around
 // it, a spotlight under it, and a burst of sparkle the moment it arrives.
 const THREAD_REACH = 104 // how far a thread reaches from the pointer
-const THREAD_MAX = 28 // threads at once, so a dense letter is not a solid fan
+const THREAD_MAX = 14 // threads at once, so a dense letter is not a solid fan
 const BURST_REACH = 150 // how far the arrival burst is felt
 
 // Dark-mode ink, per tone. Near-white by default: the word is drawn over the
@@ -221,12 +221,25 @@ export default function ParticleName({ text, tone = 'default' }) {
       context.fillText(value, width / 2, height / 2)
 
       const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data
-      const step = gap * ratio
+      // Alpha only: the colour was just a stencil.
+      const solid = (x, y) =>
+        x >= 0 && y >= 0 && x < canvas.width && y < canvas.height &&
+        pixels[(Math.floor(y) * canvas.width + Math.floor(x)) * 4 + 3] >= 128
+
+      // Outline letters, like neon tubing: only the points on the edge of each
+      // stroke are kept — solid themselves, with open sky beside them. Sampled
+      // at half the usual spacing so the outline runs as a line of light
+      // rather than a dotted one.
+      const step = gap * ratio * 0.5
+      const edge = step * 1.4
       const points = []
       for (let y = 0; y < canvas.height; y += step) {
         for (let x = 0; x < canvas.width; x += step) {
-          // Alpha only: the colour was just a stencil.
-          if (pixels[(Math.floor(y) * canvas.width + Math.floor(x)) * 4 + 3] < 128) continue
+          if (!solid(x, y)) continue
+          const open =
+            !solid(x - edge, y) || !solid(x + edge, y) ||
+            !solid(x, y - edge) || !solid(x, y + edge)
+          if (!open) continue
           points.push({ x: x / ratio, y: y / ratio })
         }
       }
@@ -353,10 +366,10 @@ export default function ParticleName({ text, tone = 'default' }) {
           const dy = p.y - pointer.y
           const d = Math.hypot(dx, dy)
           if (d > BURST_REACH || d < 0.01) continue
-          const kick = (1 - d / BURST_REACH) * (5 + Math.random() * 5)
+          const kick = (1 - d / BURST_REACH) * (2.5 + Math.random() * 2.5)
           p.vx += (dx / d) * kick
           p.vy += (dy / d) * kick
-          p.flash = Math.max(p.flash || 0, 1 - d / BURST_REACH)
+          p.flash = Math.max(p.flash || 0, (1 - d / BURST_REACH) * 0.55)
         }
       }
       over = inside
@@ -367,7 +380,7 @@ export default function ParticleName({ text, tone = 'default' }) {
       if (hover > 0.02 && !still.matches) {
         const r = THREAD_REACH * 1.6
         const spot = context.createRadialGradient(pointer.x, pointer.y, 0, pointer.x, pointer.y, r)
-        spot.addColorStop(0, light ? `${shine}40` : `${shine}55`)
+        spot.addColorStop(0, light ? `${shine}1c` : `${shine}24`)
         spot.addColorStop(1, `${shine}00`)
         if (!light) context.globalCompositeOperation = 'lighter'
         context.globalAlpha = hover
@@ -456,7 +469,7 @@ export default function ParticleName({ text, tone = 'default' }) {
             threads.push({ x, y, strength: 1 - pd / THREAD_REACH })
           }
         }
-        const lit = Math.min(1, highlight + near * 0.8 * (0.6 + hover * 0.4) + (p.flash || 0))
+        const lit = Math.min(1, highlight + near * 0.55 + (p.flash || 0) * 0.6)
         const alpha = base * fade
         const radius = p.size * (1 + lit * 0.7)
 
@@ -485,7 +498,7 @@ export default function ParticleName({ text, tone = 'default' }) {
 
         // The arrival burst: each point it reached flashes into a star.
         if (p.flash > 0.05) {
-          const r = (6 + 14 * p.flash) * Math.max(p.scale, 0.45)
+          const r = (4 + 8 * p.flash) * Math.max(p.scale, 0.45)
           if (!light) context.globalCompositeOperation = 'lighter'
           context.globalAlpha = alpha * p.flash
           context.drawImage(sparkle, x - r, y - r, r * 2, r * 2)
@@ -513,16 +526,16 @@ export default function ParticleName({ text, tone = 'default' }) {
       if (threads.length && hover > 0.02) {
         if (!light) context.globalCompositeOperation = 'lighter'
         context.strokeStyle = light ? shine : '#ffffff'
-        context.lineWidth = 0.8
+        context.lineWidth = 0.6
         for (const th of threads) {
-          context.globalAlpha = hover * th.strength * (light ? 0.55 : 0.5)
+          context.globalAlpha = hover * th.strength * (light ? 0.3 : 0.22)
           context.beginPath()
           context.moveTo(pointer.x, pointer.y)
           context.lineTo(th.x, th.y)
           context.stroke()
         }
-        const bead = 14 + 4 * Math.sin(t * 6)
-        context.globalAlpha = hover * 0.9
+        const bead = 9 + 2 * Math.sin(t * 6)
+        context.globalAlpha = hover * 0.55
         context.drawImage(sparkle, pointer.x - bead / 2, pointer.y - bead / 2, bead, bead)
         context.globalCompositeOperation = 'source-over'
       }

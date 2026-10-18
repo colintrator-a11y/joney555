@@ -462,6 +462,19 @@ export const projects = [
     tags: ['Web Development', 'Front-end Development', 'Back-end Development', 'REST API', 'Maps Integration', 'SEO'],
   },
   {
+    id: 'zego',
+    name: 'Zego — Motor Insurance Website',
+    category: 'fullstack',
+    accent: 'teal',
+    media: [
+      { file: 'zego-home.jpg', width: 1400, height: 800 },
+      { file: 'zego-delivery.jpg', width: 1400, height: 771 },
+      { file: 'zego-about.jpg', width: 1400, height: 796 },
+    ],
+    links: [{ kind: 'site', href: 'https://www.zego.com/' }],
+    tags: ['Front-end Development', 'Figma', 'Responsive Design', 'Server-side Rendering', 'Static Site Generation', 'Web Performance'],
+  },
+  {
     id: 'enterpriseErp',
     name: 'EnterpriseERP',
     category: 'fullstack',

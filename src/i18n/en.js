@@ -221,6 +221,11 @@ export default {
         'The app features an interactive map with custom sport-specific pins, advanced filters for sport, day of the week, gender and event type, and a clean, modern UI that delivers a smooth experience on both iOS and Android. Users can also follow their favourite organisers, get alerts for their events and share events with friends.',
         'Published on the App Store and Google Play by Assymbly Sport LLC, rated 5.0 on the App Store.',
       ],
+      zego: [
+        'Zego is a UK motor insurance company, authorised and regulated by the FCA, with flexible policies for work and personal driving — cars, scooters, motorbikes and vans, private hire taxis and food delivery — quoted in minutes and managed from an app. I worked on its website as a front-end developer.',
+        'UI/UX implementation: I translated Figma designs into pixel-perfect, responsive interfaces that align with Zego\'s brand and user-experience standards, across product pages such as motor, delivery and taxi insurance and the company\'s own story.',
+        'Performance: I implemented web performance techniques — server-side rendering, static site generation, lazy loading and asset bundling — to keep load times fast and interactions smooth.',
+      ],
       trakMd: [
         'trakMD Doctor App, a React Native app for clinicians on iOS and Android, published on the App Store.',
         'The doctor-facing half of a patient tracking system: appointments, patient records and messaging in one place, with a single codebase shipping to both platforms.',

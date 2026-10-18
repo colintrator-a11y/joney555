@@ -254,6 +254,11 @@ export default {
         'Visitors track recent developments across the neighbourhood — new condos, apartments, hotels, restaurants, retail and office space — get a property estimation, contact the broker to buy or sell, and sign up for a free South Boston buying guide and a newsletter so they never miss a development.',
         'Built with React, Node.js and Express on a MEAN-stack back end.',
       ],
+      yogaForLife: [
+        'Yoga for Life — "Yoga is not a work-out, it is a work-in" — is a gentle yoga app for all fitness levels, offering stretches, yoga workouts, meditation and fitness plans for women and men: a hybrid yoga programme with a complete beginner series and the most important poses for beginners.',
+        'Special features: yoga for a toned belly, a happy back and core strength; yoga for good health and sleep, with good posture; breathing exercises and fat-burning workouts, including a 30-minute session; yoga for a healthy heart; and a daily workout for a healthy, toned body. In the app, programmes run from Starter through Medium and Advanced to Extreme, day by day; every pose comes with step-by-step instructions; and reminders keep the practice going.',
+        'Built with Flutter for Android and iOS.',
+      ],
       trakMd: [
         'trakMD Doctor App, a React Native app for clinicians on iOS and Android, published on the App Store.',
         'The doctor-facing half of a patient tracking system: appointments, patient records and messaging in one place, with a single codebase shipping to both platforms.',

@@ -232,6 +232,17 @@ export const projects = [
     tags: ['Mobile App Development', 'API Integration'],
   },
   {
+    id: 'foodNetworkKitchen',
+    name: 'Food Network Kitchen',
+    category: 'mobile',
+    accent: 'amber',
+    media: [
+      { file: 'fnk-appstore.jpg', width: 1400, height: 1060 },
+      { file: 'fnk-play.jpg', width: 1400, height: 756 },
+    ],
+    tags: ['React Native', 'TypeScript', 'Redux', 'React.js', 'Firebase Cloud Messaging', 'Stripe', 'PayPal', 'i18n'],
+  },
+  {
     id: 'trakMd',
     name: 'trakMD Doctor App',
     category: 'mobile',

@@ -278,11 +278,11 @@ export const projects = [
     category: 'mobile',
     accent: 'rose',
     media: [
+      { file: 'yoga-platforms.gif', width: 586, height: 433 },
       { file: 'yoga-intro.jpg', width: 688, height: 870 },
       { file: 'yoga-meditation.jpg', width: 688, height: 930 },
       { file: 'yoga-levels.jpg', width: 688, height: 610 },
       { file: 'yoga-reminders.jpg', width: 688, height: 850 },
-      { file: 'yoga-platforms.jpg', width: 586, height: 433 },
     ],
     tags: ['Flutter', 'Android', 'iOS Development', 'Mobile App Development', 'App Developer'],
   },

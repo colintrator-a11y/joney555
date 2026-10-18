@@ -273,6 +273,10 @@ export default {
         'I built it as a full-stack project: a multistep quote form for car, home, commercial and life insurance, MailChimp newsletter sign-up, and a responsive, SEO-friendly and secure site deployed on AWS.',
         'Built with React and Node.js, alongside PHP.',
       ],
+      learningPool: [
+        'Learning Pool helps organisations deliver exceptional performance with pioneering online learning platforms, creative content and powerful analytics. Its expert team creates the content and technology solutions that engage and empower modern learners around the world — all wrapped up with award-winning support.',
+        'I worked on its website, built on WordPress with JavaScript, HTML and CSS, with AngularJS on the front end. In 2026 Learning Pool rebranded as Confirm, and the site now lives on at confirm.com.',
+      ],
       trakMd: [
         'trakMD Doctor App, a React Native app for clinicians on iOS and Android, published on the App Store.',
         'The doctor-facing half of a patient tracking system: appointments, patient records and messaging in one place, with a single codebase shipping to both platforms.',

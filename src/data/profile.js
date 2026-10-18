@@ -561,6 +561,14 @@ export const projects = [
     tags: ['Node.js', 'React.js', 'PHP', 'AWS', 'MailChimp', 'SEO', 'Full Stack Development'],
   },
   {
+    id: 'learningPool',
+    name: 'Learning Pool — Online Learning Platform Website',
+    category: 'fullstack',
+    accent: 'rose',
+    media: [{ file: 'learningpool-angular.gif', width: 600, height: 433 }],
+    tags: ['WordPress', 'JavaScript', 'HTML', 'CSS', 'Website Design', 'AngularJS'],
+  },
+  {
     id: 'enterpriseErp',
     name: 'EnterpriseERP',
     category: 'fullstack',

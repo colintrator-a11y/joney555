@@ -398,6 +398,15 @@ export const projects = [
     tags: ['Web Design', 'Web Development', 'Responsive Design', 'SEO'],
   },
   {
+    id: 'homely',
+    name: 'Homely — Real Estate Website',
+    category: 'fullstack',
+    accent: 'emerald',
+    media: [{ file: 'homely-card.jpg', width: 1400, height: 875 }],
+    links: [{ kind: 'site', href: 'https://www.homely.com.au' }],
+    tags: ['Web Development', 'Front-end Development', 'Back-end Development', 'REST API', 'Maps Integration', 'SEO'],
+  },
+  {
     id: 'enterpriseErp',
     name: 'EnterpriseERP',
     category: 'fullstack',

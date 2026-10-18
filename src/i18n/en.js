@@ -201,6 +201,11 @@ export default {
         'Dentalia is a network of more than 60 dental clinics across Mexico. Through my expertise in web design and development, I transformed its website into a visually striking, user-friendly platform that performs exceptionally across devices and search engines.',
         'The site brings the whole network together: a clinic locator with booking online, by phone or WhatsApp; treatments from implants and orthodontics to whitening and children\'s dentistry; individual and family memberships; insurance and corporate plans; promotions and financing; and a free first evaluation as part of booking.',
       ],
+      homely: [
+        'Homely is an Australian real estate platform for finding homes to buy and rent. I developed the Homely website from scratch, creating a fully functional, responsive and user-friendly platform — from conceptual design to deployment.',
+        'Front end: a modern UI/UX with seamless navigation across all devices. Back end: scalable server-side logic, APIs and database management to handle listings, user accounts and search. Integration: advanced property search, filtering and interactive maps.',
+        'Optimisation: high performance, fast load times and an SEO-friendly architecture — an end-to-end web solution held to high standards of performance and usability.',
+      ],
       trakMd: [
         'trakMD Doctor App, a React Native app for clinicians on iOS and Android, published on the App Store.',
         'The doctor-facing half of a patient tracking system: appointments, patient records and messaging in one place, with a single codebase shipping to both platforms.',

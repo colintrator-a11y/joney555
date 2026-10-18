@@ -451,6 +451,19 @@ export const projects = [
     tags: ['Telegram Mini App', 'Game Development', 'Blockchain', 'Web Application'],
   },
   {
+    id: 'agCashCarry',
+    name: 'AG Cash & Carry — Wholesale eCommerce',
+    category: 'ecommerce',
+    accent: 'amber',
+    media: [
+      { file: 'agcc-overview.jpg', width: 1400, height: 933 },
+      { file: 'agcc-home.jpg', width: 800, height: 500 },
+      { file: 'agcc-pages.jpg', width: 800, height: 500 },
+    ],
+    links: [{ kind: 'site', href: 'https://agcashcarry.co.uk/' }],
+    tags: ['WordPress', 'WooCommerce', 'PHP', 'MySQL', 'Website Design', 'Responsive Design'],
+  },
+  {
     id: 'ramboBikes',
     name: 'Rambo Bikes — Shopify Automation & Interactive Bike Builder',
     category: 'ecommerce',

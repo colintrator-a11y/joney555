@@ -264,6 +264,11 @@ export default {
         'Visitors choose their region, see where the foundation gives, and get involved: volunteer, read local stories of impact, learn about hunger, apply for funding, join up and donate.',
         'Built with PHP and Laravel on MySQL, with JavaScript on the front end.',
       ],
+      versured: [
+        "Versured was an online insurance brokerage — \"We're making insurance easier for everyone.\" Its PolicyBuilder turns buying insurance into three steps: share your goals, compare accurate live quotes from partners such as Travelers, Progressive, Safeco, Nationwide and Liberty Mutual, and buy online or with help from a licensed agent, in under four minutes.",
+        'I built it as a full-stack project: a multistep quote form for car, home, commercial and life insurance, MailChimp newsletter sign-up, and a responsive, SEO-friendly and secure site deployed on AWS.',
+        'Built with React and Node.js, alongside PHP.',
+      ],
       trakMd: [
         'trakMD Doctor App, a React Native app for clinicians on iOS and Android, published on the App Store.',
         'The doctor-facing half of a patient tracking system: appointments, patient records and messaging in one place, with a single codebase shipping to both platforms.',

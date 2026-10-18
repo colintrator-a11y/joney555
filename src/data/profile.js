@@ -549,6 +549,18 @@ export const projects = [
     tags: ['PHP', 'Laravel', 'MySQL', 'JavaScript', 'Website Design'],
   },
   {
+    id: 'versured',
+    name: 'Versured — Online Insurance Brokerage',
+    category: 'fullstack',
+    accent: 'emerald',
+    media: [
+      { file: 'versured-home.jpg', width: 1152, height: 880 },
+      { file: 'versured-features.jpg', width: 1152, height: 600 },
+      { file: 'versured-quotes.jpg', width: 1152, height: 980 },
+    ],
+    tags: ['Node.js', 'React.js', 'PHP', 'AWS', 'MailChimp', 'SEO', 'Full Stack Development'],
+  },
+  {
     id: 'enterpriseErp',
     name: 'EnterpriseERP',
     category: 'fullstack',

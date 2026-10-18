@@ -162,6 +162,11 @@ export default {
         'People join as a client or as a wellness professional, create a profile, find compatible connections and book sessions safely through a guided flow. Around that sit a community space for discussions, experiences and events; a karma and trust system with profile verification; a safety centre; and a dashboard with suggestions, bookings and progress.',
         'Built on the MERN stack — React, Node.js, MongoDB and Express — with Tailwind CSS, secure and private by design.',
       ],
+      safespace: [
+        'Safespace is an automated technological solution in the fight against digital property infringement — "Grab your coffee, we are here to protect your content." It helps content creators, influencers, brands and individuals safeguard their online presence by detecting and removing leaked or unauthorised copies of their photos, videos and posts across the web.',
+        'The platform scans the internet for infringing material, delists it from Google automatically, sends DMCA takedown requests to hosting sites and contacts site owners directly, with 24/7 monitoring to catch future leaks. Users register once and follow everything from a dashboard: scans run, infringements found, links delisted, the estimated value saved, before-and-after search results, the most-reported websites, and real-time notifications and reports.',
+        'The project covers the marketing site and the member dashboard, designed in a dark, violet-lit style and fully responsive across desktop, tablet and mobile.',
+      ],
       familj: [
         'A pregnancy health app built as a client project, designed to support pregnant women throughout their pregnancy journey. It brings guidance, health tips and community interaction together in one easy-to-use platform.',
         'Features: weekly pregnancy suggestions and health tips, a checklist of what needs to be done at each stage, a community system with blog comments for discussion and support, a web application for easy access, and mobile apps on iOS and Android.',

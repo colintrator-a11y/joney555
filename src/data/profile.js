@@ -184,6 +184,17 @@ export const projects = [
     tags: ['React', 'Node.js', 'MongoDB', 'Tailwind CSS', 'JavaScript', 'Web Development'],
   },
   {
+    id: 'safespace',
+    name: 'Safespace — Content Protection Platform',
+    category: 'fullstack',
+    accent: 'violet',
+    media: [
+      { file: 'safespace-devices.jpg', width: 1400, height: 866 },
+      { file: 'safespace-mobile.jpg', width: 1400, height: 934 },
+    ],
+    tags: ['Web Development', 'SaaS', 'Dashboard', 'Responsive Design', 'DMCA Automation'],
+  },
+  {
     id: 'familj',
     name: 'Familj Pregnancy App',
     category: 'mobile',

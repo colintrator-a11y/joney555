@@ -268,6 +268,14 @@ export const projects = [
     tags: ['Flutter', 'FastAPI', 'GetX', 'Firebase', 'Mobile App Development'],
   },
   {
+    id: 'bedrockChatbot',
+    name: 'Serverless AI Chatbot Platform on AWS Bedrock',
+    category: 'ai',
+    accent: 'amber',
+    media: [{ file: 'bedrock-architecture.jpg', width: 1131, height: 501 }],
+    tags: ['Amazon Bedrock', 'Claude', 'SDXL', 'AWS Lambda', 'API Gateway', 'AWS Amplify', 'Amazon Cognito', 'Amazon S3', 'AWS CDK', 'CloudWatch', 'Serverless'],
+  },
+  {
     id: 'aiArt',
     name: 'AI Art Generator App',
     category: 'ai',

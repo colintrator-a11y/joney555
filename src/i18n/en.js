@@ -224,6 +224,11 @@ export default {
         'Key features and technologies: fast and accurate currency data via a high-performance API, GetX for state management and smooth app performance, Firebase Authentication for secure user access, GetStorage as a local database for user preferences and data, user data persistence through efficient state management, and a fully responsive design that looks great on all devices.',
         'The app provides a seamless user experience with modern architecture, high performance, and a clean UI across all screen sizes.',
       ],
+      bedrockChatbot: [
+        'I designed and built a complete end-to-end serverless AI chatbot platform from scratch using AWS cloud-native services. Users can chat, summarise text, generate content and create AI images — all powered by Amazon Bedrock models such as Claude and SDXL.',
+        'The front end is deployed on AWS Amplify with secure Cognito authentication. Every request flows through a custom API built on API Gateway and a suite of AWS Lambda functions I engineered for each task — summarisation, text generation and image generation. Bedrock handles the AI processing, and generated images are stored securely in an S3 bucket and delivered through presigned URLs.',
+        'The whole infrastructure is code, written with AWS CDK, for one-click deployment, clean version control, consistent environments and long-term scalability; logging and monitoring run through CloudWatch for full visibility and reliability. The project shows how I architect, build, secure and deploy production-ready AI systems on AWS.',
+      ],
       aiArt: [
         'AI Art Generator is a revolutionary mobile app that enables users to create stunning artwork effortlessly with just a few taps. Powered by advanced artificial intelligence, this innovative app transforms your text prompts into breathtaking, high-quality visuals.',
         "Whether you're an artist, designer, or someone looking to explore their creative side, AI Art Generator provides a seamless platform to bring your ideas to life. Its intuitive interface allows you to generate unique and personalized artwork, offering endless creative possibilities. By leveraging cutting-edge AI technology, the app redefines the way we create and experience art, making it accessible to everyone, regardless of skill level.",

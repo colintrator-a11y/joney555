@@ -249,6 +249,11 @@ export default {
         'The project is a fully customised WordPress website: a custom theme with advanced chalet listings, a dynamic availability search filtering by location, dates, nights, guests and amenities, chalet detail pages with booking enquiries, seasonal winter and summer experiences, and luxury-focused UI/UX tailored to premium travellers — fully responsive across devices.',
         'Built with WordPress, PHP and ACF, styled with Sass, and animated with JavaScript, jQuery and GSAP; SEO-optimised and tuned for fast loading.',
       ],
+      southieMap: [
+        "SouthieMap is a real estate broker website for South Boston — \"the data-driven real estate brokerage\". It uses current market big data and invaluable real-person, hyperlocal know-how to estimate the worth of a property, backed by a proprietary database of South Boston data.",
+        'Visitors track recent developments across the neighbourhood — new condos, apartments, hotels, restaurants, retail and office space — get a property estimation, contact the broker to buy or sell, and sign up for a free South Boston buying guide and a newsletter so they never miss a development.',
+        'Built with React, Node.js and Express on a MEAN-stack back end.',
+      ],
       trakMd: [
         'trakMD Doctor App, a React Native app for clinicians on iOS and Android, published on the App Store.',
         'The doctor-facing half of a patient tracking system: appointments, patient records and messaging in one place, with a single codebase shipping to both platforms.',

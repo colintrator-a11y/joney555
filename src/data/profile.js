@@ -511,6 +511,18 @@ export const projects = [
     tags: ['WordPress', 'PHP', 'ACF', 'Sass', 'JavaScript', 'jQuery', 'GSAP', 'Website Design', 'SEO'],
   },
   {
+    id: 'southieMap',
+    name: 'SouthieMap — Data-Driven Real Estate Brokerage',
+    category: 'fullstack',
+    accent: 'violet',
+    media: [
+      { file: 'southiemap-home.jpg', width: 1291, height: 806 },
+      { file: 'southiemap-broker.jpg', width: 1291, height: 490 },
+      { file: 'southiemap-guide.jpg', width: 1291, height: 330 },
+    ],
+    tags: ['React.js', 'Node.js', 'Express JS', 'MEAN Stack', 'Programming'],
+  },
+  {
     id: 'enterpriseErp',
     name: 'EnterpriseERP',
     category: 'fullstack',

@@ -214,7 +214,7 @@ export default {
       foodNetworkKitchen: [
         'Food Network Kitchen, from Discovery: recipes, how-tos and meal plans, rated 4.9 on the App Store and 4.8 on Google Play with over 5 million downloads and an Editors\' Choice badge. Users save and organise recipes, get curated weekly meal plans, search for recipes by the ingredients in their kitchen, and cook along with step-by-step tutorials and on-demand classes.',
         'I worked on it as a front-end engineer in React Native with Redux, hooks and TypeScript: third-party API integration for recipes and ingredients, push notifications through Firebase Cloud Messaging, multiple languages with i18n and react-localization, and multiple payment gateways with Stripe and PayPal.',
-        'Designs came from InVision; the work ran on GitLab, Hubstaff and Slack. Food Network retired the app in 2024 and moved the service to FoodNetwork.com.',
+        'The screens here run from the app itself to my development builds in VS Code and the iOS simulator: categories, recipe lists, recipe details with ingredients, and the sign-in and ordering flows. Designs came from InVision; the work ran on GitLab, Hubstaff and Slack. Food Network retired the app in 2024 and moved the service to FoodNetwork.com.',
       ],
       trakMd: [
         'trakMD Doctor App, a React Native app for clinicians on iOS and Android, published on the App Store.',

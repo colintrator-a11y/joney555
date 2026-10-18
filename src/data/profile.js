@@ -191,6 +191,17 @@ export const projects = [
     tags: ['Flutter', 'PHP', 'Android', 'iOS Development', 'iPhone'],
   },
   {
+    id: 'fieldService',
+    name: 'Field Service Management Mobile App',
+    category: 'mobile',
+    accent: 'emerald',
+    media: [
+      { file: 'fieldservice-dashboard.jpg', width: 752, height: 564 },
+      { file: 'fieldservice-fleet.jpg', width: 800, height: 800 },
+    ],
+    tags: ['Mobile App Development', 'API Integration'],
+  },
+  {
     id: 'trakMd',
     name: 'trakMD Doctor App',
     category: 'mobile',

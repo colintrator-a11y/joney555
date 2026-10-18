@@ -177,6 +177,11 @@ export default {
         'The scope combined Shopify automation and backend troubleshooting with an interactive bike-builder workflow: guided questions, customisable parts selection, and a visual representation of the parts chosen. Speed optimisation and user experience were key priorities throughout.',
         'The completed project received a 5.0/5 client review. The client highlighted how I identified the backend issues, implemented a practical solution efficiently, and kept communication clear and responsive: "His communication was excellent, and he made what could have been a complicated process feel simple."',
       ],
+      fieldService: [
+        'I developed a mobile application for field service companies, helping technicians and managers handle daily operations more efficiently.',
+        'Technicians receive work orders, update job statuses, upload photos, collect customer signatures and complete service reports directly from their phones. Managers assign tasks, monitor job progress and review technician activity through a centralised system, with live tracking of vehicles, fleet performance and analytics on the dashboard.',
+        'The app and the management dashboard are tied together through API integration, so every update from the field reaches the office as it happens.',
+      ],
       trakMd: [
         'trakMD Doctor App, a React Native app for clinicians on iOS and Android, published on the App Store.',
         'The doctor-facing half of a patient tracking system: appointments, patient records and messaging in one place, with a single codebase shipping to both platforms.',

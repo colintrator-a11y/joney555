@@ -171,6 +171,19 @@ export const projects = [
     tags: ['Tauri', 'Rust', 'React', 'Desktop App Development', 'Web Development', 'Admin Dashboard', 'Responsive Design'],
   },
   {
+    id: 'soluna',
+    name: 'SoLuna Collective — Wellness Community Platform',
+    category: 'fullstack',
+    accent: 'violet',
+    media: [
+      { file: 'soluna-overview.jpg', width: 1400, height: 933 },
+      { file: 'soluna-home.jpg', width: 800, height: 500 },
+      { file: 'soluna-dashboard.jpg', width: 800, height: 500 },
+    ],
+    links: [{ kind: 'site', href: 'https://solunacollective.org/' }],
+    tags: ['React', 'Node.js', 'MongoDB', 'Tailwind CSS', 'JavaScript', 'Web Development'],
+  },
+  {
     id: 'familj',
     name: 'Familj Pregnancy App',
     category: 'mobile',

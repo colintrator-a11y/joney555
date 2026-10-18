@@ -157,6 +157,11 @@ export default {
         'The Windows app is built with Tauri and Rust, published on Steam and the Microsoft Store, with ambient soundscapes, loop and shuffle, and the panda settled into the corner of the screen. The website presents the experience and a gift flow to send Winter Panda to friends, family or a whole team; the user app lets businesses manage subscriptions, licences and gift invitations.',
         'The admin console runs the business platform — customers, plans and pricing, subscriptions, invitations, prospects and CSV exports — alongside Bagel Warmth analytics on installs, mood distribution and reflection words.',
       ],
+      soluna: [
+        'SoLuna Collective is a wellness community platform: a safe, professional space to build meaningful, platonic connections that support well-being, growth and humanity. I designed and developed it from A to Z — the complete build, custom UI, responsive layouts, core functionality, performance optimisation and a seamless experience across devices.',
+        'People join as a client or as a wellness professional, create a profile, find compatible connections and book sessions safely through a guided flow. Around that sit a community space for discussions, experiences and events; a karma and trust system with profile verification; a safety centre; and a dashboard with suggestions, bookings and progress.',
+        'Built on the MERN stack — React, Node.js, MongoDB and Express — with Tailwind CSS, secure and private by design.',
+      ],
       familj: [
         'A pregnancy health app built as a client project, designed to support pregnant women throughout their pregnancy journey. It brings guidance, health tips and community interaction together in one easy-to-use platform.',
         'Features: weekly pregnancy suggestions and health tips, a checklist of what needs to be done at each stage, a community system with blog comments for discussion and support, a web application for easy access, and mobile apps on iOS and Android.',

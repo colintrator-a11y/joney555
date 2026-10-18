@@ -231,6 +231,10 @@ export default {
         'UI/UX implementation: I translated Figma designs into pixel-perfect, responsive interfaces that align with Zego\'s brand and user-experience standards, across product pages such as motor, delivery and taxi insurance and the company\'s own story.',
         'Performance: I implemented web performance techniques — server-side rendering, static site generation, lazy loading and asset bundling — to keep load times fast and interactions smooth.',
       ],
+      rjOsaki: [
+        'RJ Osaki is a rental office in Osaki, Tokyo, run by RJ Office — private offices for one to ten people, a few minutes on foot from Gotanda and Osaki stations. I built its Japanese website on WordPress, from the PSD designs to a working theme in PHP and JavaScript.',
+        "The site presents the office and why tenants choose it, an interactive floor plan marking which rooms are free, pricing plans by team size with each room's monthly fee and campaign offers, the steps to move in, and a contact section with phone and an enquiry form.",
+      ],
       trakMd: [
         'trakMD Doctor App, a React Native app for clinicians on iOS and Android, published on the App Store.',
         'The doctor-facing half of a patient tracking system: appointments, patient records and messaging in one place, with a single codebase shipping to both platforms.',

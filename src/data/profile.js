@@ -475,6 +475,18 @@ export const projects = [
     tags: ['Front-end Development', 'Figma', 'Responsive Design', 'Server-side Rendering', 'Static Site Generation', 'Web Performance'],
   },
   {
+    id: 'rjOsaki',
+    name: 'RJ Osaki — Rental Office Website (Tokyo)',
+    category: 'fullstack',
+    accent: 'rose',
+    media: [
+      { file: 'rjosaki-home.jpg', width: 361, height: 226 },
+      { file: 'rjosaki-plan.jpg', width: 361, height: 226 },
+      { file: 'rjosaki-pricing.jpg', width: 361, height: 226 },
+    ],
+    tags: ['WordPress', 'PHP', 'JavaScript', 'Website Design', 'PSD to HTML'],
+  },
+  {
     id: 'enterpriseErp',
     name: 'EnterpriseERP',
     category: 'fullstack',

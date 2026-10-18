@@ -550,6 +550,19 @@ export const projects = [
     tags: ['Telegram Mini App', 'Game Development', 'Blockchain', 'Web Application'],
   },
   {
+    id: 'giovvani',
+    name: 'Giovvani Milan — Luxury Shoes on Shopify',
+    category: 'ecommerce',
+    accent: 'slate',
+    media: [
+      { file: 'giovvani-home.jpg', width: 1400, height: 646 },
+      { file: 'giovvani-hero.jpg', width: 1400, height: 674 },
+      { file: 'giovvani-collection.jpg', width: 1400, height: 663 },
+    ],
+    links: [{ kind: 'site', href: 'https://www.giovvani.com/' }],
+    tags: ['Shopify Development', 'Liquid Template', 'HTML5', 'CSS3', 'SEO', 'UX / User Experience', 'Payment Gateway Integration'],
+  },
+  {
     id: 'agCashCarry',
     name: 'AG Cash & Carry — Wholesale eCommerce',
     category: 'ecommerce',

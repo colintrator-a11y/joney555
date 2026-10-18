@@ -182,6 +182,11 @@ export default {
         'The site has dedicated pages for personal training, training for two and in-home training, alongside trainer profiles, client testimonials, and a prominent "start with $100 in free training" offer linked to the contact form. Visitors can explore the Central and Northwest locations, with their addresses, phone numbers and directions, and the business\'s 4.9-star Google rating and 15 years in San Antonio are shown up front.',
         'The brief was to modernise the site while keeping its existing functionality and search visibility, fully responsive on desktop and mobile. The completed project received a 5.0 client review on Freelancer.',
       ],
+      giovvani: [
+        "As lead Shopify developer for Giovvani Milan, an Italian luxury shoe brand, I drove the store's development and optimisation into a high-performance sales engine — scaling it to over €2M in revenue, merging tech with luxury flair.",
+        'Theme and UI/UX: customised Liquid themes with JavaScript and CSS on the Dawn framework for a minimalist look, with responsive product pages that cut bounce rates by 25%. SEO and performance: schema, meta tags and speed work for loads under two seconds, lifting organic traffic 40% at 98% uptime. App integrations: 15+ apps such as Klaviyo and ReCharge for email, subscriptions and reviews, with custom scripts that raised conversions 18%.',
+        'Payments and compliance: multi-currency Stripe and PayPal with GDPR tools, and secure checkouts for €500+ items that cut abandonment. Analytics and launches: GA4 for KPI tracking and A/B tests, raising repeat sales 15%, and Git-deployed seasonal drops.',
+      ],
       agCashCarry: [
         'AG Cash & Carry is a UK wholesale supplier of food and non-food products for businesses. I designed and developed its website from scratch: a professional, responsive eCommerce site with custom layouts, clear service presentation, intuitive navigation and a polished user experience.',
         'Built for wholesale customers, it makes products easy to find through clear categories, search and filters, and a Top Sellers section; product pages carry variations, images and related products; customers have accounts for easy reordering, with a simple, secure cart and checkout — browse, view, add to cart, check out.',

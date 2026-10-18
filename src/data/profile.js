@@ -154,6 +154,23 @@ export const projects = [
     tags: ['React', 'Node.js', 'Express.js', 'MongoDB', 'Tailwind CSS', 'JavaScript', 'Charles Schwab API', 'Trading Automation'],
   },
   {
+    id: 'winterDesktops',
+    name: 'Winter Desktops — Winter Panda Ecosystem',
+    category: 'fullstack',
+    accent: 'violet',
+    media: [
+      { file: 'winter-overview.jpg', width: 1400, height: 933 },
+      { file: 'winter-desktop-app.jpg', width: 800, height: 500 },
+      { file: 'winter-user-app.jpg', width: 800, height: 500 },
+    ],
+    links: [
+      { kind: 'site', href: 'https://winterdesktops.com' },
+      { kind: 'app', href: 'https://app.winterdesktops.com' },
+      { kind: 'admin', href: 'https://admin.winterdesktops.com' },
+    ],
+    tags: ['Tauri', 'Rust', 'React', 'Desktop App Development', 'Web Development', 'Admin Dashboard', 'Responsive Design'],
+  },
+  {
     id: 'familj',
     name: 'Familj Pregnancy App',
     category: 'mobile',

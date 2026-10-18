@@ -152,6 +152,11 @@ export default {
         'The admin dashboard runs the strategy: it shows live system status, the current position with its quantity, entry price and value, and the full trade history. From it you control trading and simulation, configure market hours, ETFs, trading parameters and alerts, manage trading accounts and tokens, set holidays, and connect a Charles Schwab account to switch into real trading mode.',
         'Built on the MERN stack — MongoDB, Express.js, React and Node.js — with Tailwind CSS, and fully responsive across desktop, tablet and mobile.',
       ],
+      winterDesktops: [
+        'Winter Desktops is the home of Winter Panda, a calm, privacy-first companion that lives on your desktop — reacting to your rhythm with gentle animations and one warm daily check-in, with no accounts and no tracking. I designed and developed the complete ecosystem from A to Z: the public website, the user web app, the admin dashboard, the back end, a responsive UI and the platform management tools.',
+        'The Windows app is built with Tauri and Rust, published on Steam and the Microsoft Store, with ambient soundscapes, loop and shuffle, and the panda settled into the corner of the screen. The website presents the experience and a gift flow to send Winter Panda to friends, family or a whole team; the user app lets businesses manage subscriptions, licences and gift invitations.',
+        'The admin console runs the business platform — customers, plans and pricing, subscriptions, invitations, prospects and CSV exports — alongside Bagel Warmth analytics on installs, mood distribution and reflection words.',
+      ],
       familj: [
         'A pregnancy health app built as a client project, designed to support pregnant women throughout their pregnancy journey. It brings guidance, health tips and community interaction together in one easy-to-use platform.',
         'Features: weekly pregnancy suggestions and health tips, a checklist of what needs to be done at each stage, a community system with blog comments for discussion and support, a web application for easy access, and mobile apps on iOS and Android.',
@@ -275,7 +280,7 @@ export default {
         'The site is a WordPress and WooCommerce store, with the range organised into product categories from castors, wheels and tyres through to pallet jacks, conveyors, roll cages and gate hardware, alongside site-wide product search and a store finder.',
       ],
     },
-      links: { demo: 'Watch the demo', store: 'View on Google Play', site: 'Visit the site', appStore: 'View on the App Store', admin: 'Open the admin dashboard' },
+      links: { demo: 'Watch the demo', store: 'View on Google Play', site: 'Visit the site', appStore: 'View on the App Store', admin: 'Open the admin dashboard', app: 'Open the web app' },
     mediaAlt: (name) => `Preview of ${name}`,
   },
 

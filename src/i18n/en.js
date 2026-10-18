@@ -192,6 +192,10 @@ export default {
         'Built for wholesale customers, it makes products easy to find through clear categories, search and filters, and a Top Sellers section; product pages carry variations, images and related products; customers have accounts for easy reordering, with a simple, secure cart and checkout — browse, view, add to cart, check out.',
         'Built on WordPress and WooCommerce with PHP and MySQL, fully responsive across desktop, tablet and mobile, and optimised for speed and SEO.',
       ],
+      hazardKit: [
+        'HazardKit — "Don\'t ever be unprepared" — was an online store for outdoor survival gear: knives, first aid kits, survival kits, water purifiers, axes, fire starters, navigation, satellite phones, food storage and travel kits, gathered from around the web into one place, from brands such as LifeStraw, The North Face and REI.',
+        'I built the store on WordPress from its PSD designs, in PHP and JavaScript: the bold black-and-red theme, the product categories in the navigation, a homepage leading straight to the store, and an easy checkout.',
+      ],
       ramboBikes: [
         "I worked on Rambo Bikes' existing Shopify store — the e-bike brand behind the Rambo Revolt and the No. 1 hunting e-bike — to clear backend roadblocks and make shopping for a bike more intuitive. My role: Shopify developer, focused on custom functionality and backend improvements.",
         'The scope combined Shopify automation and backend troubleshooting with an interactive bike-builder workflow: guided questions, customisable parts selection, and a visual representation of the parts chosen. Speed optimisation and user experience were key priorities throughout.',

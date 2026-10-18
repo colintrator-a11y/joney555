@@ -601,6 +601,17 @@ export const projects = [
     tags: ['Shopify Development', 'Shopify Templates', 'Backend Development', 'Frontend Development', 'Website Optimization', 'Web Development'],
   },
   {
+    id: 'hazardKit',
+    name: 'HazardKit — Survival Gear Store',
+    category: 'ecommerce',
+    accent: 'rose',
+    media: [
+      { file: 'hazardkit-home.jpg', width: 1249, height: 780 },
+      { file: 'hazardkit-brands.jpg', width: 1249, height: 480 },
+    ],
+    tags: ['WordPress', 'PHP', 'JavaScript', 'Website Design', 'PSD to HTML'],
+  },
+  {
     id: 'wooBulkDiscount',
     name: 'WooCommerce Bulk Discount Display',
     category: 'ecommerce',

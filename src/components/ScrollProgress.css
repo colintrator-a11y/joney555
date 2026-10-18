@@ -1,0 +1,21 @@
+/* Above everything, the dock included, and never in the way of a click. */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  height: 3px;
+  pointer-events: none;
+}
+
+/* The buttons' gradient, filling from the left, with a glow and a bright
+   tip at its leading edge. */
+.scroll-progress-bar {
+  position: relative;
+  height: 100%;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  background: linear-gradient(90deg, var(--btn-from), var(--btn-to));
+  box-shadow: 0 0 8px rgba(var(--glow), 0.8), 0 0 2px rgba(var(--glow), 0.9);
+}

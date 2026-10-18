@@ -13,6 +13,7 @@ import Experience from './components/Experience.jsx'
 import Contact from './components/Contact.jsx'
 import Footer from './components/Footer.jsx'
 import BackToTop from './components/BackToTop.jsx'
+import ScrollProgress from './components/ScrollProgress.jsx'
 
 function Site() {
   const t = useLocale()
@@ -31,6 +32,7 @@ function Site() {
           and its web in front of it. */}
       <Galaxy />
       <SpaceField />
+      <ScrollProgress />
       <Navbar />
       <main>
         <Hero />

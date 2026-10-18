@@ -167,6 +167,18 @@ export const projects = [
     tags: ['Flutter', 'React.js', 'Node.js', 'MySQL', 'iOS', 'Android'],
   },
   {
+    id: 'yogiApproved',
+    name: 'YogiApproved Classes',
+    category: 'mobile',
+    accent: 'teal',
+    media: [{ file: 'yogiapproved.jpg', width: 1400, height: 1050 }],
+    links: [
+      { kind: 'appStore', href: 'https://apps.apple.com/us/app/ya-classes-yoga-workouts/id1414489703' },
+      { kind: 'store', href: 'https://play.google.com/store/apps/details?id=com.yaclasses.app' },
+    ],
+    tags: ['Java', 'Android', 'iOS Development', 'Mobile App Development', 'iPhone'],
+  },
+  {
     id: 'trakMd',
     name: 'trakMD Doctor App',
     category: 'mobile',

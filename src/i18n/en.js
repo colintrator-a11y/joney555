@@ -157,6 +157,11 @@ export default {
         'Features: weekly pregnancy suggestions and health tips, a checklist of what needs to be done at each stage, a community system with blog comments for discussion and support, a web application for easy access, and mobile apps on iOS and Android.',
         'Tech stack: Node.js on the back end, React.js on the web front end, and Flutter for the iOS and Android apps. The result is a scalable, user-friendly solution that holds up across every device while helping expectant mothers stay informed and connected.',
       ],
+      yogiApproved: [
+        'Find your OM at home! YogiApproved Classes — Home Yoga & Fitness Workouts — features premium on-demand yoga and fitness classes with world-class instructors. Follow along with knowledgeable, approachable instructors through the yoga or fitness class of your choice, with hundreds of unique classes from complete beginner to advanced.',
+        'In the app: hundreds of yoga, fitness and movement classes with new ones added weekly; classes downloaded and taken offline across yoga, fitness, meditation and mindfulness; programs that work towards a goal; a personal collection of classes and programs; and a tree planted for every class taken, over 250,000 so far. Published on the App Store and Google Play, with a 14-day trial.',
+        'Skills: Java, Android, iOS development and mobile app development for iPhone.',
+      ],
       trakMd: [
         'trakMD Doctor App, a React Native app for clinicians on iOS and Android, published on the App Store.',
         'The doctor-facing half of a patient tracking system: appointments, patient records and messaging in one place, with a single codebase shipping to both platforms.',

@@ -216,6 +216,11 @@ export default {
         'I worked on it as a front-end engineer in React Native with Redux, hooks and TypeScript: third-party API integration for recipes and ingredients, push notifications through Firebase Cloud Messaging, multiple languages with i18n and react-localization, and multiple payment gateways with Stripe and PayPal.',
         'The screens here run from the app itself to my development builds in VS Code and the iOS simulator: categories, recipe lists, recipe details with ingredients, and the sign-in and ordering flows. Designs came from InVision; the work ran on GitLab, Hubstaff and Slack. Food Network retired the app in 2024 and moved the service to FoodNetwork.com.',
       ],
+      assymbly: [
+        'As a React Native developer, I built Assymbly, a sleek mobile app that helps people discover local sports leagues, pickup games and tournaments near them — for adults and youth, beginners and intermediate players alike.',
+        'The app features an interactive map with custom sport-specific pins, advanced filters for sport, day of the week, gender and event type, and a clean, modern UI that delivers a smooth experience on both iOS and Android. Users can also follow their favourite organisers, get alerts for their events and share events with friends.',
+        'Published on the App Store and Google Play by Assymbly Sport LLC, rated 5.0 on the App Store.',
+      ],
       trakMd: [
         'trakMD Doctor App, a React Native app for clinicians on iOS and Android, published on the App Store.',
         'The doctor-facing half of a patient tracking system: appointments, patient records and messaging in one place, with a single codebase shipping to both platforms.',

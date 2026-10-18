@@ -376,6 +376,19 @@ export const projects = [
     tags: ['WordPress', 'Website Design', 'Web Development', 'SEO'],
   },
   {
+    id: 'northbridge',
+    name: 'Northbridge Talent — Recruitment Website',
+    category: 'fullstack',
+    accent: 'violet',
+    media: [
+      { file: 'northbridge-overview.jpg', width: 1400, height: 933 },
+      { file: 'northbridge-home.jpg', width: 800, height: 500 },
+      { file: 'northbridge-pages.jpg', width: 800, height: 500 },
+    ],
+    links: [{ kind: 'site', href: 'https://www.northbridge-talent.com/' }],
+    tags: ['WordPress', 'Elementor', 'PHP', 'MySQL', 'Website Design', 'Responsive Design', 'SEO'],
+  },
+  {
     id: 'enterpriseErp',
     name: 'EnterpriseERP',
     category: 'fullstack',

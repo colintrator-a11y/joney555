@@ -192,6 +192,11 @@ export default {
         'Technicians receive work orders, update job statuses, upload photos, collect customer signatures and complete service reports directly from their phones. Managers assign tasks, monitor job progress and review technician activity through a centralised system, with live tracking of vehicles, fleet performance and analytics on the dashboard.',
         'The app and the management dashboard are tied together through API integration, so every update from the field reaches the office as it happens.',
       ],
+      northbridge: [
+        'Northbridge Talent is a recruitment and talent solutions firm connecting organisations with exceptional people. I designed and developed its website from scratch: a professional, responsive site with custom layouts, clear service presentation, intuitive navigation and a polished user experience.',
+        'The site speaks to both sides of hiring. Employers find the services — executive search, talent acquisition, contract and temporary staffing, and talent consulting — while candidates get their own pages for finding opportunities, career support and working with a trusted partner. Every path leads to a clear next step: explore, read the details, submit an inquiry or browse opportunities.',
+        'Built on WordPress with Elementor, PHP and MySQL; fully responsive across desktop, tablet and mobile, and optimised for performance and SEO.',
+      ],
       trakMd: [
         'trakMD Doctor App, a React Native app for clinicians on iOS and Android, published on the App Store.',
         'The doctor-facing half of a patient tracking system: appointments, patient records and messaging in one place, with a single codebase shipping to both platforms.',

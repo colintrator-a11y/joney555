@@ -172,6 +172,11 @@ export default {
         'The site has dedicated pages for personal training, training for two and in-home training, alongside trainer profiles, client testimonials, and a prominent "start with $100 in free training" offer linked to the contact form. Visitors can explore the Central and Northwest locations, with their addresses, phone numbers and directions, and the business\'s 4.9-star Google rating and 15 years in San Antonio are shown up front.',
         'The brief was to modernise the site while keeping its existing functionality and search visibility, fully responsive on desktop and mobile. The completed project received a 5.0 client review on Freelancer.',
       ],
+      ramboBikes: [
+        "I worked on Rambo Bikes' existing Shopify store — the e-bike brand behind the Rambo Revolt and the No. 1 hunting e-bike — to clear backend roadblocks and make shopping for a bike more intuitive. My role: Shopify developer, focused on custom functionality and backend improvements.",
+        'The scope combined Shopify automation and backend troubleshooting with an interactive bike-builder workflow: guided questions, customisable parts selection, and a visual representation of the parts chosen. Speed optimisation and user experience were key priorities throughout.',
+        'The completed project received a 5.0/5 client review. The client highlighted how I identified the backend issues, implemented a practical solution efficiently, and kept communication clear and responsive: "His communication was excellent, and he made what could have been a complicated process feel simple."',
+      ],
       trakMd: [
         'trakMD Doctor App, a React Native app for clinicians on iOS and Android, published on the App Store.',
         'The doctor-facing half of a patient tracking system: appointments, patient records and messaging in one place, with a single codebase shipping to both platforms.',

@@ -423,6 +423,19 @@ export const projects = [
     tags: ['Telegram Mini App', 'Game Development', 'Blockchain', 'Web Application'],
   },
   {
+    id: 'ramboBikes',
+    name: 'Rambo Bikes — Shopify Automation & Interactive Bike Builder',
+    category: 'ecommerce',
+    accent: 'emerald',
+    media: [
+      { file: 'rambo-overview.jpg', width: 1400, height: 1050 },
+      { file: 'rambo-campaign.jpg', width: 800, height: 500 },
+      { file: 'rambo-store.jpg', width: 800, height: 500 },
+    ],
+    links: [{ kind: 'site', href: 'https://www.rambobikes.com/' }],
+    tags: ['Shopify Development', 'Shopify Templates', 'Backend Development', 'Frontend Development', 'Website Optimization', 'Web Development'],
+  },
+  {
     id: 'wooBulkDiscount',
     name: 'WooCommerce Bulk Discount Display',
     category: 'ecommerce',

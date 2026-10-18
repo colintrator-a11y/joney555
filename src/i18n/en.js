@@ -252,7 +252,7 @@ export default {
       southieMap: [
         "SouthieMap is a real estate broker website for South Boston — \"the data-driven real estate brokerage\". It uses current market big data and invaluable real-person, hyperlocal know-how to estimate the worth of a property, backed by a proprietary database of South Boston data.",
         'Visitors track recent developments across the neighbourhood — new condos, apartments, hotels, restaurants, retail and office space — get a property estimation, contact the broker to buy or sell, and sign up for a free South Boston buying guide and a newsletter so they never miss a development.',
-        'Built with React, Node.js and Express on a MEAN-stack back end.',
+        'Built to be responsive, user-friendly and secure, with React, Node.js and Express on a MEAN-stack back end.',
       ],
       yogaForLife: [
         'Yoga for Life — "Yoga is not a work-out, it is a work-in" — is a gentle yoga app for all fitness levels, offering stretches, yoga workouts, meditation and fitness plans for women and men: a hybrid yoga programme with a complete beginner series and the most important poses for beginners.',

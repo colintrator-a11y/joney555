@@ -147,6 +147,11 @@ export default {
       stack: 'Expected stack',
     },
     items: {
+      lordOfTheModels: [
+        'Lord of the Models is a trading automation platform, built around its Momentum Inverse Model. I designed and developed it from A to Z: the public website and the admin dashboard, with a custom UI, responsive design, the back end, content management and secure administration.',
+        'The admin dashboard runs the strategy: it shows live system status, the current position with its quantity, entry price and value, and the full trade history. From it you control trading and simulation, configure market hours, ETFs, trading parameters and alerts, manage trading accounts and tokens, set holidays, and connect a Charles Schwab account to switch into real trading mode.',
+        'Built on the MERN stack — MongoDB, Express.js, React and Node.js — with Tailwind CSS, and fully responsive across desktop, tablet and mobile.',
+      ],
       familj: [
         'A pregnancy health app built as a client project, designed to support pregnant women throughout their pregnancy journey. It brings guidance, health tips and community interaction together in one easy-to-use platform.',
         'Features: weekly pregnancy suggestions and health tips, a checklist of what needs to be done at each stage, a community system with blog comments for discussion and support, a web application for easy access, and mobile apps on iOS and Android.',
@@ -245,7 +250,7 @@ export default {
         'The site is a WordPress and WooCommerce store, with the range organised into product categories from castors, wheels and tyres through to pallet jacks, conveyors, roll cages and gate hardware, alongside site-wide product search and a store finder.',
       ],
     },
-      links: { demo: 'Watch the demo', store: 'View on Google Play', site: 'Visit the site', appStore: 'View on the App Store' },
+      links: { demo: 'Watch the demo', store: 'View on Google Play', site: 'Visit the site', appStore: 'View on the App Store', admin: 'Open the admin dashboard' },
     mediaAlt: (name) => `Preview of ${name}`,
   },
 

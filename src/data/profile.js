@@ -138,6 +138,22 @@ export const skillGroups = [
 // as marked blocks and are left out of every count.
 export const projects = [
   {
+    id: 'lordOfTheModels',
+    name: 'Lord of the Models — Momentum Inverse Model',
+    category: 'fullstack',
+    accent: 'amber',
+    media: [
+      { file: 'lotm-overview.jpg', width: 1400, height: 933 },
+      { file: 'lotm-dashboard.jpg', width: 800, height: 500 },
+      { file: 'lotm-admin.jpg', width: 800, height: 500 },
+    ],
+    links: [
+      { kind: 'site', href: 'https://lordofthemodels.com' },
+      { kind: 'admin', href: 'https://admin.lordofthemodels.com' },
+    ],
+    tags: ['React', 'Node.js', 'Express.js', 'MongoDB', 'Tailwind CSS', 'JavaScript', 'Charles Schwab API', 'Trading Automation'],
+  },
+  {
     id: 'familj',
     name: 'Familj Pregnancy App',
     category: 'mobile',

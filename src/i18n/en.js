@@ -192,6 +192,10 @@ export default {
         'Theme and UI/UX: customised Liquid themes with JavaScript and CSS on the Dawn framework for a minimalist look, with responsive product pages that cut bounce rates by 25%. SEO and performance: schema, meta tags and speed work for loads under two seconds, lifting organic traffic 40% at 98% uptime. App integrations: 15+ apps such as Klaviyo and ReCharge for email, subscriptions and reviews, with custom scripts that raised conversions 18%.',
         'Payments and compliance: multi-currency Stripe and PayPal with GDPR tools, and secure checkouts for €500+ items that cut abandonment. Analytics and launches: GA4 for KPI tracking and A/B tests, raising repeat sales 15%, and Git-deployed seasonal drops.',
       ],
+      hiketron: [
+        'Hiketron is a Shopify store for luxurious home and personal care products — laundry detergents, skin care, hair care, liquid soap dispensers and bundles — "Laundry detergents reimagined": safe on all fabrics, kind to sensitive skin and babies, never tested on animals, with energy-saving cold-water washing and compact packaging.',
+        'I built the store on the Empire theme, with gift cards from $10 to $100, Smile.io rewards, live chat, multi-product shopping and bundles, and checkout through PayPal, Shopify Pay, Google Pay and Amazon Pay.',
+      ],
       agCashCarry: [
         'AG Cash & Carry is a UK wholesale supplier of food and non-food products for businesses. I designed and developed its website from scratch: a professional, responsive eCommerce site with custom layouts, clear service presentation, intuitive navigation and a polished user experience.',
         'Built for wholesale customers, it makes products easy to find through clear categories, search and filters, and a Top Sellers section; product pages carry variations, images and related products; customers have accounts for easy reordering, with a simple, secure cart and checkout — browse, view, add to cart, check out.',

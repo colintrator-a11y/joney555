@@ -649,6 +649,19 @@ export const projects = [
     tags: ['Shopify Development', 'Liquid Template', 'HTML5', 'CSS3', 'SEO', 'UX / User Experience', 'Payment Gateway Integration'],
   },
   {
+    id: 'hiketron',
+    name: 'Hiketron — Home & Personal Care Store on Shopify',
+    category: 'ecommerce',
+    accent: 'teal',
+    media: [
+      { file: 'hiketron-home.jpg', width: 1492, height: 760 },
+      { file: 'hiketron-categories.jpg', width: 1492, height: 930 },
+      { file: 'hiketron-detergents.jpg', width: 1492, height: 1020 },
+    ],
+    links: [{ kind: 'site', href: 'https://www.hiketron.com/' }],
+    tags: ['Shopify', 'Shopify Development', 'Shopify Templates', 'Website Design'],
+  },
+  {
     id: 'agCashCarry',
     name: 'AG Cash & Carry — Wholesale eCommerce',
     category: 'ecommerce',

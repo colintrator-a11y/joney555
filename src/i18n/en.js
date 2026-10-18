@@ -202,7 +202,7 @@ export default {
         'The site brings the whole network together: a clinic locator with booking online, by phone or WhatsApp; treatments from implants and orthodontics to whitening and children\'s dentistry; individual and family memberships; insurance and corporate plans; promotions and financing; and a free first evaluation as part of booking.',
       ],
       homely: [
-        'Homely is an Australian real estate platform for finding homes to buy and rent. I developed the Homely website from scratch, creating a fully functional, responsive and user-friendly platform — from conceptual design to deployment.',
+        'Homely is an Australian real estate search platform — homes for sale, rent and sold, suburb reviews and local Q&A, and real estate agents compared across the country. I developed the Homely website from scratch, creating a fully functional, responsive and user-friendly platform — from conceptual design to deployment.',
         'Front end: a modern UI/UX with seamless navigation across all devices. Back end: scalable server-side logic, APIs and database management to handle listings, user accounts and search. Integration: advanced property search, filtering and interactive maps.',
         'Optimisation: high performance, fast load times and an SEO-friendly architecture — an end-to-end web solution held to high standards of performance and usability.',
       ],

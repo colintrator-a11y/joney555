@@ -179,6 +179,18 @@ export const projects = [
     tags: ['Java', 'Android', 'iOS Development', 'Mobile App Development', 'iPhone'],
   },
   {
+    id: 'playFitt',
+    name: 'PlayFitt — Daily Fitness Games',
+    category: 'mobile',
+    accent: 'emerald',
+    media: [{ file: 'playfitt.jpg', width: 1400, height: 1050 }],
+    links: [
+      { kind: 'store', href: 'https://play.google.com/store/apps/details?id=com.play.playfit2021.smart' },
+      { kind: 'appStore', href: 'https://apps.apple.com/us/app/playfitt-daily-workout-game/id1434731178' },
+    ],
+    tags: ['Flutter', 'PHP', 'Android', 'iOS Development', 'iPhone'],
+  },
+  {
     id: 'trakMd',
     name: 'trakMD Doctor App',
     category: 'mobile',

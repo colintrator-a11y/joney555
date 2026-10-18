@@ -162,6 +162,11 @@ export default {
         'In the app: hundreds of yoga, fitness and movement classes with new ones added weekly; classes downloaded and taken offline across yoga, fitness, meditation and mindfulness; programs that work towards a goal; a personal collection of classes and programs; and a tree planted for every class taken, over 250,000 so far. Published on the App Store and Google Play, with a 14-day trial.',
         'Skills: Java, Android, iOS development and mobile app development for iPhone.',
       ],
+      playFitt: [
+        'PlayFitt is the fitness game that gets you addicted to moving! It motivates you to lead an achievable, active lifestyle by turning your daily home workout into a game. All your steps, stairs, squats, push-ups and active breaks are counted automatically.',
+        'PlayFitt makes movement just as fun as your favourite video game, or as routine as scrolling through social media. With daily and weekly goals, it encourages you to stay active in small bites, more often — and in the app you earn coins to invest, plant trees, invite and nudge friends, and climb a friends leaderboard.',
+        'Built with Flutter for iOS and Android, on a PHP back end, and published on the App Store and Google Play.',
+      ],
       trakMd: [
         'trakMD Doctor App, a React Native app for clinicians on iOS and Android, published on the App Store.',
         'The doctor-facing half of a patient tracking system: appointments, patient records and messaging in one place, with a single codebase shipping to both platforms.',

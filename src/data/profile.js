@@ -542,9 +542,9 @@ export const projects = [
     category: 'fullstack',
     accent: 'teal',
     media: [
+      { file: 'safeway-node.gif', width: 600, height: 433 },
       { file: 'safeway-home.jpg', width: 1342, height: 1190 },
       { file: 'safeway-give.jpg', width: 1342, height: 815 },
-      { file: 'safeway-node.jpg', width: 600, height: 433 },
     ],
     tags: ['PHP', 'Laravel', 'MySQL', 'JavaScript', 'Website Design'],
   },

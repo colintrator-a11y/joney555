@@ -498,6 +498,19 @@ export const projects = [
     tags: ['WordPress', 'PHP', 'JavaScript', 'Website Design', 'PSD to HTML'],
   },
   {
+    id: 'alpineComfort',
+    name: '4 Valleys Chalet Rental — Luxury Chalets in Switzerland',
+    category: 'fullstack',
+    accent: 'rose',
+    media: [
+      { file: 'chalet-overview.jpg', width: 1055, height: 1491 },
+      { file: 'chalet-hero.jpg', width: 800, height: 500 },
+      { file: 'chalet-pages.jpg', width: 800, height: 500 },
+    ],
+    links: [{ kind: 'site', href: 'https://4valleyschaletrental.com/' }],
+    tags: ['WordPress', 'PHP', 'ACF', 'Sass', 'JavaScript', 'jQuery', 'GSAP', 'Website Design', 'SEO'],
+  },
+  {
     id: 'enterpriseErp',
     name: 'EnterpriseERP',
     category: 'fullstack',

@@ -244,6 +244,11 @@ export default {
         'RJ Osaki is a rental office in Osaki, Tokyo, run by RJ Office — private offices for one to ten people, a few minutes on foot from Gotanda and Osaki stations. I built its Japanese website on WordPress, from the PSD designs to a working theme in PHP and JavaScript.',
         "The site presents the office and why tenants choose it, an interactive floor plan marking which rooms are free, pricing plans by team size with each room's monthly fee and campaign offers, the steps to move in, and a contact section with phone and an enquiry form.",
       ],
+      alpineComfort: [
+        'I designed and developed a premium luxury chalet rental platform for Alpine Comfort, a Switzerland-based hospitality brand renting and managing chalets in Nendaz, in the heart of the 4 Valleys ski area, for travellers looking for high-end alpine experiences.',
+        'The project is a fully customised WordPress website: a custom theme with advanced chalet listings, a dynamic availability search filtering by location, dates, nights, guests and amenities, chalet detail pages with booking enquiries, seasonal winter and summer experiences, and luxury-focused UI/UX tailored to premium travellers — fully responsive across devices.',
+        'Built with WordPress, PHP and ACF, styled with Sass, and animated with JavaScript, jQuery and GSAP; SEO-optimised and tuned for fast loading.',
+      ],
       trakMd: [
         'trakMD Doctor App, a React Native app for clinicians on iOS and Android, published on the App Store.',
         'The doctor-facing half of a patient tracking system: appointments, patient records and messaging in one place, with a single codebase shipping to both platforms.',

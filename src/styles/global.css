@@ -601,3 +601,56 @@ a {
   .section-head { gap: 10px; margin-bottom: 22px; }
   .section-head .note { margin-left: 0; flex-basis: 100%; }
 }
+
+/* ------------------------------ scrollbar ------------------------------ */
+
+/*
+ * The page's scrollbar as the spider on its thread: a fine line of silk down
+ * the track, and the thumb a spider hanging from it — the logo's two glass
+ * spheres on eight legs — which brightens under the pointer. WebKit and Blink
+ * draw it; Firefox takes only colours, so it gets a slim bar in the same blues.
+ */
+:root {
+  --scroll-spider: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 40'%3E%3Cdefs%3E%3CradialGradient id='b' cx='0.38' cy='0.32' r='0.75'%3E%3Cstop offset='0' stop-color='%23ffffff' stop-opacity='0.85'/%3E%3Cstop offset='0.35' stop-color='%232f7dff'/%3E%3Cstop offset='1' stop-color='%230a2a8a'/%3E%3C/radialGradient%3E%3C/defs%3E%3Cpath d='M12 0V15' stroke='%23c8def8' stroke-width='0.8' stroke-linecap='round' opacity='0.9'/%3E%3Cg%3E%3Cg fill='none' stroke='%23c8def8' stroke-width='1.3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 19L5 15L2 17'/%3E%3Cpath d='M10 21L4 19.5L1.5 22'/%3E%3Cpath d='M10 23L4 24.5L2 28'/%3E%3Cpath d='M10.5 25L6 28.5L5 32'/%3E%3Cpath d='M14 19L19 15L22 17'/%3E%3Cpath d='M14 21L20 19.5L22.5 22'/%3E%3Cpath d='M14 23L20 24.5L22 28'/%3E%3Cpath d='M13.5 25L18 28.5L19 32'/%3E%3C/g%3E%3Ccircle cx='12' cy='20' r='4.6' fill='url%28%23b%29'/%3E%3Ccircle cx='12' cy='27' r='3.1' fill='url%28%23b%29'/%3E%3Ccircle cx='10.9' cy='27.6' r='0.7' fill='%23bff4ff'/%3E%3Ccircle cx='13.1' cy='27.6' r='0.7' fill='%23bff4ff'/%3E%3C/g%3E%3C/svg%3E");
+  --scroll-spider-hover: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 40'%3E%3Cdefs%3E%3Cfilter id='g' x='-50%25' y='-50%25' width='200%25' height='200%25'%3E%3CfeDropShadow dx='0' dy='0' stdDeviation='1' flood-color='%235ab4ff'/%3E%3C/filter%3E%3CradialGradient id='b' cx='0.38' cy='0.32' r='0.75'%3E%3Cstop offset='0' stop-color='%23ffffff' stop-opacity='0.85'/%3E%3Cstop offset='0.35' stop-color='%234aa8ff'/%3E%3Cstop offset='1' stop-color='%231240c0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Cpath d='M12 0V15' stroke='%23ffffff' stroke-width='0.8' stroke-linecap='round' opacity='0.9'/%3E%3Cg filter='url%28%23g%29'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='1.3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 19L5 15L2 17'/%3E%3Cpath d='M10 21L4 19.5L1.5 22'/%3E%3Cpath d='M10 23L4 24.5L2 28'/%3E%3Cpath d='M10.5 25L6 28.5L5 32'/%3E%3Cpath d='M14 19L19 15L22 17'/%3E%3Cpath d='M14 21L20 19.5L22.5 22'/%3E%3Cpath d='M14 23L20 24.5L22 28'/%3E%3Cpath d='M13.5 25L18 28.5L19 32'/%3E%3C/g%3E%3Ccircle cx='12' cy='20' r='4.6' fill='url%28%23b%29'/%3E%3Ccircle cx='12' cy='27' r='3.1' fill='url%28%23b%29'/%3E%3Ccircle cx='10.9' cy='27.6' r='0.7' fill='%23ffffff'/%3E%3Ccircle cx='13.1' cy='27.6' r='0.7' fill='%23ffffff'/%3E%3C/g%3E%3C/svg%3E");
+  --scroll-thread: rgba(var(--silk), 0.45);
+  scrollbar-width: thin;
+  scrollbar-color: #2f7dff transparent;
+}
+
+[data-theme='light'] {
+  --scroll-spider: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 40'%3E%3Cdefs%3E%3CradialGradient id='b' cx='0.38' cy='0.32' r='0.75'%3E%3Cstop offset='0' stop-color='%23ffffff' stop-opacity='0.85'/%3E%3Cstop offset='0.35' stop-color='%230b6cf0'/%3E%3Cstop offset='1' stop-color='%2306307a'/%3E%3C/radialGradient%3E%3C/defs%3E%3Cpath d='M12 0V15' stroke='%2333496b' stroke-width='0.8' stroke-linecap='round' opacity='0.9'/%3E%3Cg%3E%3Cg fill='none' stroke='%2333496b' stroke-width='1.3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 19L5 15L2 17'/%3E%3Cpath d='M10 21L4 19.5L1.5 22'/%3E%3Cpath d='M10 23L4 24.5L2 28'/%3E%3Cpath d='M10.5 25L6 28.5L5 32'/%3E%3Cpath d='M14 19L19 15L22 17'/%3E%3Cpath d='M14 21L20 19.5L22.5 22'/%3E%3Cpath d='M14 23L20 24.5L22 28'/%3E%3Cpath d='M13.5 25L18 28.5L19 32'/%3E%3C/g%3E%3Ccircle cx='12' cy='20' r='4.6' fill='url%28%23b%29'/%3E%3Ccircle cx='12' cy='27' r='3.1' fill='url%28%23b%29'/%3E%3Ccircle cx='10.9' cy='27.6' r='0.7' fill='%23bfe9ff'/%3E%3Ccircle cx='13.1' cy='27.6' r='0.7' fill='%23bfe9ff'/%3E%3C/g%3E%3C/svg%3E");
+  --scroll-spider-hover: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 40'%3E%3Cdefs%3E%3Cfilter id='g' x='-50%25' y='-50%25' width='200%25' height='200%25'%3E%3CfeDropShadow dx='0' dy='0' stdDeviation='1' flood-color='%2322b8f0'/%3E%3C/filter%3E%3CradialGradient id='b' cx='0.38' cy='0.32' r='0.75'%3E%3Cstop offset='0' stop-color='%23ffffff' stop-opacity='0.85'/%3E%3Cstop offset='0.35' stop-color='%233d9bff'/%3E%3Cstop offset='1' stop-color='%230a55c2'/%3E%3C/radialGradient%3E%3C/defs%3E%3Cpath d='M12 0V15' stroke='%230b1a33' stroke-width='0.8' stroke-linecap='round' opacity='0.9'/%3E%3Cg filter='url%28%23g%29'%3E%3Cg fill='none' stroke='%230b1a33' stroke-width='1.3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 19L5 15L2 17'/%3E%3Cpath d='M10 21L4 19.5L1.5 22'/%3E%3Cpath d='M10 23L4 24.5L2 28'/%3E%3Cpath d='M10.5 25L6 28.5L5 32'/%3E%3Cpath d='M14 19L19 15L22 17'/%3E%3Cpath d='M14 21L20 19.5L22.5 22'/%3E%3Cpath d='M14 23L20 24.5L22 28'/%3E%3Cpath d='M13.5 25L18 28.5L19 32'/%3E%3C/g%3E%3Ccircle cx='12' cy='20' r='4.6' fill='url%28%23b%29'/%3E%3Ccircle cx='12' cy='27' r='3.1' fill='url%28%23b%29'/%3E%3Ccircle cx='10.9' cy='27.6' r='0.7' fill='%23ffffff'/%3E%3Ccircle cx='13.1' cy='27.6' r='0.7' fill='%23ffffff'/%3E%3C/g%3E%3C/svg%3E");
+  scrollbar-color: #0b6cf0 transparent;
+}
+
+::-webkit-scrollbar {
+  width: 16px;
+  height: 10px;
+}
+
+/* The track: open sky with one thread of silk down its middle. */
+::-webkit-scrollbar-track {
+  background: linear-gradient(var(--scroll-thread), var(--scroll-thread)) center / 1px 100% no-repeat;
+}
+
+/* The thumb: the spider, hanging in the middle of however long the thumb is,
+   with its own thread running up out of the top of the picture. */
+::-webkit-scrollbar-thumb {
+  min-height: 44px;
+  border: 0;
+  background:
+    var(--scroll-spider) center / 16px 28px no-repeat,
+    linear-gradient(var(--scroll-thread), var(--scroll-thread)) center top / 1px 50% no-repeat;
+}
+
+::-webkit-scrollbar-thumb:hover,
+::-webkit-scrollbar-thumb:active {
+  background:
+    var(--scroll-spider-hover) center / 16px 28px no-repeat,
+    linear-gradient(rgba(var(--silk), 0.9), rgba(var(--silk), 0.9)) center top / 1px 50% no-repeat;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}

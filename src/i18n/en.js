@@ -259,6 +259,11 @@ export default {
         'Special features: yoga for a toned belly, a happy back and core strength; yoga for good health and sleep, with good posture; breathing exercises and fat-burning workouts, including a 30-minute session; yoga for a healthy heart; and a daily workout for a healthy, toned body. In the app, programmes run from Starter through Medium and Advanced to Extreme, day by day; every pose comes with step-by-step instructions; and reminders keep the practice going.',
         'Built with Flutter for Android and iOS.',
       ],
+      safewayFoundation: [
+        "The Safeway Foundation's Nourishing Neighbors site, part of the national Albertsons Companies Foundation — \"Dedicated to bettering the lives of people in our neighbourhoods.\" The foundation set out to commit over $50 million to hunger relief across its communities, and the site invites everyone to help do even more.",
+        'Visitors choose their region, see where the foundation gives, and get involved: volunteer, read local stories of impact, learn about hunger, apply for funding, join up and donate.',
+        'Built with PHP and Laravel on MySQL, with JavaScript on the front end.',
+      ],
       trakMd: [
         'trakMD Doctor App, a React Native app for clinicians on iOS and Android, published on the App Store.',
         'The doctor-facing half of a patient tracking system: appointments, patient records and messaging in one place, with a single codebase shipping to both platforms.',

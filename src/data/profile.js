@@ -335,6 +335,19 @@ export const projects = [
     tags: ['Java', 'Kotlin', 'Android App Development', 'Mobile App Development', 'Mobile App Testing'],
   },
   {
+    id: 'hasfit',
+    name: 'HASfit Personal Trainer — WordPress Redesign & Local SEO',
+    category: 'fullstack',
+    accent: 'rose',
+    media: [
+      { file: 'hasfit-overview.jpg', width: 1400, height: 1050 },
+      { file: 'hasfit-home.jpg', width: 800, height: 500 },
+      { file: 'hasfit-stats.jpg', width: 800, height: 500 },
+    ],
+    links: [{ kind: 'site', href: 'https://hasfitpersonaltrainer.com' }],
+    tags: ['WordPress', 'Website Design', 'Web Development', 'SEO'],
+  },
+  {
     id: 'enterpriseErp',
     name: 'EnterpriseERP',
     category: 'fullstack',

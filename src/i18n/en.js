@@ -167,6 +167,11 @@ export default {
         'PlayFitt makes movement just as fun as your favourite video game, or as routine as scrolling through social media. With daily and weekly goals, it encourages you to stay active in small bites, more often — and in the app you earn coins to invest, plant trees, invite and nudge friends, and climb a friends leaderboard.',
         'Built with Flutter for iOS and Android, on a PHP back end, and published on the App Store and Google Play.',
       ],
+      hasfit: [
+        'I redesigned and developed the WordPress website of HASfit Personal Trainer, a San Antonio personal training business, with a focus on service presentation, customer inquiries and local SEO.',
+        'The site has dedicated pages for personal training, training for two and in-home training, alongside trainer profiles, client testimonials, and a prominent "start with $100 in free training" offer linked to the contact form. Visitors can explore the Central and Northwest locations, with their addresses, phone numbers and directions, and the business\'s 4.9-star Google rating and 15 years in San Antonio are shown up front.',
+        'The brief was to modernise the site while keeping its existing functionality and search visibility, fully responsive on desktop and mobile. The completed project received a 5.0 client review on Freelancer.',
+      ],
       trakMd: [
         'trakMD Doctor App, a React Native app for clinicians on iOS and Android, published on the App Store.',
         'The doctor-facing half of a patient tracking system: appointments, patient records and messaging in one place, with a single codebase shipping to both platforms.',

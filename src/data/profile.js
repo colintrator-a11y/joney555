@@ -389,6 +389,15 @@ export const projects = [
     tags: ['WordPress', 'Elementor', 'PHP', 'MySQL', 'Website Design', 'Responsive Design', 'SEO'],
   },
   {
+    id: 'dentalia',
+    name: 'Dentalia — Dental Clinic Network Website',
+    category: 'fullstack',
+    accent: 'violet',
+    media: [{ file: 'dentalia-home.jpg', width: 1400, height: 875 }],
+    links: [{ kind: 'site', href: 'https://www.dentalia.com/' }],
+    tags: ['Web Design', 'Web Development', 'Responsive Design', 'SEO'],
+  },
+  {
     id: 'enterpriseErp',
     name: 'EnterpriseERP',
     category: 'fullstack',

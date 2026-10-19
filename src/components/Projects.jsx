@@ -36,11 +36,10 @@ export default function Projects({ focus, onFocusChange }) {
   // which is translated, so switching language keeps the current selection.
   const categories = useMemo(() => {
     const counts = new Map()
-    const real = projects.filter((project) => !project.placeholder)
-    real.forEach((project) => {
+    projects.forEach((project) => {
       counts.set(project.category, (counts.get(project.category) ?? 0) + 1)
     })
-    return [[ALL, real.length], ...counts.entries()]
+    return [[ALL, projects.length], ...counts.entries()]
   }, [])
 
   // Sixty-nine tags in one flat alphabetical list means scrolling past fifty of
@@ -205,33 +204,7 @@ export default function Projects({ focus, onFocusChange }) {
 
         {shown.length ? (
           <ol className="projects-list">
-            {shown.map((project) => project.placeholder ? (
-              // An empty slot: where a project belongs that the page cannot
-              // show yet. Plain on purpose, so it is easy to find and hard to
-              // mistake for a finished entry.
-              <li key={project.id} data-reveal className={`project-row project-slot accent-${project.accent}`}>
-                <div className="project-slot-mark" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" width="22" height="22">
-                    <path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-                  </svg>
-                </div>
-                <div className="project-content">
-                  <p className="project-category">
-                    {t.projects.categories[project.category]} · {t.projects.slot.from(project.company)}
-                  </p>
-                  <h3>{t.projects.slot.label}</h3>
-                  {t.projects.items[project.id].map((paragraph) => (
-                    <p key={paragraph.slice(0, 32)} className="project-body">{paragraph}</p>
-                  ))}
-                  <p className="project-slot-stack">{t.projects.slot.stack}</p>
-                  <ul className="project-tags">
-                    {project.stack.map((tag) => (
-                      <li key={tag} className="project-slot-tag">{tag}</li>
-                    ))}
-                  </ul>
-                </div>
-              </li>
-            ) : (
+            {shown.map((project) => (
               <li key={project.id} data-tilt="soft" data-reveal className={`card project-row accent-${project.accent}${rowLayout(project)}`}>
                 <div className={`project-media${mediaLayout(project)}`}>
                   {shot(project, 0, 'media-lead')}
@@ -304,12 +277,7 @@ export default function Projects({ focus, onFocusChange }) {
               {t.projects.more(Math.min(PAGE, remaining))}
             </button>
             <p className="projects-progress" aria-live="polite">
-              {/* Projects, not rows: an empty slot is not work, and the count
-                  has to agree with the filter chips above. */}
-              {t.projects.progress(
-                shown.filter((project) => !project.placeholder).length,
-                matching.filter((project) => !project.placeholder).length,
-              )}
+              {t.projects.progress(shown.length, matching.length)}
             </p>
           </div>
         ) : null}

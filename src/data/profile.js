@@ -132,10 +132,6 @@ export const skillGroups = [
 // The work, curated to the headline: mobile apps, AI integration and
 // full-stack systems. Declared order is display order — the strongest
 // mobile work first, since that is what the title leads with.
-//
-// Entries with `placeholder: true` are empty slots, kept where the work
-// history describes a kind of project the page cannot show yet. They render
-// as marked blocks and are left out of every count.
 export const projects = [
   {
     id: 'lordOfTheModels',
@@ -339,20 +335,6 @@ export const projects = [
     tags: ['Mobile App Development', 'AI Mobile App Development'],
   },
   {
-    id: 'slotMobileAi',
-    // An empty slot: the experience says this work exists, and there is
-    // nothing on the page to show it yet. Replace with the real project —
-    // name, media, tags and links — and drop `placeholder`.
-    placeholder: true,
-    name: 'Project to add',
-    category: 'ai',
-    accent: 'violet',
-    company: 'Originally US',
-    stack: ['Flutter', 'React Native', 'Python', 'FastAPI', 'OpenAI API', 'PostgreSQL', 'AWS'],
-    media: [],
-    tags: [],
-  },
-  {
     id: 'qalorie',
     name: 'Qalorie: Weight Loss & Health',
     category: 'mobile',
@@ -392,20 +374,6 @@ export const projects = [
       { file: 'emuvas-overview.jpg', width: 800, height: 600 },
     ],
     tags: ['React Native', 'Android', 'iOS', 'Node.js', 'MongoDB'],
-  },
-  {
-    id: 'slotDocumentAi',
-    // An empty slot: the experience says this work exists, and there is
-    // nothing on the page to show it yet. Replace with the real project —
-    // name, media, tags and links — and drop `placeholder`.
-    placeholder: true,
-    name: 'Project to add',
-    category: 'ai',
-    accent: 'violet',
-    company: 'Tech JDI',
-    stack: ['Python', 'FastAPI', 'Django', 'Docker', 'AWS'],
-    media: [],
-    tags: [],
   },
   {
     id: 'rasaHandoff',
@@ -580,34 +548,6 @@ export const projects = [
     ],
     tags: ['PHP', 'Laravel', 'AJAX', 'SaaS'],
   },
-  {
-    id: 'slotWebPlatform',
-    // An empty slot: the experience says this work exists, and there is
-    // nothing on the page to show it yet. Replace with the real project —
-    // name, media, tags and links — and drop `placeholder`.
-    placeholder: true,
-    name: 'Project to add',
-    category: 'fullstack',
-    accent: 'slate',
-    company: 'Tech JDI',
-    stack: ['React', 'TypeScript', 'Python', 'Django', 'Docker', 'AWS'],
-    media: [],
-    tags: [],
-  },
-  {
-    id: 'slotFlutterProduct',
-    // An empty slot: the experience says this work exists, and there is
-    // nothing on the page to show it yet. Replace with the real project —
-    // name, media, tags and links — and drop `placeholder`.
-    placeholder: true,
-    name: 'Project to add',
-    category: 'mobile',
-    accent: 'teal',
-    company: 'Buuuk',
-    stack: ['Flutter', 'Dart', 'BLoC', 'Firebase', 'REST API'],
-    media: [],
-    tags: [],
-  },
   // Beyond the headline: games, then e-commerce. Real work, placed after
   // the mobile, AI and full-stack rows so the first screen of the list
   // still says what the title says.
@@ -758,8 +698,7 @@ export const projects = [
 ]
 
 // Declared after `projects` so the headline count follows the list itself.
-// The projects with something behind them; the empty slots are not work.
-export const shipped = projects.filter((project) => !project.placeholder)
+export const shipped = projects
 
 export const stats = [
   { id: 'years', value: '7+' },

@@ -139,13 +139,6 @@ export default {
       games: 'Games',
       ecommerce: 'E-commerce',
     },
-    // The empty slots. Shown on the page, deliberately plain, so the places
-    // where a project belongs are easy to find.
-    slot: {
-      label: 'Project slot — to be added',
-      from: (company) => `Work from ${company}`,
-      stack: 'Expected stack',
-    },
     items: {
       lordOfTheModels: [
         'Lord of the Models is a trading automation platform, built around its Momentum Inverse Model. I designed and developed it from A to Z: the public website and the admin dashboard, with a custom UI, responsive design, the back end, content management and secure administration.',
@@ -334,18 +327,6 @@ export default {
         'EnterpriseERP is a cloud-based Enterprise Resource Planning platform designed to centralize and automate core business operations within a single integrated system. The solution provides organizations with real-time visibility into financial performance, sales activities, inventory levels, procurement processes, customer relationships, and workforce management, enabling data-driven decision-making and operational efficiency.',
         'The platform consists of multiple interconnected modules, including Finance, Sales, Purchasing, Inventory, Production, CRM, Human Resources, Projects, Assets, Reports, and Document Management. Each module shares a unified database, ensuring data consistency and eliminating duplicate data entry across departments.',
         'The Finance module manages accounts payable, accounts receivable, general ledger, budgeting, tax management, banking, and financial reporting.',
-      ],
-      slotMobileAi: [
-        'Your flagship from Originally US: a cross-platform app with LLM-powered chat or AI features. Show the app screens, what the AI does for the person using it, and one outcome — users, rating, or a measured improvement.',
-      ],
-      slotDocumentAi: [
-        'The AI document processing and workflow automation from Tech JDI. Show the pipeline — what goes in, what the model extracts, where it ends up — and how much manual work it took off the team.',
-      ],
-      slotWebPlatform: [
-        'A web application from Tech JDI: a React and TypeScript front end on a FastAPI or Django API, containerised and running on AWS. Show the product, a simple architecture diagram, and your part in it.',
-      ],
-      slotFlutterProduct: [
-        'A Flutter product from Buuuk — authentication, push notifications, BLoC state management. Show the screens and one thing you improved, such as performance or test coverage.',
       ],
       mmorpg: [
         'A Unity 3D mobile MMORPG for Android and iOS, in the massively multiplayer base-building strategy genre: players raise an army, upgrade a castle and its economy, and fight real-time battles against other players.',
